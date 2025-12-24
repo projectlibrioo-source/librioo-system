@@ -1,13 +1,8 @@
-
+import AppRoutes from './common/routes/AppRoutes.jsx';
 import './App.css'
 
 function App() {
-  return (
-    <div>
-      <h1>Librioo – Smart Library Assistant System</h1>
-      <p>Member & Admin Web Interface</p>
-    </div>
-  );
+  return <AppRoutes />;
 }
 
 export default App;
