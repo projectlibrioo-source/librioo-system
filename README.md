@@ -1,3 +1,5 @@
-# librioo-system
-Library Assistant Robot and Library Management System (Librioo). 
-A centralized system including a robot-assisted member interface, admin dashboard, and backend services for smart library operations.
+# Librioo System
+
+Library Assistant Robot and Library Management System (Librioo).
+
+This repository contains the source code for the Librioo system, including the robot-assisted member interface, admin dashboard, and backend services.
