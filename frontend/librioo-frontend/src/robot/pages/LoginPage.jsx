@@ -17,12 +17,12 @@ export const LoginPage = () => {
   };
 
   return (
-    <main className="bg-[linear-gradient(0deg,rgba(30,30,30,0.2)_0%,rgba(30,30,30,0.2)_100%),linear-gradient(180deg,rgba(33,36,70,0.5)_0%,rgba(129,218,248,0.5)_100%)] w-full min-w-[1280px] min-h-[720px] relative">
+    <main className="bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] min-h-[720px] relative">
      
       <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
         <div className="absolute top-0 left-0 w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
 
-        <h2 className="absolute top-[55px] left-[59px] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
+        <h2 className="absolute top-[45px] left-[59px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
           Smart Library Assistant
         </h2>
 
@@ -44,7 +44,7 @@ export const LoginPage = () => {
           Welcome to the Library
         </h1>
 
-        <p className="mt-[0px] [-webkit-text-stroke:1px_#080838] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#9dced4] text-2xl text-center tracking-[0] leading-[normal]">
+        <p className="mt-[0px] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#a8d5e2] text-[18px] text-center tracking-[0] leading-[normal]">
           Please select how you&apos;d like to Proceed
         </p>
       </section>
