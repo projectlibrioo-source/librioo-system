@@ -3,6 +3,7 @@ import LoginPage from "../../robot/pages/LoginPage";
 import MemberLogin from "../../robot/pages/MemberLogin";
 import UserDetails from "../../robot/pages/UserDetails";
 import SearchPage from "../../robot/pages/SearchPage";
+import SearchBook from "../../robot/pages/SearchBook";
 import AdminDashboard from "../../admin/pages/AdminDashboard";
 
 function AppRoutes() {
@@ -13,6 +14,7 @@ function AppRoutes() {
         <Route path="/robot/member-login" element={<MemberLogin />} />
         <Route path="/robot/user-details" element={<UserDetails />} />
         <Route path="/robot/search" element={<SearchPage />} />
+        <Route path="/robot/search-book" element={<SearchBook />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
