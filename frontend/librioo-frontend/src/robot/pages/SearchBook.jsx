@@ -12,8 +12,6 @@ const SearchBook = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // ⚠️ BACKEND INTEGRATION POINT:
-  // Replace this sample array with dynamic data fetched from backend (e.g., useEffect + fetch/axios)
   const bookData = [
     { id: 1, title: "Xennix", author: "Rufus Stewart", image: blackAndBlueFictionBookCover1 },
     { id: 2, title: "Conquest", author: "Shawn Garcia", image: null },
@@ -35,27 +33,20 @@ const SearchBook = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // ⚠️ BACKEND INTEGRATION POINT:
-    // Replace with API call to search books by name using searchQuery
     console.log("Searching for:", searchQuery);
   };
 
   const handleGuideMe = () => {
-    // ⚠️ BACKEND INTEGRATION POINT:
-    // Replace with logic to fetch recommended books or navigate to guided search
     console.log("Guide Me clicked");
   };
 
   return (
     <main className="bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] min-h-[2105px] relative">
-     
       <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
-        <div className="absolute top-0 left-0 w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
-
-        <h2 className="absolute top-[45px] left-[59px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
+        <div className="absolute top-0 left-0 w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040] border-2 border-red-500" />
+        <h2 className="absolute top-[45px] left-[59px] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px]">
           Smart Library Assistant
         </h2>
-
         <img
           className="absolute top-0 left-[43px] w-[191px] h-[72px] aspect-[2.86]"
           alt="Logolib Smart Library Assistant"
@@ -63,33 +54,28 @@ const SearchBook = () => {
         />
       </header>
 
-      {/* Title - ADLaM Font synchronized */}
       <h1 className="absolute top-[105px] left-[65px] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[40px]">
         Search Book By Name
       </h1>
 
-      {/* Border Container - Matches screenshot */}
-      <div className="absolute top-[188px] left-[17px] w-[1244px] h-[1882px] rounded-[20px] border-2 border-solid border-[#efe1e126] bg-[#0000001a] z-10 shadow-md" />
+      <div className="absolute top-[188px] left-[17px] w-[1244px] h-[1882px] rounded-[20px] border-2 border-solid border-[#efe1e126] bg-[#0000001a] z-10 shadow-md border-blue-500" />
 
-      {/* Search Bar - Pill styled */}
       <SearchBar
         query={searchQuery}
         onChange={handleSearchChange}
         onSubmit={handleSearchSubmit}
       />
 
-      {/* Guide & Cancel Buttons - Styled like Page 1 buttons */}
       <GuideButton onClick={handleGuideMe} />
       <CancelButton />
 
-      {/* Book Cards Grid - 4 per row matching screenshot coordinates */}
       <section className="absolute top-[385px] left-[55px] w-[1180px] grid grid-cols-4 gap-x-[30px] gap-y-[60px] z-30">
         {bookData.map((book) => (
-          <BookCard 
-            key={book.id} 
-            title={book.title} 
-            author={book.author} 
-            image={book.image} 
+          <BookCard
+            key={book.id}
+            title={book.title}
+            author={book.author}
+            image={book.image}
           />
         ))}
       </section>

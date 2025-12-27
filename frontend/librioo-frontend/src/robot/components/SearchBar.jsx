@@ -1,24 +1,29 @@
 import React from "react";
-import { Icon } from "./Icon";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const SearchBar = ({ query, onChange, onSubmit }) => (
   <form
     onSubmit={onSubmit}
-    className="flex w-[630px] h-[40px] items-center justify-between absolute top-[215px] left-[65px] bg-[#ece6f0] rounded-[20px] overflow-hidden z-30 shadow-sm px-5"
-  > 
-      {/* Input Field */}
-      <input
-        type="search"
-        value={query}
-        onChange={onChange}
-        placeholder="Search Books By Name"
-        className="flex-1 bg-transparent outline-none text-[#49454f] [font-family:'Aldrich-Regular',Helvetica] text-[16px] text-left placeholder:text-[#49454f]/70"
-      />
-      
-      {/* Submit/Arrow Icon */}
-      <button type="submit" className="hover:scale-110 transition-transform ml-2 p-1 flex items-center justify-center cursor-pointer">
-        <Icon className="w-4 h-4 text-[#49454f]" />
-      </button>
+    className="absolute top-[215px] left-[65px] w-[630px] h-[40px] bg-[#ece6f0] rounded-full flex items-center shadow-md z-30 overflow-hidden"
+  >
+    {/* Input Field */}
+    <input
+      type="search"
+      value={query}
+      onChange={onChange}
+      placeholder="Search Books By Name"
+      className="flex-1 px-4 bg-transparent outline-none text-[#49454f] placeholder:text-[#49454f]/70 placeholder:font-semibold [font-family:'Aldrich-Regular',Helvetica] text-[16px]"
+      style={{ fontWeight: 600 }}
+    />
+
+    {/* Icon Button */}
+    <button
+      type="submit"
+      aria-label="Search"
+      className="w-[40px] h-[40px] flex items-center justify-center bg-gradient-to-r from-[#4b4b6b] to-[#5c6ac4] text-white rounded-full hover:from-[#5c6ac4] hover:to-[#7c8fdc] transition-all"
+    >
+      <MagnifyingGlassIcon className="w-5 h-5 text-white" />
+    </button>
   </form>
 );
 
