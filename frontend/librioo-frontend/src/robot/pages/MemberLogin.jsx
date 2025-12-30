@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logolib31 from "../../assets/logolib3-1.png";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
+import { memberLogin } from "../../BackendFunctions";
+
 
 const MemberLogin = () => {
   const [libraryId, setLibraryId] = useState("");
@@ -9,7 +11,8 @@ const MemberLogin = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login with Library ID:", libraryId);
+    memberLogin(libraryId);
+    //console.log("Login with Library ID:", libraryId);
   };
 
   const handleBack = () => {
