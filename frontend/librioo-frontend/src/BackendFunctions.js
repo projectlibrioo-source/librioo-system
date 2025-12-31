@@ -1,5 +1,3 @@
-
-
 export function testfun(libraryId){
     console.log(libraryId);
     
@@ -14,12 +12,32 @@ export async function memberLogin(libraryId) {
 
         if(response.ok){
             const memberData = await response.json();
-            console.log(memberData);
+            return memberData;
+            
           
         }else{
-            alert("Invalid Library ID");
+            return null;
         }
     }catch(e){
-        alert("Error occured "+e)
+        alert("Error occured "+e);
     }
+}
+
+export async function searchBooksByName(keyword) {
+  if (!keyword || keyword.trim() === "") return [];
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/searchname?keyword=${encodeURIComponent(keyword)}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch books");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Search API error:", error);
+    return [];
+  }
 }

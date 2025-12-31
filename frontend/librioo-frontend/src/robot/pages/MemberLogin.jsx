@@ -9,9 +9,19 @@ const MemberLogin = () => {
   const [libraryId, setLibraryId] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
-    memberLogin(libraryId);
+    const member = await memberLogin(libraryId);
+
+    if(member){
+      alert("Login Success")
+      navigate("/robot/search")
+      
+    }else{
+      alert("Invalid ID");
+    }
+      
+  
     //console.log("Login with Library ID:", libraryId);
   };
 

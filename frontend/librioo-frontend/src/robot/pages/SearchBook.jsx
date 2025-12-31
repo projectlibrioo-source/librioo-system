@@ -7,6 +7,7 @@ import CancelButton from "../components/CancelButton";
 import blackAndBlueFictionBookCover1 from "../../assets/black-and-blue-fiction-book-cover-1.png";
 import redNeonMysticBookCover1 from "../../assets/red-neon-mystic-book-cover-1.png";
 import logolib31 from "../../assets/logolib3-1.png";
+import { searchBooksByName } from "../../BackendFunctions";
 
 const SearchBook = () => {
   const [searchQuery, setSearchQuery] = useState("");
