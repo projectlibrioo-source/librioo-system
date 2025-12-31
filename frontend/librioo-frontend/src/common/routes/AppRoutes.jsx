@@ -10,6 +10,12 @@ import BorrowPage from "../../robot/pages/BorrowPage";
 import EndingPage from "../../robot/pages/EndingPage";
 import AdminDashboard from "../../admin/pages/AdminDashboard";
 
+import GuestLogin from "../../robot/pages/GuestLogin";
+
+
+
+import SearchCategory from "../../robot/pages/SearchCategory";
+
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -24,6 +30,14 @@ function AppRoutes() {
         <Route path="/robot/borrow" element={<BorrowPage />} />
         <Route path="/robot/ending" element={<EndingPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
+
+        <Route path="/robot/guest-login" element={<GuestLogin />} />
+
+        
+        
+        
+        <Route path="/robot/search-category" element={<SearchCategory />} />
+
       </Routes>
     </BrowserRouter>
   );
