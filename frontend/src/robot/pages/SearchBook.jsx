@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BackgroundContainer from "../components/BackgroundContainer";
 import SearchBar from "../components/SearchBar";
 import BookCard from "../components/BookCard";
 import GuideButton from "../components/GuideButton";
@@ -42,7 +43,7 @@ const SearchBook = () => {
   };
 
   return (
-    <main className="bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] min-h-[2105px] relative">
+    <main className="h-screen overflow-y-auto bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] relative">
       <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
               <div className="absolute top-[10px] left-[100px] w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
               <h2 className="absolute top-[45px] left-[145px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
@@ -59,12 +60,15 @@ const SearchBook = () => {
         Search Book By Name
       </h1>
 
-      <div className="absolute top-[188px] left-[40px] w-[1370px] h-[1882px] rounded-[20px] border-2 border-solid border-[#efe1e126] bg-[#0000001a] z-10 shadow-md border-blue-500" />
+      <BackgroundContainer />
 
+      {/* SEARCH BAR UPDATE */}
+      {/* Added className with the position */}
       <SearchBar
         query={searchQuery}
         onChange={handleSearchChange}
         onSubmit={handleSearchSubmit}
+        className="absolute top-[215px] left-[65px] z-30" 
       />
 
       <GuideButton onClick={handleGuideMe} />
