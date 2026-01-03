@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import RobotLayout from "../layouts/RobotLayout";
 import BackgroundContainer from "../components/BackgroundContainer";
 import SearchBar from "../components/SearchBar";
 import BookCard from "../components/BookCard";
@@ -7,8 +8,6 @@ import GuideButton from "../components/GuideButton";
 import CancelButton from "../components/CancelButton";
 import blackAndBlueFictionBookCover1 from "../../assets/black-and-blue-fiction-book-cover-1.png";
 import redNeonMysticBookCover1 from "../../assets/red-neon-mystic-book-cover-1.png";
-import logolib31 from "../../assets/logolib3-1.png";
-import { searchBooksByName } from "../../BackendFunctions";
 
 const SearchBook = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,62 +28,78 @@ const SearchBook = () => {
     { id: 12, title: "Hear Me", author: "Rufus Stewart", image: null },
   ];
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
   };
-
-  const handleGuideMe = () => {
-    console.log("Guide Me clicked");
-  };
+  const handleGuideMe = () => console.log("Guide Me clicked");
 
   return (
-    <main className="h-screen overflow-y-auto bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] relative">
-      <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
-              <div className="absolute top-[10px] left-[100px] w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
-              <h2 className="absolute top-[45px] left-[145px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
-                Smart Library Assistant
-              </h2>
-              <img
-                className="absolute top-[5px] left-[130px] w-[191px] h-[72px] aspect-[2.86]"
-                alt="Logolib Smart Library Assistant"
-                src={logolib31}
-              />
-            </header>
+    <RobotLayout>
+      <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-6 overflow-hidden">
+        
+        {/* Title */}
+        <h1 className="flex-shrink-0 ml-[80px] mb-4 [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[30px] md:text-[40px]">
+          Search Book By Name
+        </h1>
 
-      <h1 className="absolute top-[105px] left-[67px] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[40px]">
-        Search Book By Name
-      </h1>
+        {/* Big Background Container */}
+        <BackgroundContainer className="relative flex flex-col flex-1 overflow-hidden">
+            
+            {/* Scrollable Area */}
+            {/* pl-[40px]: Left padding for content */}
+            {/* pr-6: Right padding ensures buttons NEVER touch the right border */}
+            <div className="w-full h-full overflow-y-auto custom-scrollbar pl-[40px] pr-6 pt-[30px]">
+                
+                {/* HEADER ROW */}
+                {/* gap-6: Keeps a gap between SearchBar and Buttons. They will NOT touch. */}
+                <div className="flex flex-row items-start w-full gap-[60px]">
+                    
+                    {/* Search Bar Wrapper */}
+                    {/* flex-1: Takes up available space */}
+                    {/* min-w-0: CRITICAL. Allows this div to shrink smaller than its content if needed. */}
+                    <div className="ml-[40px] flex-1 max-w-[630px] min-w-0 mt-2"> 
+                         <SearchBar
+                            query={searchQuery}
+                            onChange={handleSearchChange}
+                            onSubmit={handleSearchSubmit}
+                            className="w-full"
+                        />
+                    </div>
 
-      <BackgroundContainer />
+                    {/* Button Wrapper */}
+                    {/* w-[240px]: Sets a base width */}
+                    {/* flex-shrink: Allows buttons to get narrower if screen is TINY */}
+                    {/* flex flex-col gap-3: Vertical stack with 12px gap between buttons */}
+                    <div className="mr-[40px] w-[240px] flex-shrink flex flex-col gap-[3px]">
+                        <GuideButton onClick={handleGuideMe} className="w-full text-[14px] sm:text-[18px]" />
+                        <CancelButton className="w-full text-[14px] sm:text-[18px]" />
+                    </div>
+                </div>
 
-      {/* SEARCH BAR UPDATE */}
-      {/* Added className with the position */}
-      <SearchBar
-        query={searchQuery}
-        onChange={handleSearchChange}
-        onSubmit={handleSearchSubmit}
-        className="absolute top-[215px] left-[65px] z-30" 
-      />
+                {/* BOOK GRID */}
+                {/* grid-cols-4: Always 4 columns */}
+                {/* gap-x-[20px]: Horizontal gap between cards. */}
+                {/* gap-y-[60px]: Vertical gap between rows. */}
+                {/* pr-4: Extra padding on right of grid to match visual balance */}
+                <section className="mt-[60px] mr-[60px] mb-[20px] grid grid-cols-4 gap-x-[20px] gap-y-[60px] pr-4">
+                    {bookData.map((book) => (
+                        // min-w-0 ensures the card container can shrink below the image size if necessary
+                        <div key={book.id} className="flex justify-center min-w-0">
+                            <BookCard
+                                title={book.title}
+                                author={book.author}
+                                image={book.image}
+                            />
+                        </div>
+                    ))}
+                </section>
 
-      <GuideButton onClick={handleGuideMe} />
-      <CancelButton />
-
-      <section className="absolute top-[385px] left-[55px] w-[1200px] grid grid-cols-4 gap-x-[30px] gap-y-[60px] z-30">
-        {bookData.map((book) => (
-          <BookCard
-            key={book.id}
-            title={book.title}
-            author={book.author}
-            image={book.image}
-          />
-        ))}
-      </section>
-    </main>
+            </div>
+        </BackgroundContainer>
+      </div>
+    </RobotLayout>
   );
 };
 

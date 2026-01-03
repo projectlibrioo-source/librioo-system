@@ -1,10 +1,12 @@
 import React from "react";
 
-const BackgroundContainer = () => {
+const BackgroundContainer = ({ children, className = "" }) => {
   return (
     <div 
-      className="absolute top-[188px] left-[17px] w-[1244px] min-h-[1882px] rounded-[20px] border-2 border-solid border-[#efe1e126] bg-[#0000001a] z-0 shadow-md pointer-events-none" 
-    />
+      className={`relative w-full rounded-[20px] border-2 border-solid border-[#efe1e126] bg-[#0000001a] shadow-md overflow-hidden ${className}`}
+    >
+      {children}
+    </div>
   );
 };
 
