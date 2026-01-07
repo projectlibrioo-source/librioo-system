@@ -9,30 +9,47 @@ import CancelButton from "../components/CancelButton";
 import blackAndBlueFictionBookCover1 from "../../assets/black-and-blue-fiction-book-cover-1.png";
 import redNeonMysticBookCover1 from "../../assets/red-neon-mystic-book-cover-1.png";
 
+import { searchBooksByName } from "../../BackendFunctions";
+
 const SearchBook = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // 2. STATE FOR BOOKS
+  // We start with an empty array. The data will fill up when we search.
+  const [bookData, setBookData] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false); // To prevent double clicking
+  
   const navigate = useNavigate();
 
-  const bookData = [
-    { id: 1, title: "Xennix", author: "Rufus Stewart", image: blackAndBlueFictionBookCover1 },
-    { id: 2, title: "Conquest", author: "Shawn Garcia", image: null },
-    { id: 3, title: "Fairy Tale", author: "Margarita Perez", image: null },
-    { id: 4, title: "Alone", author: "Juliana Silva", image: redNeonMysticBookCover1 },
-    { id: 5, title: "Journal", author: "Faith", image: null },
-    { id: 6, title: "Mariana", author: "Bailey Dupont", image: null },
-    { id: 7, title: "The Never Garden", author: "Helene Paquet", image: null },
-    { id: 8, title: "Xennix", author: "Rufus Stewart", image: null },
-    { id: 9, title: "Xennix", author: "Rufus Stewart", image: null },
-    { id: 10, title: "The Night", author: "Rufus Stewart", image: null },
-    { id: 11, title: "Fighting For", author: "Rufus Stewart", image: null },
-    { id: 12, title: "Hear Me", author: "Rufus Stewart", image: null },
-  ];
-
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
-  const handleSearchSubmit = (e) => {
+
+  // 3. CONNECTED SEARCH HANDLER
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
+    if (!searchQuery.trim()) return; // Don't search empty strings
+
+    setIsLoading(true);
+
+    try {
+        console.log("Searching backend for:", searchQuery);
+        
+        // Call the function your teammate wrote
+        const results = await searchBooksByName(searchQuery);
+        
+        console.log("Backend results:", results);
+        
+        // Update the screen
+        // NOTE: If results is null/undefined, fallback to empty array []
+        setBookData(results || []); 
+
+    } catch (error) {
+        console.error("Error fetching books:", error);
+        alert("Failed to connect to the library server.");
+    } finally {
+        setIsLoading(false);
+    }
   };
+  
   const handleGuideMe = () => console.log("Guide Me clicked");
 
   return (
@@ -66,12 +83,32 @@ const SearchBook = () => {
 
             {/* Grid section - vertical spacing scales with viewport height */}
             <section className="mt-[clamp(20px,3vh,60px)] mr-[60px] mb-[20px] grid grid-cols-4 gap-x-[20px] gap-y-[clamp(20px,3vh,60px)] pr-4">
+              {/* Optional: Loading Indicator */}
+              {isLoading && (
+                 <div className="col-span-4 text-center text-[#caf9ff] text-xl animate-pulse">
+                    Scanning Library...
+                 </div>
+              )}
+
+              {/* Optional: No Results Message */}
+              {!isLoading && bookData.length === 0 && searchQuery !== "" && (
+                 <div className="col-span-4 text-center text-[#caf9ff] opacity-60">
+                    No books found named "{searchQuery}"
+                 </div>
+              )}
+
+              {/* 4. MAP REAL DATA */}
               {bookData.map((book) => (
-                <div key={book.id} className="flex justify-center min-w-0">
+                <div key={book.id || Math.random()} className="flex justify-center min-w-0">
                   <BookCard
-                    title={book.title}
-                    author={book.author}
-                    image={book.image}
+                    // CRITICAL: Ensure these match what your backend sends! 
+                    // If the backend sends "bookName" instead of "title", change it here.
+                    title={book.title || book.bookName || "Unknown Title"} 
+                    author={book.author || book.writer || "Unknown Author"}
+                    
+                    // The backend won't return your local imports. 
+                    // It will return a URL string or null.
+                    image={book.image || book.imgUrl || null} 
                   />
                 </div>
               ))}
