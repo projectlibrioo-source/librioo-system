@@ -1,10 +1,13 @@
 import React from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
-const SearchBar = ({ query, onChange, onSubmit }) => (
+// Added className prop to allow parents to position it
+const SearchBar = ({ query, onChange, onSubmit, className = "" }) => (
   <form
     onSubmit={onSubmit}
-    className="absolute top-[215px] left-[65px] w-[630px] h-[40px] bg-[#ece6f0] rounded-full flex items-center shadow-md z-30 overflow-hidden"
+    // Removed 'absolute top-[215px] left-[65px] z-30' from here
+    // Added ${className} at the end to accept parent styles
+    className={`w-[630px] h-[40px] bg-[#ece6f0] rounded-full flex items-center shadow-md overflow-hidden ${className}`}
   >
     {/* Input Field */}
     <input

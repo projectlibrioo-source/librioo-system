@@ -1,86 +1,123 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import RobotLayout from "../layouts/RobotLayout";
+import BackgroundContainer from "../components/BackgroundContainer";
 import SearchBar from "../components/SearchBar";
 import BookCard from "../components/BookCard";
 import GuideButton from "../components/GuideButton";
 import CancelButton from "../components/CancelButton";
 import blackAndBlueFictionBookCover1 from "../../assets/black-and-blue-fiction-book-cover-1.png";
 import redNeonMysticBookCover1 from "../../assets/red-neon-mystic-book-cover-1.png";
-import logolib31 from "../../assets/logolib3-1.png";
+
 import { searchBooksByName } from "../../BackendFunctions";
 
 const SearchBook = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // 2. STATE FOR BOOKS
+  // We start with an empty array. The data will fill up when we search.
+  const [bookData, setBookData] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false); // To prevent double clicking
+  
   const navigate = useNavigate();
 
-  const bookData = [
-    { id: 1, title: "Xennix", author: "Rufus Stewart", image: blackAndBlueFictionBookCover1 },
-    { id: 2, title: "Conquest", author: "Shawn Garcia", image: null },
-    { id: 3, title: "Fairy Tale", author: "Margarita Perez", image: null },
-    { id: 4, title: "Alone", author: "Juliana Silva", image: redNeonMysticBookCover1 },
-    { id: 5, title: "Journal", author: "Faith", image: null },
-    { id: 6, title: "Mariana", author: "Bailey Dupont", image: null },
-    { id: 7, title: "The Never Garden", author: "Helene Paquet", image: null },
-    { id: 8, title: "Xennix", author: "Rufus Stewart", image: null },
-    { id: 9, title: "Xennix", author: "Rufus Stewart", image: null },
-    { id: 10, title: "The Night", author: "Rufus Stewart", image: null },
-    { id: 11, title: "Fighting For", author: "Rufus Stewart", image: null },
-    { id: 12, title: "Hear Me", author: "Rufus Stewart", image: null },
-  ];
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleSearchSubmit = (e) => {
+  // 3. CONNECTED SEARCH HANDLER
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
-  };
+    if (!searchQuery.trim()) return; // Don't search empty strings
 
-  const handleGuideMe = () => {
-    console.log("Guide Me clicked");
+    setIsLoading(true);
+
+    try {
+        console.log("Searching backend for:", searchQuery);
+        
+        // Call the function your teammate wrote
+        const results = await searchBooksByName(searchQuery);
+        
+        console.log("Backend results:", results);
+        
+        // Update the screen
+        // NOTE: If results is null/undefined, fallback to empty array []
+        setBookData(results || []); 
+
+    } catch (error) {
+        console.error("Error fetching books:", error);
+        alert("Failed to connect to the library server.");
+    } finally {
+        setIsLoading(false);
+    }
   };
+  
+  const handleGuideMe = () => console.log("Guide Me clicked");
 
   return (
-    <main className="bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] min-h-[2105px] relative">
-      <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
-              <div className="absolute top-[10px] left-[100px] w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
-              <h2 className="absolute top-[45px] left-[145px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
-                Smart Library Assistant
-              </h2>
-              <img
-                className="absolute top-[5px] left-[130px] w-[191px] h-[72px] aspect-[2.86]"
-                alt="Logolib Smart Library Assistant"
-                src={logolib31}
-              />
-            </header>
+    <RobotLayout>
+      <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-[clamp(12px,2vh,24px)] overflow-hidden">
+        
+        {/* Title - scales with viewport height */}
+        <h1 className="flex-shrink-0 ml-[80px] mb-[clamp(8px,1.5vh,16px)] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(20px,3.5vh,40px)] leading-tight">
+          Search Book By Name
+        </h1>
 
-      <h1 className="absolute top-[105px] left-[67px] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[40px]">
-        Search Book By Name
-      </h1>
+        <BackgroundContainer className="relative flex flex-col flex-1 min-h-0 overflow-hidden">
+          <div className="w-full h-full overflow-y-auto custom-scrollbar pl-[40px] pr-6 pt-[clamp(15px,2.5vh,30px)]">
+            
+            {/* Search and buttons section - scales proportionally */}
+            <div className="flex flex-row items-start w-full gap-[clamp(30px,5vw,60px)]">
+              <div className="ml-[40px] flex-1 max-w-[630px] min-w-0 mt-2"> 
+                <SearchBar
+                  query={searchQuery}
+                  onChange={handleSearchChange}
+                  onSubmit={handleSearchSubmit}
+                  className="w-full"
+                />
+              </div>
 
-      <div className="absolute top-[188px] left-[40px] w-[1370px] h-[1882px] rounded-[20px] border-2 border-solid border-[#efe1e126] bg-[#0000001a] z-10 shadow-md border-blue-500" />
+              <div className="mr-[40px] w-[clamp(180px,20vw,240px)] flex-shrink-0 flex flex-col gap-[clamp(2px,0.5vh,6px)]">
+                <GuideButton onClick={handleGuideMe} className="w-full text-[clamp(12px,1.6vh,18px)]" />
+                <CancelButton className="w-full text-[clamp(12px,1.6vh,18px)]" />
+              </div>
+            </div>
 
-      <SearchBar
-        query={searchQuery}
-        onChange={handleSearchChange}
-        onSubmit={handleSearchSubmit}
-      />
+            {/* Grid section - vertical spacing scales with viewport height */}
+            <section className="mt-[clamp(20px,3vh,60px)] mr-[60px] mb-[20px] grid grid-cols-4 gap-x-[20px] gap-y-[clamp(20px,3vh,60px)] pr-4">
+              {/* Optional: Loading Indicator */}
+              {isLoading && (
+                 <div className="col-span-4 text-center text-[#caf9ff] text-xl animate-pulse">
+                    Scanning Library...
+                 </div>
+              )}
 
-      <GuideButton onClick={handleGuideMe} />
-      <CancelButton />
+              {/* Optional: No Results Message */}
+              {!isLoading && bookData.length === 0 && searchQuery !== "" && (
+                 <div className="col-span-4 text-center text-[#caf9ff] opacity-60">
+                    No books found named "{searchQuery}"
+                 </div>
+              )}
 
-      <section className="absolute top-[385px] left-[55px] w-[1200px] grid grid-cols-4 gap-x-[30px] gap-y-[60px] z-30">
-        {bookData.map((book) => (
-          <BookCard
-            key={book.id}
-            title={book.title}
-            author={book.author}
-            image={book.image}
-          />
-        ))}
-      </section>
-    </main>
+              {/* 4. MAP REAL DATA */}
+              {bookData.map((book) => (
+                <div key={book.id || Math.random()} className="flex justify-center min-w-0">
+                  <BookCard
+                    // CRITICAL: Ensure these match what your backend sends! 
+                    // If the backend sends "bookName" instead of "title", change it here.
+                    title={book.title || book.bookName || "Unknown Title"} 
+                    author={book.author || book.writer || "Unknown Author"}
+                    
+                    // The backend won't return your local imports. 
+                    // It will return a URL string or null.
+                    image={book.image || book.imgUrl || null} 
+                  />
+                </div>
+              ))}
+            </section>
+
+          </div>
+        </BackgroundContainer>
+      </div>
+    </RobotLayout>
   );
 };
 
