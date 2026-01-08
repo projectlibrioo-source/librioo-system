@@ -1,124 +1,160 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logolib31 from "../../assets/logolib3-1.png";
+import RobotLayout from "../layouts/RobotLayout";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
 
-const BorrowPage = () => {
+export default function BorrowPage() {
   const [bookId, setBookId] = useState("");
   const [bookName, setBookName] = useState("");
   const navigate = useNavigate();
 
   const handleBorrow = (e) => {
     e.preventDefault();
-    // ⚠️ BACKEND INTEGRATION POINT:
-    // Replace with API call to borrow book using bookId and bookName
-    console.log("Borrowing book:", { bookId, bookName });
-  };
-
-  const handleCancel = () => {
-    // Clear form fields
-    setBookId("");
-    setBookName("");
-  };
-
-  const handleBack = () => {
-    navigate("/robot/selection");
+    console.log("Borrowing:", { bookId, bookName });
   };
 
   return (
-    <main className="bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] min-h-[780px] relative">
-      
-      {/* HEADER - Consistent with MemberLogin */}
-      <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
-              <div className="absolute top-[10px] left-[100px] w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
-              <h2 className="absolute top-[45px] left-[145px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
-                Smart Library Assistant
-              </h2>
+    <RobotLayout>
+      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[100px]">
+
+        {/* Title */}
+        <div
+          style={{
+            paddingLeft: "clamp(0px, 10vw, 80px)",
+            marginBottom: "clamp(10px, 2vh, 40px)",
+          }}
+        >
+          <h1
+            className="[font-family:'ADLaM_Display-Regular',Helvetica] text-[#caf9ff]"
+            style={{ fontSize: "clamp(20px, 3.5vh, 60px)" }}
+          >
+            Borrow Book
+          </h1>
+        </div>
+
+        {/* Content */}
+        <div
+          style={{
+            paddingLeft: "clamp(0px, 12vw, 100px)",
+            flex: 1,
+            display: "flex",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: "clamp(20px, 4vw, 100px)",
+              width: "100%",
+              alignItems: "flex-start",
+            }}
+          >
+            {/* LEFT: Form */}
+            <form
+              onSubmit={handleBorrow}
+              style={{
+                flex: 1,
+                maxWidth: "720px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "clamp(20px, 3vh, 45px)",
+              }}
+            >
+              {/* Book ID */}
+              <div className="bg-[#d9d9d926] rounded-[20px] shadow-md px-6 py-6">
+                <label
+                  className="text-white [font-family:'Aldrich-Regular',Helvetica]"
+                  style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
+                >
+                  Book ID :
+                </label>
+
+                <input
+                  value={bookId}
+                  onChange={(e) => setBookId(e.target.value)}
+                  required
+                  className="mt-4 w-full bg-[#d9d9d926] rounded-[20px] shadow-md px-6 text-white focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
+                  style={{
+                    height: "clamp(45px, 6vh, 68px)",
+                    fontSize: "clamp(16px, 2vw, 24px)",
+                  }}
+                />
+              </div>
+
+              {/* Book Name */}
+              <div className="bg-[#d9d9d926] rounded-[20px] shadow-md px-6 py-6">
+                <label
+                  className="text-white [font-family:'Aldrich-Regular',Helvetica]"
+                  style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
+                >
+                  Book Name :
+                </label>
+
+                <input
+                  value={bookName}
+                  onChange={(e) => setBookName(e.target.value)}
+                  required
+                  className="mt-4 w-full bg-[#d9d9d926] rounded-[20px] shadow-md px-6 text-white focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
+                  style={{
+                    height: "clamp(45px, 6vh, 68px)",
+                    fontSize: "clamp(16px, 2vw, 24px)",
+                  }}
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBookId("");
+                    setBookName("");
+                  }}
+                  className="flex-1 bg-[#00000045] rounded-[20px] shadow-md hover:bg-[#00000060]"
+                  style={{ height: "clamp(50px, 7vh, 80px)" }}
+                >
+                  <span
+                    className="text-white [font-family:'Aldrich-Regular',Helvetica]"
+                    style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
+                  >
+                    CANCEL
+                  </span>
+                </button>
+
+                <button
+                  type="submit"
+                  className="flex-1 bg-[#00000045] rounded-[20px] shadow-md hover:bg-[#00000060]"
+                  style={{ height: "clamp(50px, 7vh, 80px)" }}
+                >
+                  <span
+                    className="text-white [font-family:'Aldrich-Regular',Helvetica]"
+                    style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
+                  >
+                    BORROW
+                  </span>
+                </button>
+              </div>
+            </form>
+
+            {/* RIGHT: Robot */}
+            <div
+              style={{
+                width: "clamp(120px, 18vw, 400px)",
+                flexShrink: 0,
+              }}
+            >
               <img
-                className="absolute top-[5px] left-[130px] w-[191px] h-[72px] aspect-[2.86]"
-                alt="Logolib Smart Library Assistant"
-                src={logolib31}
+                src={robotImage}
+                alt="Smart Library Assistant Robot"
+                style={{
+                  width: "100%",
+                  maxHeight: "620px",
+                  objectFit: "contain",
+                }}
               />
-            </header>
-
-      {/* PAGE TITLE */}
-      <section className="absolute top-[143px] left-[194px] w-[650px]">
-        <h1 className="[font-family:'ADLaM_Display-Regular',Helvetica] text-[#caf9ff] text-[40px] text-center">
-          Borrow Book
-        </h1>
-      </section>
-
-      {/* FORM AREA */}
-      <form onSubmit={handleBorrow}>
-        {/* Book ID Field */}
-        <div className="absolute top-[283px] left-[194px] w-[650px] h-[101px]">
-          <div className="absolute top-0 left-0 w-full h-full bg-[#d9d9d926] rounded-[20px] shadow-md" />
-          <label
-            htmlFor="book-id"
-            className="absolute top-[32px] left-[50px] text-white text-[32px] [font-family:'Aldrich-Regular',Helvetica]"
-          >
-            Book ID :
-          </label>
-          <input
-            type="text"
-            id="book-id"
-            value={bookId}
-            onChange={(e) => setBookId(e.target.value)}
-            className="absolute top-[16px] right-[40px] w-[301px] h-[68px] bg-[#d9d9d926] rounded-[20px] shadow-md px-6 text-white text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
-            required
-          />
+            </div>
+          </div>
         </div>
-
-        {/* Book Name Field */}
-        <div className="absolute top-[414px] left-[194px] w-[650px] h-[101px]">
-          <div className="absolute top-0 left-0 w-full h-full bg-[#d9d9d926] rounded-[20px] shadow-md" />
-          <label
-            htmlFor="book-name"
-            className="absolute top-[32px] left-[50px] text-white text-[32px] [font-family:'Aldrich-Regular',Helvetica]"
-          >
-            Book Name :
-          </label>
-          <input
-            type="text"
-            id="book-name"
-            value={bookName}
-            onChange={(e) => setBookName(e.target.value)}
-            className="absolute top-[16px] right-[40px] w-[301px] h-[68px] bg-[#d9d9d926] rounded-[20px] shadow-md px-6 text-white text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
-            required
-          />
-        </div>
-
-        {/* NAVIGATION BUTTONS */}
-        <nav className="absolute top-[565px] left-[194px] w-[650px] flex justify-between">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="w-[280px] h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-md cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
-          >
-            <span className="text-white text-[32px] [font-family:'Aldrich-Regular',Helvetica]">
-              CANCEL
-            </span>
-          </button>
-
-          <button
-            type="submit"
-            className="w-[280px] h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-md cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
-          >
-            <span className="text-white text-[32px] [font-family:'Aldrich-Regular',Helvetica]">
-              BORROW
-            </span>
-          </button>
-        </nav>
-      </form>
-
-      {/* ROBOT MASCOT */}
-      <img
-        className="absolute top-[194px] left-[952px] w-[269px] h-[457px] object-cover"
-        alt="Smart Library Assistant Robot"
-        src={robotImage}
-      />
-    </main>
+      </div>
+    </RobotLayout>
   );
-};
-
-export default BorrowPage;
+}
