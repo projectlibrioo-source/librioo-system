@@ -6,17 +6,41 @@ import { memberLogin } from "../../BackendFunctions";
 
 const MemberLogin = () => {
   const [libraryId, setLibraryId] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Added loading state  
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const member = await memberLogin(libraryId);
+    
+    // Prevent empty logins
+    if (!libraryId.trim()) {
+        alert("Please enter a Library ID");
+        return;
+    }
 
-    if (member) {
-      alert("Login Success");
-      navigate("/robot/search");
-    } else {
-      alert("Invalid ID");
+    setIsLoading(true); // Disable button
+
+    try {
+        console.log("Attempting login for ID:", libraryId);
+        
+        // Call the backend function
+        const member = await memberLogin(libraryId);
+
+        if (member) {
+            console.log("Login successful:", member);
+            // Optional: Save member info to localStorage if you need it later
+            // localStorage.setItem("currentMember", JSON.stringify(member)); 
+            
+            alert("Login Success");
+            navigate("/robot/search");
+        } else {
+            // If memberLogin returns null, the ID was not found
+            alert("Invalid Library ID. Please try again.");
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+    } finally {
+        setIsLoading(false); // Re-enable button
     }
   };
 
@@ -25,54 +49,57 @@ const MemberLogin = () => {
   };
 
   return (
-    <RobotLayout>
-      <div className="h-full w-full flex flex-col overflow-hidden px-[100px]">
-        
-        {/* Main Content Area */}
-        <div style={{ 
-  paddingLeft: 'clamp(0px, 10vw, 80px)', 
-  paddingRight: 'clamp(100px, 25vw, 350px)', 
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'row', 
-  alignItems: 'flex-start', // ✅ CHANGED
-  justifyContent: 'space-between',
-  gap: 'clamp(20px, 4vw, 100px)',
-  paddingBottom: '20px',
-  marginTop: '30px'
-}}>
+    <main className="bg-[linear-gradient(180deg,#2c3e50_0%,#4a6278_100%)] w-full min-w-[1280px] min-h-[780px] relative">
+      
+      {/* HEADER - Exact match to Page 1 */}
+      <header className="absolute top-3.5 left-16 w-[1152px] h-[100px]">
+        <div className="absolute top-[10px] left-[100px] w-[1280px] h-[100px] bg-[#d9d9d959] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
+        <h2 className="absolute top-[45px] left-[145px] [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-white text-[22px] tracking-[0] leading-[normal] whitespace-nowrap">
+          Smart Library Assistant
+        </h2>
+        <img
+          className="absolute top-[5px] left-[130px] w-[191px] h-[72px] aspect-[2.86]"
+          alt="Logolib Smart Library Assistant"
+          src={logolib31}
+        />
+      </header>
 
-          
-            {/* Left Column: Title, Form, Buttons */}
-            <div className="flex flex-col w-full max-w-[650px] gap-8">
-              
-              {/* Title */}
-              <h1 
-                className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal] text-center"
-                style={{ fontSize: 'clamp(32px, 4vh, 60px)' }}
-              >
-                Member Login
-              </h1>
+      {/* PAGE TITLE - Exact match to Page 1 */}
+      <section className="absolute top-[143px] left-[194px] w-[650px]">
+        <h1 className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[40px] text-center tracking-[0] leading-[normal]">
+          Member Login
+        </h1>
+      </section>
 
-              {/* Input Box Container */}
-              <form onSubmit={handleLogin} className="w-full mb-16">
-                <div className="w-full h-[100px] bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] px-8 flex items-center justify-center gap-8">
-                  <label
-                    htmlFor="library-id"
-                    className="whitespace-nowrap [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[24px] lg:text-[32px] tracking-[0] leading-[normal]"
-                  >
-                    Library ID :
-                  </label>
-                  <input
-                    type="text"
-                    id="library-id"
-                    value={libraryId}
-                    onChange={(e) => setLibraryId(e.target.value)}
-                    className="w-[50%] h-[68px] bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] px-4 text-white text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
-                    required
-                  />
-                </div>
-              </form>
+      {/* FORM AREA*/}
+      <form 
+        onSubmit={handleLogin}
+        className="absolute top-[283px] left-[194px] w-[650px] h-[101px]"
+      >
+        {/* The Bigger Box */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040]" />
+
+        <label
+        htmlFor="library-id"
+        className="absolute top-[32px] left-[50px] w-fit 
+                    [-webkit-text-fill-color:white] 
+                    [font-family:'Aldrich-Regular',Helvetica] 
+                    font-normal text-[32px] tracking-[0] leading-[normal] whitespace-nowrap"
+        >
+        Library ID :
+        </label>
+
+        {/* The Input */}
+        <input
+          type="text"
+          id="library-id"
+          value={libraryId}
+          onChange={(e) => setLibraryId(e.target.value)}
+          className="absolute top-[16px] right-[40px] w-[301px] h-[68px] bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] px-6 text-white text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
+          required
+          autoFocus
+        />
+      </form>
 
               {/* Buttons Row - INCREASED GAP HERE */}
               <div className="flex flex-row justify-between w-full gap-[200px] mt-16">
@@ -86,40 +113,29 @@ const MemberLogin = () => {
                   </span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleLogin}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
-                >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[32px]">
-                    LOGIN
-                  </span>
-                </button>
-              </div>
-            </div>
+        <button
+          type="submit"
+          onClick={handleLogin}
+          disabled={isLoading} // Disable button when loading
+          className={`w-[280px] h-[80px] flex items-center justify-center rounded-[20px] shadow-[0px_4px_4px_#00000040] transition-all focus:outline-none focus:ring-2 focus:ring-[#ff7421]
+            ${isLoading ? "bg-[#ffffff20] cursor-not-allowed" : "bg-[#00000045] cursor-pointer hover:bg-[#00000060]"}`}
+        >
+          <span className="flex items-center justify-center w-fit 
+                    [-webkit-text-fill-color:white] 
+                    [font-family:'Aldrich-Regular',Helvetica] 
+                    font-normal text-[32px] tracking-[0] leading-[normal] whitespace-nowrap">
+            {isLoading ? "..." : "LOGIN"}
+          </span>
+        </button>
+      </nav>
 
-            {/* Right Column: Robot Image */}
-            <div style={{ 
-              flexShrink: 0, 
-              width: 'clamp(200px, 25vw, 400px)',
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'center'
-            }}>
-              <img
-                style={{ 
-                  width: '100%', 
-                  height: 'auto',
-                  objectFit: 'contain'
-                }}
-                alt="Smart Library Assistant Robot"
-                src={robotImage}
-              />
-            </div>
-
-        </div>
-      </div>
-    </RobotLayout>
+      {/* ROBOT - Exact match to Page 1 */}
+      <img
+        className="absolute top-[140px] left-[952px] w-[269px] h-[457px] aspect-[0.58] object-cover"
+        alt="Smart Library Assistant Robot"
+        src={robotImage}
+      />
+    </main>
   );
 };
 
