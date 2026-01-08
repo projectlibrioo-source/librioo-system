@@ -102,17 +102,17 @@ const GuestLogin = () => {
         />
       </form>
 
-              {/* Navigation Buttons */}
-              <div className="flex flex-row gap-4 w-full">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
-                >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
-                    BACK
-                  </span>
-                </button>
+      {/* Navigation Buttons */}
+      <div className="flex flex-row w-full gap-4">
+        <button
+          type="button"
+          onClick={handleBack}
+          className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+        >
+          <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
+            BACK
+          </span>
+        </button>
 
         <button
           type="submit"
@@ -128,7 +128,7 @@ const GuestLogin = () => {
             {isLoading ? "..." : "LOGIN"}
           </span>
         </button>
-      </nav>
+      </div>
 
       {/* ROBOT - Exact match to Page 1 */}
       <img

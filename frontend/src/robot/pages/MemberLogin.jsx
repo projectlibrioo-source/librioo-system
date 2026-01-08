@@ -101,17 +101,17 @@ const MemberLogin = () => {
         />
       </form>
 
-              {/* Buttons Row - INCREASED GAP HERE */}
-              <div className="flex flex-row justify-between w-full gap-[200px] mt-16">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
-                >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[32px]">
-                    BACK
-                  </span>
-                </button>
+        {/* Buttons Row - INCREASED GAP HERE */}
+        <div className="flex flex-row justify-between w-full gap-[200px] mt-16">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+          >
+            <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[32px]">
+              BACK
+            </span>
+          </button>
 
         <button
           type="submit"
@@ -127,7 +127,7 @@ const MemberLogin = () => {
             {isLoading ? "..." : "LOGIN"}
           </span>
         </button>
-      </nav>
+      </div>
 
       {/* ROBOT - Exact match to Page 1 */}
       <img
