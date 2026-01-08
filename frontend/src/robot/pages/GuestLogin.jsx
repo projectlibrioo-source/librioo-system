@@ -1,48 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RobotLayout from "../layouts/RobotLayout"; // Import the layout
+import logolib31 from "../../assets/logolib3-1.png";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
-import { guestLogin } from "../../BackendFunctions";
+//import { guestLogin } from "../../BackendFunctions";
 
 const GuestLogin = () => {
   const [guestId, setGuestId] = useState("");
-  // 2. Add loading state to prevent double clicks
-  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
-  // 3. Make the handler async and connect it
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    
-    if (!guestId.trim()) {
-        alert("Please enter a Guest ID");
-        return;
-    }
-
-    setIsLoading(true); // Disable button
-
-    try {
-        console.log("Attempting login for Guest ID:", guestId);
-        
-        // Call the backend function
-        const guest = await guestLogin(guestId);
-
-        if (guest) {
-            console.log("Guest login successful:", guest);
-            // Optional: Store guest info if needed
-            // localStorage.setItem("currentUser", JSON.stringify(guest));
-            
-            alert("Login Success");
-            navigate("/robot/search");
-        } else {
-            alert("Invalid Guest ID. Please try again.");
-        }
-    } catch (error) {
-        console.error("Login error:", error);
-        alert("System error. Please try again later.");
-    } finally {
-        setIsLoading(false); // Re-enable button
-    }
+    guestLogin(guestId);
+    //console.log("Login with Guest ID:", guestId);
   };
 
   const handleBack = () => {
@@ -98,18 +67,20 @@ const GuestLogin = () => {
           onChange={(e) => setGuestId(e.target.value)}
           className="absolute top-[16px] right-[40px] w-[301px] h-[68px] bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] px-6 text-white text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
           required
-          autoFocus
         />
       </form>
 
-      {/* Navigation Buttons */}
-      <div className="flex flex-row w-full gap-4">
+      {/* NAVIGATION - Back and Login buttons */}
+      <nav className="absolute top-[434px] left-[194px] w-[650px] flex justify-between">
         <button
           type="button"
           onClick={handleBack}
-          className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+          className="w-[280px] h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
         >
-          <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
+          <span className="flex items-center justify-center w-fit 
+                    [-webkit-text-fill-color:white] 
+                    [font-family:'Aldrich-Regular',Helvetica] 
+                    font-normal text-[32px] tracking-[0] leading-[normal] whitespace-nowrap">
             BACK
           </span>
         </button>
@@ -117,18 +88,16 @@ const GuestLogin = () => {
         <button
           type="submit"
           onClick={handleLogin}
-          disabled={isLoading} // Disable button while loading
-          className={`w-[280px] h-[80px] flex items-center justify-center rounded-[20px] shadow-[0px_4px_4px_#00000040] transition-all focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-            ${isLoading ? "bg-[#ffffff20] cursor-not-allowed" : "bg-[#00000045] cursor-pointer hover:bg-[#00000060]"}`}
+          className="w-[280px] h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
         >
           <span className="flex items-center justify-center w-fit 
                     [-webkit-text-fill-color:white] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     font-normal text-[32px] tracking-[0] leading-[normal] whitespace-nowrap">
-            {isLoading ? "..." : "LOGIN"}
+            LOGIN
           </span>
         </button>
-      </div>
+      </nav>
 
       {/* ROBOT - Exact match to Page 1 */}
       <img

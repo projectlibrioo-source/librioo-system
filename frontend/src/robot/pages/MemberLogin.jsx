@@ -1,47 +1,28 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RobotLayout from "../layouts/RobotLayout"; 
+import logolib31 from "../../assets/logolib3-1.png";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
 import { memberLogin } from "../../BackendFunctions";
 
+
 const MemberLogin = () => {
   const [libraryId, setLibraryId] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Added loading state  
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
-    
-    // Prevent empty logins
-    if (!libraryId.trim()) {
-        alert("Please enter a Library ID");
-        return;
+    const member = await memberLogin(libraryId);
+
+    if(member){
+      alert("Login Success")
+      navigate("/robot/search")
+      
+    }else{
+      alert("Invalid ID");
     }
-
-    setIsLoading(true); // Disable button
-
-    try {
-        console.log("Attempting login for ID:", libraryId);
-        
-        // Call the backend function
-        const member = await memberLogin(libraryId);
-
-        if (member) {
-            console.log("Login successful:", member);
-            // Optional: Save member info to localStorage if you need it later
-            // localStorage.setItem("currentMember", JSON.stringify(member)); 
-            
-            alert("Login Success");
-            navigate("/robot/search");
-        } else {
-            // If memberLogin returns null, the ID was not found
-            alert("Invalid Library ID. Please try again.");
-        }
-    } catch (error) {
-        console.error("Login error:", error);
-    } finally {
-        setIsLoading(false); // Re-enable button
-    }
+      
+  
+    //console.log("Login with Library ID:", libraryId);
   };
 
   const handleBack = () => {
@@ -97,37 +78,37 @@ const MemberLogin = () => {
           onChange={(e) => setLibraryId(e.target.value)}
           className="absolute top-[16px] right-[40px] w-[301px] h-[68px] bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] px-6 text-white text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
           required
-          autoFocus
         />
       </form>
 
-        {/* Buttons Row - INCREASED GAP HERE */}
-        <div className="flex flex-row justify-between w-full gap-[200px] mt-16">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
-          >
-            <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[32px]">
-              BACK
-            </span>
-          </button>
-
+      {/* NAVIGATION - Back and Login buttons */}
+      <nav className="absolute top-[434px] left-[194px] w-[650px] flex justify-between">
         <button
-          type="submit"
-          onClick={handleLogin}
-          disabled={isLoading} // Disable button when loading
-          className={`w-[280px] h-[80px] flex items-center justify-center rounded-[20px] shadow-[0px_4px_4px_#00000040] transition-all focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-            ${isLoading ? "bg-[#ffffff20] cursor-not-allowed" : "bg-[#00000045] cursor-pointer hover:bg-[#00000060]"}`}
+          type="button"
+          onClick={handleBack}
+          className="w-[280px] h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
         >
           <span className="flex items-center justify-center w-fit 
                     [-webkit-text-fill-color:white] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     font-normal text-[32px] tracking-[0] leading-[normal] whitespace-nowrap">
-            {isLoading ? "..." : "LOGIN"}
+            BACK
           </span>
         </button>
-      </div>
+
+        <button
+          type="submit"
+          onClick={handleLogin}
+          className="w-[280px] h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+        >
+          <span className="flex items-center justify-center w-fit 
+                    [-webkit-text-fill-color:white] 
+                    [font-family:'Aldrich-Regular',Helvetica] 
+                    font-normal text-[32px] tracking-[0] leading-[normal] whitespace-nowrap">
+            LOGIN
+          </span>
+        </button>
+      </nav>
 
       {/* ROBOT - Exact match to Page 1 */}
       <img
