@@ -66,7 +66,7 @@ export async function guestLogin(guestid) {
         });
 
         if(response.ok){
-            const guestData = await response.json();
+            const guestData = await response.json();            
             return guestData;
             
           

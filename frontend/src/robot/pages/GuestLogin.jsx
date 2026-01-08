@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logolib31 from "../../assets/logolib3-1.png";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
-//import { guestLogin } from "../../BackendFunctions";
+import { guestLogin } from "../../BackendFunctions";
 
 const GuestLogin = () => {
   const [guestId, setGuestId] = useState("");
