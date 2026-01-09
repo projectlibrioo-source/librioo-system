@@ -58,7 +58,7 @@ export async function searchByCategory(category) {
     }
 }
 
-//Login for the members
+//Login for the guests
 export async function guestLogin(guestid) {
     try{
         const response = await fetch(`http://localhost:8080/api/loginguest?guestid=${guestid}`, {
