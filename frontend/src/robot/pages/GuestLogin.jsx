@@ -20,18 +20,13 @@ const GuestLogin = () => {
 
   return (
     <RobotLayout>
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[100px]">
+      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
         
         {/* Title Section */}
         <div style={{ 
           display: 'flex',
-          justifyContent: 'flex-start', // 1. Align to left (Start)
-          
-          /* 2. PUSH TITLE A LITTLE BIT FROM LEFT 
-             - Change '200px' to adjust exact position.
-             - clamp(...) makes it responsive on smaller screens. */
-          paddingLeft: 'clamp(100px, 25vw, 320px)', 
-
+          justifyContent: 'flex-start',
+          paddingLeft: 'clamp(20px, 25vw, 320px)',
           width: '100%',
           marginBottom: 'clamp(20px, 4vh, 60px)',
           marginTop: 'clamp(10px, 2vh, 40px)',
@@ -45,7 +40,7 @@ const GuestLogin = () => {
           </h1>
         </div>
 
-        {/* Content Area (Form + Robot) */}
+        {/* Content Area */}
         <div style={{ 
           paddingLeft: 'clamp(0px, 12vw, 100px)',
           flex: 1,
@@ -60,13 +55,14 @@ const GuestLogin = () => {
             gap: 'clamp(15px, 4vw, 100px)', 
             alignItems: 'stretch',
             width: '100%',
-            height: '100%'
+            height: '100%',
+            flexWrap: 'wrap'
           }}>
             
             {/* Left side: Form & Buttons */}
             <div style={{ 
               flex: 1, 
-              minWidth: 0, 
+              minWidth: '300px',
               display: 'flex', 
               flexDirection: 'column', 
               gap: 'clamp(20px, 3vh, 50px)',
@@ -75,32 +71,70 @@ const GuestLogin = () => {
               
               {/* Input Group */}
               <form onSubmit={handleLogin} className="w-full">
-                <div className="w-full bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] p-6 flex flex-col sm:flex-row items-center gap-4">
+                <div className="
+                  w-full 
+                  h-[80px] sm:h-[100px] 
+                  bg-[#d9d9d926] 
+                  rounded-[20px] 
+                  shadow-[0px_4px_4px_#00000040] 
+                  
+                  /* FLEX SETTINGS FOR CENTERING */
+                  flex flex-row 
+                  items-center      /* Vertically Center */
+                  justify-center    /* Horizontally Center */
+                  
+                  gap-[65px] sm:gap-[30px] /* Responsive gap */
+                ">
+                  
+                  {/* LABEL */}
                   <label
                     htmlFor="guest-id"
-                    className="whitespace-nowrap [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[20px] sm:text-[24px] lg:text-[32px] tracking-[0] leading-[normal]"
+                    className="
+                      whitespace-nowrap 
+                      [-webkit-text-fill-color:white] 
+                      [font-family:'Aldrich-Regular',Helvetica] 
+                      font-normal 
+                      text-[22px] sm:text-[24px] lg:text-[32px] 
+                      tracking-[0] 
+                      leading-[normal]
+                    "
                   >
                     Guest ID :
                   </label>
+
+                  {/* INPUT */}
                   <input
                     type="text"
                     id="guest-id"
                     value={guestId}
                     onChange={(e) => setGuestId(e.target.value)}
-                    className="flex-1 w-full h-[60px] bg-[#d9d9d926] rounded-[15px] shadow-inner px-4 text-white text-[20px] sm:text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
+                    className="
+                      /* RESPONSIVE WIDTH: Smaller on mobile to fit, wider on desktop */
+                      w-[220px] sm:w-[100px] 
+                      
+                      h-[45px] sm:h-[50px] 
+                      bg-[#d9d9d926] 
+                      rounded-[15px] 
+                      shadow-inner 
+                      px-4 
+                      text-white 
+                      text-[16px] sm:text-[20px] 
+                      [font-family:'Aldrich-Regular',Helvetica] 
+                      focus:outline-none focus:ring-2 focus:ring-[#caf9ff]
+                    "
                     required
                   />
                 </div>
               </form>
 
               {/* Navigation Buttons */}
-              <div className="flex flex-row gap-[120px] w-full">
+              <div className="flex flex-row gap-[50px] sm:gap-[120px] w-full">
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
                 >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
                     BACK
                   </span>
                 </button>
@@ -108,9 +142,9 @@ const GuestLogin = () => {
                 <button
                   type="submit"
                   onClick={handleLogin}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
                 >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
                     LOGIN
                   </span>
                 </button>
@@ -118,19 +152,15 @@ const GuestLogin = () => {
 
             </div>
 
-            {/* Right side: Robot image */}
+            {/* Right side: Robot image (Desktop) */}
             <div style={{ 
               flexShrink: 0, 
               width: 'clamp(100px, 18vw, 400px)',
               display: 'flex',
               alignItems: 'flex-start',
               overflow: 'hidden',
-              
-              /* 3. PUSH ROBOT HIGHER 
-                 Negative margin pulls the element up. 
-                 Increase to -60px or -80px to go higher. */
               marginTop: '-50px' 
-            }}>
+            }} className="hidden sm:flex">
               <img
                 style={{ 
                   width: '100%', 
@@ -142,6 +172,8 @@ const GuestLogin = () => {
                 src={robotImage}
               />
             </div>
+            
+             
 
           </div>
         </div>

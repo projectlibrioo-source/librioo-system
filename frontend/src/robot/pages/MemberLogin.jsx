@@ -26,17 +26,13 @@ const MemberLogin = () => {
 
   return (
     <RobotLayout>
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[100px]">
+      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
         
         {/* Title Section */}
         <div style={{ 
           display: 'flex',
-          justifyContent: 'flex-start', // Align start
-          
-          /* MATCHING GUEST LOGIN STYLE:
-             Pushes the title to the right, exactly like the Guest page. */
-          paddingLeft: 'clamp(100px, 25vw, 320px)', 
-          
+          justifyContent: 'flex-start',
+          paddingLeft: 'clamp(20px, 25vw, 320px)',
           width: '100%',
           marginBottom: 'clamp(20px, 4vh, 60px)',
           marginTop: 'clamp(10px, 2vh, 40px)',
@@ -50,7 +46,7 @@ const MemberLogin = () => {
           </h1>
         </div>
 
-        {/* Content Area (Form + Robot) */}
+        {/* Content Area */}
         <div style={{ 
           paddingLeft: 'clamp(0px, 12vw, 100px)',
           flex: 1,
@@ -65,13 +61,14 @@ const MemberLogin = () => {
             gap: 'clamp(15px, 4vw, 100px)', 
             alignItems: 'stretch',
             width: '100%',
-            height: '100%'
+            height: '100%',
+            flexWrap: 'wrap'
           }}>
             
             {/* Left side: Form & Buttons */}
             <div style={{ 
               flex: 1, 
-              minWidth: 0, 
+              minWidth: '300px',
               display: 'flex', 
               flexDirection: 'column', 
               gap: 'clamp(20px, 3vh, 50px)',
@@ -80,32 +77,70 @@ const MemberLogin = () => {
               
               {/* Input Group */}
               <form onSubmit={handleLogin} className="w-full">
-                <div className="w-full bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040] p-6 flex flex-col sm:flex-row items-center gap-4">
+                <div className="
+                  w-full 
+                  h-[80px] sm:h-[100px] 
+                  bg-[#d9d9d926] 
+                  rounded-[20px] 
+                  shadow-[0px_4px_4px_#00000040] 
+                  
+                  /* FLEX SETTINGS FOR CENTERING */
+                  flex flex-row 
+                  items-center      /* Vertically Center */
+                  justify-center    /* Horizontally Center (Left/Right) */
+                  
+                  gap-[65px] sm:gap-[30px] /* Reduced gap slightly to keep them grouped */
+                ">
+                  
+                  {/* LABEL */}
                   <label
                     htmlFor="library-id"
-                    className="whitespace-nowrap [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[20px] sm:text-[24px] lg:text-[32px] tracking-[0] leading-[normal]"
+                    className="
+                      whitespace-nowrap 
+                      [-webkit-text-fill-color:white] 
+                      [font-family:'Aldrich-Regular',Helvetica] 
+                      font-normal 
+                      text-[22px] sm:text-[24px] lg:text-[32px] 
+                      tracking-[0] 
+                      leading-[normal]
+                    "
                   >
                     Library ID :
                   </label>
+
+                  {/* INPUT */}
                   <input
                     type="text"
                     id="library-id"
                     value={libraryId}
                     onChange={(e) => setLibraryId(e.target.value)}
-                    className="flex-1 w-full h-[60px] bg-[#d9d9d926] rounded-[15px] shadow-inner px-4 text-white text-[20px] sm:text-[24px] [font-family:'Aldrich-Regular',Helvetica] focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
+                    className="
+                      /* RESPONSIVE WIDTH */
+                      w-[220px] sm:w-[100px] /* Fixed width on both mobile and desktop so it stays centered */
+                      
+                      h-[45px] sm:h-[50px] 
+                      bg-[#d9d9d926] 
+                      rounded-[15px] 
+                      shadow-inner 
+                      px-4 
+                      text-white 
+                      text-[16px] sm:text-[20px] 
+                      [font-family:'Aldrich-Regular',Helvetica] 
+                      focus:outline-none focus:ring-2 focus:ring-[#caf9ff]
+                    "
                     required
                   />
                 </div>
               </form>
 
               {/* Navigation Buttons */}
-              <div className="flex flex-row gap-[120px] w-full">
+              <div className="flex flex-row gap-[50px] sm:gap-[120px] w-full">
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
                 >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
                     BACK
                   </span>
                 </button>
@@ -113,9 +148,9 @@ const MemberLogin = () => {
                 <button
                   type="button"
                   onClick={handleLogin}
-                  className="flex-1 h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
                 >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(20px,2.5vw,32px)]">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
                     LOGIN
                   </span>
                 </button>
@@ -123,18 +158,15 @@ const MemberLogin = () => {
 
             </div>
 
-            {/* Right side: Robot image */}
+            {/* Right side: Robot image (Desktop) */}
             <div style={{ 
               flexShrink: 0, 
               width: 'clamp(100px, 18vw, 400px)',
               display: 'flex',
               alignItems: 'flex-start',
               overflow: 'hidden',
-              
-              /* MATCHING GUEST LOGIN STYLE:
-                 Lifts the robot image up by 50px */
               marginTop: '-50px' 
-            }}>
+            }} className="hidden sm:flex">
               <img
                 style={{ 
                   width: '100%', 
@@ -146,6 +178,9 @@ const MemberLogin = () => {
                 src={robotImage}
               />
             </div>
+            
+             
+             
 
           </div>
         </div>
