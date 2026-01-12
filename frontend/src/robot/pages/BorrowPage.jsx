@@ -11,147 +11,176 @@ export default function BorrowPage() {
   const handleBorrow = (e) => {
     e.preventDefault();
     console.log("Borrowing:", { bookId, bookName });
+    // Add your backend logic here
+  };
+
+  const handleCancel = () => {
+    setBookId("");
+    setBookName("");
+    // Optional: navigate back if needed, e.g., navigate("/robot/search");
   };
 
   return (
     <RobotLayout>
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[100px]">
+      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
 
-        {/* Title */}
-        <div
-          style={{
-            paddingLeft: "clamp(0px, 10vw, 80px)",
-            marginBottom: "clamp(10px, 2vh, 40px)",
-          }}
-        >
-          <h1
-            className="[font-family:'ADLaM_Display-Regular',Helvetica] text-[#caf9ff]"
-            style={{ fontSize: "clamp(20px, 3.5vh, 60px)" }}
+        {/* Title Section */}
+        <div style={{ 
+          display: 'flex',
+          justifyContent: 'flex-start',
+          paddingLeft: 'clamp(20px, 25vw, 320px)',
+          width: '100%',
+          marginBottom: 'clamp(20px, 4vh, 60px)',
+          marginTop: 'clamp(10px, 2vh, 40px)',
+          flexShrink: 0
+        }}>
+          <h1 
+            className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal]"
+            style={{ fontSize: 'clamp(24px, 4vh, 60px)' }}
           >
             Borrow Book
           </h1>
         </div>
 
-        {/* Content */}
-        <div
-          style={{
-            paddingLeft: "clamp(0px, 12vw, 100px)",
-            flex: 1,
-            display: "flex",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              gap: "clamp(20px, 4vw, 100px)",
-              width: "100%",
-              alignItems: "flex-start",
-            }}
-          >
-            {/* LEFT: Form */}
-            <form
-              onSubmit={handleBorrow}
-              style={{
-                flex: 1,
-                maxWidth: "720px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "clamp(20px, 3vh, 45px)",
-              }}
-            >
-              {/* Book ID */}
-              <div className="bg-[#d9d9d926] rounded-[20px] shadow-md px-6 py-6">
-                <label
-                  className="text-white [font-family:'Aldrich-Regular',Helvetica]"
-                  style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
-                >
-                  Book ID :
-                </label>
-
-                <input
-                  value={bookId}
-                  onChange={(e) => setBookId(e.target.value)}
-                  required
-                  className="mt-4 w-full bg-[#d9d9d926] rounded-[20px] shadow-md px-6 text-white focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
-                  style={{
-                    height: "clamp(45px, 6vh, 68px)",
-                    fontSize: "clamp(16px, 2vw, 24px)",
-                  }}
-                />
-              </div>
-
-              {/* Book Name */}
-              <div className="bg-[#d9d9d926] rounded-[20px] shadow-md px-6 py-6">
-                <label
-                  className="text-white [font-family:'Aldrich-Regular',Helvetica]"
-                  style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
-                >
-                  Book Name :
-                </label>
-
-                <input
-                  value={bookName}
-                  onChange={(e) => setBookName(e.target.value)}
-                  required
-                  className="mt-4 w-full bg-[#d9d9d926] rounded-[20px] shadow-md px-6 text-white focus:outline-none focus:ring-2 focus:ring-[#caf9ff]"
-                  style={{
-                    height: "clamp(45px, 6vh, 68px)",
-                    fontSize: "clamp(16px, 2vw, 24px)",
-                  }}
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setBookId("");
-                    setBookName("");
-                  }}
-                  className="flex-1 bg-[#00000045] rounded-[20px] shadow-md hover:bg-[#00000060]"
-                  style={{ height: "clamp(50px, 7vh, 80px)" }}
-                >
-                  <span
-                    className="text-white [font-family:'Aldrich-Regular',Helvetica]"
-                    style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
+        {/* Content Area */}
+        <div style={{ 
+          paddingLeft: 'clamp(0px, 12vw, 100px)',
+          flex: 1,
+          minHeight: '100px',
+          display: 'flex',
+          overflow: 'visible',
+          paddingBottom: '20px' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'row', 
+            gap: 'clamp(15px, 4vw, 100px)', 
+            alignItems: 'stretch',
+            width: '100%',
+            height: '100%',
+            flexWrap: 'wrap'
+          }}>
+            
+            {/* Left side: Form & Buttons */}
+            <div style={{ 
+              flex: 1, 
+              minWidth: '300px',
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 'clamp(20px, 3vh, 40px)', // Slightly tighter gap to fit two inputs
+              maxWidth: '650px' 
+            }}>
+              
+              <form onSubmit={handleBorrow} className="w-full flex flex-col gap-[20px] sm:gap-[30px]">
+                
+                {/* --- Input Group 1: Book ID --- */}
+                <div className="
+                  w-full 
+                  h-[80px] sm:h-[100px] 
+                  bg-[#d9d9d926] 
+                  rounded-[20px] 
+                  shadow-[0px_4px_4px_#00000040] 
+                  flex flex-row items-center justify-center 
+                  gap-[40px] sm:gap-[30px]
+                ">
+                  <label
+                    className="whitespace-nowrap [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[22px] sm:text-[24px] lg:text-[32px]"
                   >
-                    CANCEL
-                  </span>
-                </button>
+                    Book ID :
+                  </label>
+                  <input
+                    type="text"
+                    value={bookId}
+                    onChange={(e) => setBookId(e.target.value)}
+                    className="
+                      w-[220px] sm:w-[100px] 
+                      h-[40px] sm:h-[50px] 
+                      bg-[#d9d9d926] rounded-[15px] shadow-inner px-4 
+                      text-white text-[16px] sm:text-[20px] [font-family:'Aldrich-Regular',Helvetica] 
+                      focus:outline-none focus:ring-2 focus:ring-[#caf9ff]
+                    "
+                    required
+                  />
+                </div>
 
-                <button
-                  type="submit"
-                  className="flex-1 bg-[#00000045] rounded-[20px] shadow-md hover:bg-[#00000060]"
-                  style={{ height: "clamp(50px, 7vh, 80px)" }}
-                >
-                  <span
-                    className="text-white [font-family:'Aldrich-Regular',Helvetica]"
-                    style={{ fontSize: "clamp(18px, 2.5vw, 32px)" }}
+                {/* --- Input Group 2: Book Name --- */}
+                <div className="
+                  w-full 
+                  h-[80px] sm:h-[100px] 
+                  bg-[#d9d9d926] 
+                  rounded-[20px] 
+                  shadow-[0px_4px_4px_#00000040] 
+                  flex flex-row items-center justify-center 
+                  gap-[10px] sm:gap-[30px]
+                ">
+                  <label
+                    className="whitespace-nowrap [-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[22px] sm:text-[24px] lg:text-[32px]"
                   >
-                    BORROW
-                  </span>
-                </button>
-              </div>
-            </form>
+                    Book Name :
+                  </label>
+                  <input
+                    type="text"
+                    value={bookName}
+                    onChange={(e) => setBookName(e.target.value)}
+                    className="
+                      w-[220px] sm:w-[100px] 
+                      h-[40px] sm:h-[50px] 
+                      bg-[#d9d9d926] rounded-[15px] shadow-inner px-4 
+                      text-white text-[16px] sm:text-[20px] [font-family:'Aldrich-Regular',Helvetica] 
+                      focus:outline-none focus:ring-2 focus:ring-[#caf9ff]
+                    "
+                    required
+                  />
+                </div>
 
-            {/* RIGHT: Robot */}
-            <div
-              style={{
-                width: "clamp(120px, 18vw, 400px)",
-                flexShrink: 0,
-              }}
-            >
+                {/* --- Buttons --- */}
+                <div className="flex flex-row gap-[50px] sm:gap-[120px] w-full mt-2">
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  >
+                    <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
+                      CANCEL
+                    </span>
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  >
+                    <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
+                      BORROW
+                    </span>
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+            {/* Right side: Robot image (Desktop) */}
+            <div style={{ 
+              flexShrink: 0, 
+              width: 'clamp(100px, 18vw, 400px)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              overflow: 'hidden',
+              marginTop: '-40px' 
+            }} className="hidden sm:flex">
               <img
-                src={robotImage}
-                alt="Smart Library Assistant Robot"
-                style={{
-                  width: "100%",
-                  maxHeight: "620px",
-                  objectFit: "contain",
+                style={{ 
+                  width: '100%', 
+                  height: 'auto',
+                  maxHeight: '600px',
+                  objectFit: 'contain'
                 }}
+                alt="Smart Library Assistant Robot"
+                src={robotImage}
               />
             </div>
+            
+             
+
           </div>
         </div>
       </div>
