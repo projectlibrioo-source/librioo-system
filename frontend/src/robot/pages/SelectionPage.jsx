@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import RobotLayout from "../layouts/RobotLayout"; 
+import RobotLayout from "../layouts/RobotLayout";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
 
 const SelectionPage = () => {
@@ -22,70 +22,64 @@ const SelectionPage = () => {
 
   return (
     <RobotLayout>
-      {/* 1. MAIN CONTAINER
-          - CHANGED: overflow-hidden (Removes scrolling on ALL screens)
-          - Use flex-col to organize layout
-      */}
-      <div className="h-full w-full flex flex-col overflow-hidden p-4 lg:px-[100px]">
-        
-        {/* 2. CONTENT WRAPPER
-            - justify-center: Centers content vertically so it looks good if screen is tall
-        */}
-        <div className="
-          flex-1 w-full
-          flex flex-col lg:flex-row 
-          items-center lg:justify-between
-          justify-center
-          gap-4 lg:gap-[clamp(20px,4vw,100px)]
-          mt-2 lg:mt-[30px]
-          lg:pl-[clamp(0px,10vw,80px)] 
-          lg:pr-[clamp(100px,25vw,350px)]
-        ">
-          
-            {/* 3. ROBOT IMAGE
-               - Mobile: Smaller (140px) to save vertical space
-            */}
-            <div className="
-              order-1 lg:order-2
-              flex-shrink-0 
-              w-[140px] lg:w-[clamp(200px,25vw,350px)] 
-              flex items-center justify-center
-            ">
-              <img
-                className="w-full h-auto object-contain"
-                alt="Library assistant robot mascot"
-                src={robotImage}
-              />
-            </div>
+      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
 
-            {/* 4. INTERACTIVE SECTION
-               - Mobile: Gap-4 (tighter spacing) to fit on screen
-            */}
-            <div className="
-              order-2 lg:order-1
-              flex flex-col w-full lg:max-w-[650px] 
-              gap-4 lg:gap-10 
-              lg:-mt-[40px]
-            ">
+        {/* Title Section */}
+        <div style={{ 
+          display: 'flex',
+          justifyContent: 'flex-start',
+          paddingLeft: 'clamp(20px, 25vw, 170px)',
+          width: '100%',
+          marginBottom: 'clamp(20px, 4vh, 60px)',
+          marginTop: 'clamp(10px, 2vh, 40px)',
+          flexShrink: 0
+        }}>
+          <h1 
+            className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal]"
+            style={{ fontSize: 'clamp(24px, 4vh, 60px)' }}
+          >
+            What would you like to do?
+          </h1>
+        </div>
+
+        {/* Content Area */}
+        <div style={{ 
+          paddingLeft: 'clamp(0px, 12vw, 100px)',
+          flex: 1,
+          minHeight: '100px',
+          display: 'flex',
+          overflow: 'visible',
+          paddingBottom: '20px' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'row', 
+            gap: 'clamp(15px, 4vw, 100px)', 
+            alignItems: 'stretch',
+            width: '100%',
+            height: '100%',
+            flexWrap: 'wrap'
+          }}>
+            
+            {/* Left side: Options & Nav Buttons */}
+            <div style={{ 
+              flex: 1, 
+              minWidth: '300px',
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 'clamp(20px, 3vh, 40px)', 
+              maxWidth: '650px' 
+            }}>
               
-              {/* Title */}
-              <h1 className="
-                [font-family:'ADLaM_Display-Regular',Helvetica] font-normal 
-                text-[#caf9ff] text-center leading-tight
-                text-[28px] lg:text-[40px]
-              ">
-                What would you like to do?
-              </h1>
-
-              {/* SELECTION BUTTONS */}
-              <div className="flex flex-col gap-4 w-full">
+              {/* --- Selection Buttons --- */}
+              <div className="flex flex-col gap-[20px] sm:gap-[30px] w-full">
                 
-                {/* Button 1 */}
+                {/* Button 1: Read Here */}
                 <button
                   onClick={handleReadHereClick}
                   className="
                     w-full 
-                    h-[80px] lg:h-[180px] /* Reduced height for mobile fit */
+                    h-[130px] sm:h-[120px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
@@ -96,18 +90,19 @@ const SelectionPage = () => {
                     [-webkit-text-stroke:1px_#ff7421] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     text-[#fcfbfa] 
-                    text-[24px] lg:text-[40px]
+                    text-[24px] sm:text-[40px] 
+                    whitespace-nowrap
                   ">
                     Read Here
                   </span>
                 </button>
 
-                {/* Button 2 */}
+                {/* Button 2: Borrow Book */}
                 <button
                   onClick={handleBorrowBookClick}
                   className="
                     w-full 
-                    h-[80px] lg:h-[180px] /* Reduced height for mobile fit */
+                    h-[130px] sm:h-[120px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
@@ -118,32 +113,31 @@ const SelectionPage = () => {
                     [-webkit-text-stroke:1px_#ff7421] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     text-[#fcfbfa] 
-                    text-[24px] lg:text-[40px]
+                    text-[24px] sm:text-[40px] 
+                    whitespace-nowrap
                   ">
                     Borrow Book
                   </span>
                 </button>
+
               </div>
 
-              {/* Back Button */}
-              <div className="flex justify-start w-full mt-2 lg:mt-4">
+              {/* --- Back Button --- */}
+              {/* UPDATED: 'justify-start' keeps it left. Widths changed to be smaller. */}
+              <div className="flex justify-start w-full mt-2">
                 <button
                   type="button"
                   onClick={handleBackClick}
                   className="
-                    w-[120px] lg:w-[200px] 
-                    h-[45px] lg:h-[60px] 
+                    w-[150px] sm:w-[180px] 
+                    h-[50px] sm:h-[70px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
                     focus:outline-none focus:ring-2 focus:ring-[#ff7421]
                   "
                 >
-                  <span className="
-                    text-white 
-                    [font-family:'Aldrich-Regular',Helvetica] 
-                    text-[18px] lg:text-[24px]
-                  ">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2vw,24px)]">
                     BACK
                   </span>
                 </button>
@@ -151,6 +145,30 @@ const SelectionPage = () => {
 
             </div>
 
+            {/* Right side: Robot image (Desktop) */}
+            <div style={{ 
+              flexShrink: 0, 
+              width: 'clamp(100px, 18vw, 400px)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              overflow: 'hidden',
+              marginTop: '20px' 
+            }} className="hidden sm:flex">
+              <img
+                style={{ 
+                  width: '100%', 
+                  height: 'auto',
+                  maxHeight: '600px',
+                  objectFit: 'contain'
+                }}
+                alt="Smart Library Assistant Robot"
+                src={robotImage}
+              />
+            </div>
+            
+             
+
+          </div>
         </div>
       </div>
     </RobotLayout>
