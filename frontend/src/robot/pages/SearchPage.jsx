@@ -95,7 +95,7 @@ const SearchPage = () => {
                     [-webkit-text-stroke:1px_#ff7421] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     text-[#fcfbfa] 
-                    text-[20px] sm:text-[32px] 
+                    text-[24px] sm:text-[32px] 
                     whitespace-nowrap
                   ">
                     Search Book By Name
@@ -118,7 +118,7 @@ const SearchPage = () => {
                     [-webkit-text-stroke:1px_#ff7421] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     text-[#fcfbfa] 
-                    text-[20px] sm:text-[32px] 
+                    text-[24px] sm:text-[32px] 
                     whitespace-nowrap
                   ">
                     Search By Category

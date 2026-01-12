@@ -127,7 +127,7 @@ const UserDetails = () => {
                     {/* INPUT FIELD STYLE: 
                        Matches the inner lighter box in your image 
                     */}
-                    <div className="flex-1 max-w-[440px] h-[40px] sm:h-[50px] bg-[#ffffff20] rounded-[15px] flex items-center shadow-inner">
+                    <div className="flex-1 max-w-[370px]  h-[40px] sm:h-[50px] bg-[#ffffff20] rounded-[15px] flex items-center shadow-inner">
                       <input
                         id={field.id}
                         type={field.type}

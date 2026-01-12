@@ -132,17 +132,20 @@ const EndingPage = () => {
                 w-[70%] sm:w-[180px] lg:w-[220px]
                 h-[45px] lg:h-[55px]
                 flex items-center justify-center 
-                bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
+                bg-[#03fcba] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                 cursor-pointer transition-all hover:bg-[#00000060] 
                 focus:outline-none focus:ring-2 focus:ring-[#ff7421]
               "
             >
-              <span className="
-                text-[#f0f0f0]
-                [font-family:'Aldrich-Regular',Helvetica] 
-                text-[14px] lg:text-[20px]
-                whitespace-nowrap
-              ">
+              <span
+          className="
+            text-[#111212]
+            font-orbitron
+            text-[16px] lg:text-[20px]
+            whitespace-nowrap
+            font-bold
+          "
+        >
                 RETURN HOME
               </span>
             </button>
@@ -160,13 +163,15 @@ const EndingPage = () => {
                 focus:outline-none focus:ring-2 focus:ring-white
               "
             >
-              <span className="
-                text-[#f0f0f0]
-                [font-family:'Aldrich-Regular',Helvetica] 
-                text-[14px] lg:text-[20px]
+              <span
+            className="
+                text-[#111212]
+                font-orbitron
+                text-[16px] lg:text-[20px]
                 whitespace-nowrap
                 font-bold
-              ">
+              "
+             >
                 END SESSION
               </span>
             </button>
