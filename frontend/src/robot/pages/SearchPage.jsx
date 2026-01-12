@@ -84,7 +84,7 @@ const SearchPage = () => {
                   onClick={handleSearchByNameClick}
                   className="
                     w-full 
-                    h-[80px] sm:h-[120px] 
+                    h-[130px] sm:h-[120px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
@@ -107,7 +107,7 @@ const SearchPage = () => {
                   onClick={handleSearchByCategoryClick}
                   className="
                     w-full 
-                    h-[80px] sm:h-[120px] 
+                    h-[130px] sm:h-[120px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
@@ -159,7 +159,7 @@ const SearchPage = () => {
               display: 'flex',
               alignItems: 'flex-start',
               overflow: 'hidden',
-              marginTop: '-30px' 
+              marginTop: '20px' 
             }} className="hidden sm:flex">
               <img
                 style={{ 
