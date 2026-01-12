@@ -7,12 +7,10 @@ const SearchPage = () => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    // Navigate back to user details or previous page
     navigate("/robot/user-details");
   };
 
   const handleProceedClick = () => {
-    // ⚠️ BACKEND INTEGRATION POINT
     console.log("Proceed button clicked");
     // navigate("/robot/results");
   };
@@ -29,71 +27,64 @@ const SearchPage = () => {
 
   return (
     <RobotLayout>
-      {/* 1. MAIN CONTAINER
-          - overflow-hidden: Prevents scrolling
-          - flex-col: Stacks content vertically
-      */}
-      <div className="h-full w-full flex flex-col overflow-hidden p-3 lg:px-[100px]">
-        
-        {/* 2. CONTENT WRAPPER
-            - justify-center: Centers content vertically
-        */}
-        <div className="
-          flex-1 w-full
-          flex flex-col lg:flex-row 
-          items-center lg:items-start lg:justify-between
-          justify-center
-          gap-4 lg:gap-[clamp(20px,4vw,100px)]
-          lg:pl-[clamp(0px,5vw,80px)] 
-          lg:pr-[clamp(20px,10vw,150px)]
-        ">
-          
-            {/* 3. ROBOT IMAGE 
-               - Mobile: Small (120px)
-               - Desktop: Large (300px), pushed down
-            */}
-            <div className="
-              order-1 lg:order-2
-              flex-shrink-0 
-              w-[120px] lg:w-[clamp(200px,25vw,300px)] 
-              flex items-center justify-center
-              lg:mt-[80px] 
-            ">
-              <img
-                className="w-full h-auto object-contain"
-                alt="Library assistant robot mascot"
-                src={robotImage}
-              />
-            </div>
+      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
 
-            {/* 4. INTERACTIVE SECTION
-               - Mobile: Tight gaps
-            */}
-            <div className="
-              order-2 lg:order-1
-              flex flex-col w-full lg:max-w-[650px] 
-              gap-4 lg:gap-10 
-              lg:-mt-[20px]
-            ">
+        {/* Title Section */}
+        <div style={{ 
+          display: 'flex',
+          justifyContent: 'flex-start',
+          paddingLeft: 'clamp(20px, 25vw, 320px)',
+          width: '100%',
+          marginBottom: 'clamp(20px, 4vh, 60px)',
+          marginTop: 'clamp(10px, 2vh, 40px)',
+          flexShrink: 0
+        }}>
+          <h1 
+            className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal]"
+            style={{ fontSize: 'clamp(24px, 4vh, 60px)' }}
+          >
+            Search Books
+          </h1>
+        </div>
+
+        {/* Content Area */}
+        <div style={{ 
+          paddingLeft: 'clamp(0px, 12vw, 100px)',
+          flex: 1,
+          minHeight: '100px',
+          display: 'flex',
+          overflow: 'visible',
+          paddingBottom: '20px' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'row', 
+            gap: 'clamp(15px, 4vw, 100px)', 
+            alignItems: 'stretch',
+            width: '100%',
+            height: '100%',
+            flexWrap: 'wrap'
+          }}>
+            
+            {/* Left side: Search Options & Nav Buttons */}
+            <div style={{ 
+              flex: 1, 
+              minWidth: '300px',
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 'clamp(20px, 3vh, 40px)', 
+              maxWidth: '650px' 
+            }}>
               
-              {/* Title */}
-              <h1 className="
-                [font-family:'ADLaM_Display-Regular',Helvetica] font-normal 
-                text-[#caf9ff] text-center leading-tight
-                text-[28px] lg:text-[40px]
-              ">
-                Search Books
-              </h1>
-
-              {/* SEARCH BUTTONS */}
-              <div className="flex flex-col gap-4 w-full">
+              {/* --- Search Option Buttons (Acting as the "Form" area) --- */}
+              <div className="flex flex-col gap-[20px] sm:gap-[30px] w-full">
                 
                 {/* Search By Name */}
                 <button
                   onClick={handleSearchByNameClick}
                   className="
                     w-full 
-                    h-[70px] lg:h-[180px] 
+                    h-[80px] sm:h-[120px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
@@ -104,10 +95,9 @@ const SearchPage = () => {
                     [-webkit-text-stroke:1px_#ff7421] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     text-[#fcfbfa] 
-                    text-[22px] lg:text-[40px]
+                    text-[20px] sm:text-[32px] 
                     whitespace-nowrap
-                  "
-                  >
+                  ">
                     Search Book By Name
                   </span>
                 </button>
@@ -117,7 +107,7 @@ const SearchPage = () => {
                   onClick={handleSearchByCategoryClick}
                   className="
                     w-full 
-                    h-[70px] lg:h-[180px] 
+                    h-[80px] sm:h-[120px] 
                     flex items-center justify-center 
                     bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
                     cursor-pointer transition-all hover:bg-[#00000060] 
@@ -128,65 +118,64 @@ const SearchPage = () => {
                     [-webkit-text-stroke:1px_#ff7421] 
                     [font-family:'Aldrich-Regular',Helvetica] 
                     text-[#fcfbfa] 
-                    text-[22px] lg:text-[40px]
+                    text-[20px] sm:text-[32px] 
                     whitespace-nowrap
-                  "
-                  >
+                  ">
                     Search By Category
                   </span>
                 </button>
+
               </div>
 
-              {/* NAVIGATION BUTTONS */}
-              <div className="flex justify-between w-full mt-2 lg:mt-4 gap-4">
-                
-                {/* Back Button */}
+              {/* --- Navigation Buttons (Back / Proceed) --- */}
+              <div className="flex flex-row gap-[50px] sm:gap-[120px] w-full mt-2">
                 <button
                   type="button"
                   onClick={handleBackClick}
-                  className="
-                    flex-1 lg:flex-none lg:w-[200px] 
-                    h-[50px] lg:h-[60px] 
-                    flex items-center justify-center 
-                    bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                    cursor-pointer transition-all hover:bg-[#00000060] 
-                    focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                  "
+                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
                 >
-                  <span className="
-                    [-webkit-text-fill-color:white] 
-                    [font-family:'Aldrich-Regular',Helvetica] 
-                    text-[20px] lg:text-[24px]
-                  ">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
                     BACK
                   </span>
                 </button>
 
-                {/* Proceed Button */}
                 <button
                   type="button"
                   onClick={handleProceedClick}
-                  className="
-                    flex-1 lg:flex-none lg:w-[200px] 
-                    h-[50px] lg:h-[60px] 
-                    flex items-center justify-center 
-                    bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                    cursor-pointer transition-all hover:bg-[#00000060] 
-                    focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                  "
+                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
                 >
-                  <span className="
-                    [-webkit-text-fill-color:white] 
-                    [font-family:'Aldrich-Regular',Helvetica] 
-                    text-[20px] lg:text-[24px]
-                  ">
+                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
                     PROCEED
                   </span>
                 </button>
-
               </div>
+
             </div>
 
+            {/* Right side: Robot image (Desktop) */}
+            <div style={{ 
+              flexShrink: 0, 
+              width: 'clamp(100px, 18vw, 400px)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              overflow: 'hidden',
+              marginTop: '-30px' 
+            }} className="hidden sm:flex">
+              <img
+                style={{ 
+                  width: '100%', 
+                  height: 'auto',
+                  maxHeight: '600px',
+                  objectFit: 'contain'
+                }}
+                alt="Smart Library Assistant Robot"
+                src={robotImage}
+              />
+            </div>
+            
+             
+
+          </div>
         </div>
       </div>
     </RobotLayout>
