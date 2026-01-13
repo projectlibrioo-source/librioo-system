@@ -26,7 +26,7 @@ const UserDetails = () => {
     // ID: Checks 'guestID' (Guest) OR 'libraryId' (Member)
     id: userType === "guest" 
         ? (passedUser.guestID || passedUser.guestId || "") // Added guestID based on your image
-        : (passedUser.libraryId || passedUser.id || ""), 
+        : (passedUser.libraryID || passedUser.ID || ""), 
 
     // Email: 'email' is usually the same for both
     email: passedUser.email || "", 

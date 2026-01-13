@@ -52,7 +52,7 @@ export async function searchByCategory(category) {
 
     try{
         const response = await fetch(`http://localhost:8080/api/searchcategory?category=${encodeURIComponent(category)}`);
-
+        
         return await response.json();
 
     }catch(e){
