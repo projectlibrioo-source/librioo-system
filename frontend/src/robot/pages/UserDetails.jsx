@@ -64,6 +64,7 @@ const UserDetails = () => {
           paddingLeft: 'clamp(0px, 12vw, 100px)',
           flex: 1,
           minHeight: '100px',
+          marginRight: '60px',
           display: 'flex',
           overflow: 'visible',
           paddingBottom: '20px' 
@@ -85,7 +86,6 @@ const UserDetails = () => {
               display: 'flex', 
               flexDirection: 'column', 
               gap: 'clamp(15px, 2vh, 30px)', 
-              maxWidth: '650px' 
             }}>
               
               {/* --- Form Section --- */}
@@ -101,21 +101,21 @@ const UserDetails = () => {
                     key={field.id}
                     className="
                       w-full 
-                      h-[60px] sm:h-[80px]
+                      h-[80px] sm:h-[100px]
                       bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040]
                       flex flex-row items-center
                       px-4 sm:px-6
-                      gap-[10px]
+                      gap-[100px]
                     "
                   >
                     {/* Label */}
                     <label
                       htmlFor={field.id}
                       className="
-                        w-[100px] sm:w-[160px] flex-shrink-0
+                        w-[100px] sm:w-[160px] flex-shrink-0 ml-[10px]
                         [-webkit-text-fill-color:white] 
                         [font-family:'Aldrich-Regular',Helvetica] 
-                        text-[16px] sm:text-[24px]
+                        text-[25px] sm:text-[33px]
                         whitespace-nowrap
                         text-center
                         
@@ -127,7 +127,7 @@ const UserDetails = () => {
                     {/* INPUT FIELD STYLE: 
                        Matches the inner lighter box in your image 
                     */}
-                    <div className="flex-1 max-w-[370px]  h-[40px] sm:h-[50px] bg-[#ffffff20] rounded-[15px] flex items-center shadow-inner">
+                    <div className="flex-1 mr-[20px] h-[50px] sm:h-[50px] bg-[#ffffff20] rounded-[15px] flex items-center shadow-inner">
                       <input
                         id={field.id}
                         type={field.type}
@@ -139,7 +139,7 @@ const UserDetails = () => {
                           px-3
                           text-white
                           [font-family:'Aldrich-Regular',Helvetica] 
-                          text-[16px] sm:text-[22px]
+                          text-[25px] sm:text-[22px]
                           text-center
                           placeholder-gray-400
                           focus:outline-none focus:ring-2 focus:ring-[#caf9ff] rounded-[15px]

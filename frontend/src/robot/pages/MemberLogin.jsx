@@ -31,7 +31,6 @@ const MemberLogin = () => {
         {/* Title Section */}
         <div style={{ 
           display: 'flex',
-          justifyContent: 'flex-start',
           paddingLeft: 'clamp(20px, 25vw, 320px)',
           width: '100%',
           marginBottom: 'clamp(20px, 4vh, 60px)',
@@ -51,6 +50,7 @@ const MemberLogin = () => {
           paddingLeft: 'clamp(0px, 12vw, 100px)',
           flex: 1,
           minHeight: '100px',
+          marginRight: '60px',
           display: 'flex',
           overflow: 'visible',
           paddingBottom: '20px' 
@@ -72,7 +72,6 @@ const MemberLogin = () => {
               display: 'flex', 
               flexDirection: 'column', 
               gap: 'clamp(20px, 3vh, 50px)',
-              maxWidth: '650px' 
             }}>
               
               {/* Input Group */}
@@ -89,7 +88,7 @@ const MemberLogin = () => {
                   items-center      /* Vertically Center */
                   justify-center    /* Horizontally Center (Left/Right) */
                   
-                  gap-[65px] sm:gap-[30px] /* Reduced gap slightly to keep them grouped */
+                  gap-[clamp(16px,3vw,32px)] /* Reduced gap slightly to keep them grouped */
                 ">
                   
                   {/* LABEL */}
@@ -100,7 +99,7 @@ const MemberLogin = () => {
                       [-webkit-text-fill-color:white] 
                       [font-family:'Aldrich-Regular',Helvetica] 
                       font-normal 
-                      text-[22px] sm:text-[24px] lg:text-[32px] 
+                      text-[clamp(16px,3vw,32px)]
                       tracking-[0] 
                       leading-[normal]
                     "
@@ -117,14 +116,14 @@ const MemberLogin = () => {
                     className="
                       /* RESPONSIVE WIDTH */
                       w-[220px] sm:w-[100px] /* Fixed width on both mobile and desktop so it stays centered */
-                      
+                    
                       h-[45px] sm:h-[50px] 
                       bg-[#d9d9d926] 
                       rounded-[15px] 
                       shadow-inner 
                       px-4 
                       text-white 
-                      text-[16px] sm:text-[20px] 
+                      text-[20px] sm:text-[20px] 
                       [font-family:'Aldrich-Regular',Helvetica] 
                       focus:outline-none focus:ring-2 focus:ring-[#caf9ff]
                     "
