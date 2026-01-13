@@ -10,13 +10,15 @@ const UserDetails = () => {
   // 2. Get the user data passed from the Login page
   // If no data exists (e.g., user refreshed the page), default to empty object
   const passedUser = location.state?.user || {};
+  console.log(passedUser);
+  
 
   // 3. Initialize state with the passed data (or empty strings)
   const formData = {
     name: passedUser.name || passedUser.fullName || "", 
-    libraryId: passedUser.libraryId || passedUser.id || "",   
+    libraryId: passedUser.libraryID || passedUser.id || "",   
     email: passedUser.email || "", 
-    contactNo: passedUser.contactNo || passedUser.mobile || "",   
+    contactNo: passedUser.phoneNumber || passedUser.mobile || "",   
   };
 
   // Optional: Redirect back to login if someone tries to access this page directly without logging in

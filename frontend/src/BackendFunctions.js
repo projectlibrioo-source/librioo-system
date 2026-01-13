@@ -13,6 +13,8 @@ export async function memberLogin(libraryId) {
 
         if(response.ok){
             const memberData = await response.json();
+            //console.log(memberData);
+            
             return memberData;
             
           
