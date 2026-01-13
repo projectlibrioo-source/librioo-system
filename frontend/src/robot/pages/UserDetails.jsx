@@ -7,18 +7,41 @@ const UserDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 2. Get the user data passed from the Login page
-  // If no data exists (e.g., user refreshed the page), default to empty object
+ // 1. Get the user data AND the userType ('member' or 'guest')
   const passedUser = location.state?.user || {};
-  console.log(passedUser);
-  
+  const userType = location.state?.userType || "member"; // Default to member if undefined
 
-  // 3. Initialize state with the passed data (or empty strings)
+  console.log("Current User:", passedUser);
+  console.log("User Type:", userType);
+
+  // 2. Prepare the ID Label and Value dynamically
+  // If guest, label is "Guest ID", otherwise "Library ID"
+  const idLabel = userType === "guest" ? "Guest ID :" : "Library ID :";
+  
+  // 3. Map the data based on what your backend sends
   const formData = {
-    name: passedUser.name || passedUser.fullName || "", 
-    libraryId: passedUser.libraryID || passedUser.id || "",   
+    // Name: Checks 'fullName' (Guest) OR 'name' (Member)
+    name: passedUser.fullName || passedUser.name || "", 
+
+    // ID: Checks 'guestID' (Guest) OR 'libraryId' (Member)
+    id: userType === "guest" 
+        ? (passedUser.guestID || passedUser.guestId || "") // Added guestID based on your image
+        : (passedUser.libraryId || passedUser.id || ""), 
+
+    // Email: 'email' is usually the same for both
     email: passedUser.email || "", 
-    contactNo: passedUser.phoneNumber || passedUser.mobile || "",   
+
+    // Contact: Checks 'phoneNumber' (Guest) OR 'contactNo' (Member)
+    contactNo: passedUser.phoneNumber || passedUser.contactNo || passedUser.mobile || "",   
+  };
+
+  // 4. Handle Back Button Logic
+  const handleBack = () => {
+    if (userType === "guest") {
+        navigate("/robot/guest-login"); // Go back to guest login
+    } else {
+        navigate("/robot/member-login"); // Go back to member login
+    }
   };
 
   // Optional: Redirect back to login if someone tries to access this page directly without logging in
@@ -29,9 +52,6 @@ const UserDetails = () => {
     }
   }, [passedUser, navigate]);
 
-  const handleBack = () => {
-    navigate("/robot/member-login");
-  };
 
   const handleProceed = () => {
       console.log("Proceeding with user:", formData);
@@ -41,7 +61,7 @@ const UserDetails = () => {
 
   const formFields = [
     { id: "name", label: "Name :", value: formData.name, type: "text" },
-    { id: "libraryId", label: "Library ID :", value: formData.libraryId, type: "text" },
+    { id: "id", label: idLabel, value: formData.id, type: "text" },
     { id: "email", label: "Email :", value: formData.email, type: "email" },
     { id: "contactNo", label: "Contact No :", value: formData.contactNo, type: "tel" },
   ];

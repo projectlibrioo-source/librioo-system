@@ -21,7 +21,13 @@ const GuestLogin = () => {
 
       if (guest) {
         // alert("Login Success"); // Optional
-        navigate("/robot/search");
+        navigate("/robot/user-details",{state: {
+          user: guest,
+          userType: "guest"
+
+        }
+      });
+      
       } else {
         alert("Invalid Guest ID");
       }
