@@ -22,7 +22,7 @@ const MemberLogin = () => {
 
       if (member) {
         // alert("Login Success"); // Optional
-        navigate("/robot/search");
+        navigate("/robot/user-details", { state: { user: member } });
       } else {
         alert("Invalid ID");
       }

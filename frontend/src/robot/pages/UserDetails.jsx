@@ -1,34 +1,41 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate,useLocation } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout"; 
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-1.png";
 
 const UserDetails = () => {
-  // ⚠️ SAMPLE DATA — backend devs should replace this with actual user data
-  const [formData, setFormData] = useState({
-    name: "Sandun Witharana", 
-    libraryId: "L21857541",   
-    email: "sandun@gmail.com", 
-    contactNo: "0712222338",   
-  });
-
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  // 2. Get the user data passed from the Login page
+  // If no data exists (e.g., user refreshed the page), default to empty object
+  const passedUser = location.state?.user || {};
+
+  // 3. Initialize state with the passed data (or empty strings)
+  const formData = {
+    name: passedUser.name || passedUser.fullName || "", 
+    libraryId: passedUser.libraryId || passedUser.id || "",   
+    email: passedUser.email || "", 
+    contactNo: passedUser.contactNo || passedUser.mobile || "",   
   };
+
+  // Optional: Redirect back to login if someone tries to access this page directly without logging in
+  useEffect(() => {
+    if (!passedUser.libraryId && !passedUser.id) {
+        // console.warn("No user data found, redirecting...");
+        // navigate("/robot/member-login"); // Uncomment this later to secure the page
+    }
+  }, [passedUser, navigate]);
 
   const handleBack = () => {
     navigate("/robot/member-login");
   };
 
   const handleProceed = () => {
-    console.log("Proceed button clicked", formData);
-    navigate("/robot/selection"); 
-  };
+      console.log("Proceeding with user:", formData);
+      // Pass the user data to the NEXT page (Selection) as well
+      navigate("/robot/search", { state: { user: formData } }); 
+    };
 
   const formFields = [
     { id: "name", label: "Name :", value: formData.name, type: "text" },
@@ -118,7 +125,6 @@ const UserDetails = () => {
                         text-[25px] sm:text-[33px]
                         whitespace-nowrap
                         text-center
-                        
                       "
                     >
                       {field.label}
@@ -132,7 +138,7 @@ const UserDetails = () => {
                         id={field.id}
                         type={field.type}
                         value={field.value}
-                        onChange={(e) => handleInputChange(field.id, e.target.value)}
+                        readOnly
                         className="
                           w-full h-full
                           bg-transparent
@@ -142,7 +148,8 @@ const UserDetails = () => {
                           text-[25px] sm:text-[22px]
                           text-center
                           placeholder-gray-400
-                          focus:outline-none focus:ring-2 focus:ring-[#caf9ff] rounded-[15px]
+                          focus:outline-none 
+                          cursor-default
                         "
                       />
                     </div>

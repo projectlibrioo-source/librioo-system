@@ -18,7 +18,7 @@ export default function LoginPage() {
         }}>
           <h1 
             className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal]"
-            style={{ fontSize: 'clamp(20px, 3.5vh, 60px)' }}
+            style={{ fontSize: 'clamp(24px, 4vh, 60px)' }}
           >
             Welcome to the Library
           </h1>
@@ -26,7 +26,7 @@ export default function LoginPage() {
           <p 
             className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#a8d5e2] tracking-[0] leading-[normal]"
             style={{ 
-              fontSize: 'clamp(11px, 1.8vh, 28px)',
+              fontSize: 'clamp(14px, 2.5vh, 28px)',
               marginTop: 'clamp(4px, 0.8vh, 20px)'
             }}
           >
