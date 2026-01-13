@@ -6,17 +6,30 @@ import { memberLogin } from "../../BackendFunctions";
 
 const MemberLogin = () => {
   const [libraryId, setLibraryId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const member = await memberLogin(libraryId);
+    
+    if (!libraryId.trim()) return; // Don't run if empty
 
-    if (member) {
-      alert("Login Success");
-      navigate("/robot/search");
-    } else {
-      alert("Invalid ID");
+    setIsLoading(true); // 1. Start loading
+
+    try {
+      const member = await memberLogin(libraryId); // 2. Wait for Backend
+
+      if (member) {
+        // alert("Login Success"); // Optional
+        navigate("/robot/search");
+      } else {
+        alert("Invalid ID");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false); // 3. Stop loading (always runs)
     }
   };
 
@@ -145,12 +158,14 @@ const MemberLogin = () => {
                 </button>
 
                 <button
-                  type="button"
+                  type="submit"
                   onClick={handleLogin}
-                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  disabled={isLoading}
+                  className={`flex-1 h-[60px] sm:h-[80px] flex items-center justify-center rounded-[20px] shadow-[0px_4px_4px_#00000040] transition-all focus:outline-none focus:ring-2 focus:ring-[#ff7421]
+    ${isLoading ? "bg-[#ffffff20] cursor-not-allowed" : "bg-[#00000045] cursor-pointer hover:bg-[#00000060]"}`}
                 >
                   <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
-                    LOGIN
+                    {isLoading ? "..." : "LOGIN"}
                   </span>
                 </button>
               </div>

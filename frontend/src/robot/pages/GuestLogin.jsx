@@ -2,20 +2,34 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout"; 
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
-// import { guestLogin } from "../../BackendFunctions"; 
+import { guestLogin } from "../../BackendFunctions"; 
 
 const GuestLogin = () => {
   const [guestId, setGuestId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login with Guest ID:", guestId);
-    // navigate("/robot/search");
-  };
+    
+    if (!guestId.trim()) return; // Don't run if empty
 
-  const handleBack = () => {
-    navigate("/robot/login");
+    setIsLoading(true); // 1. Start loading
+
+    try {
+      const guest = await guestLogin(guestId); // 2. Wait for Backend
+
+      if (guest) {
+        // alert("Login Success"); // Optional
+        navigate("/robot/search");
+      } else {
+        alert("Invalid Guest ID");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false); // 3. Stop loading (always runs)
+    }
   };
 
   return (
@@ -142,10 +156,12 @@ const GuestLogin = () => {
                 <button
                   type="submit"
                   onClick={handleLogin}
-                  className="flex-1 h-[60px] sm:h-[80px] flex items-center justify-center bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] cursor-pointer transition-all hover:bg-[#00000060] focus:outline-none focus:ring-2 focus:ring-[#ff7421]"
+                  disabled={isLoading}
+                  className={`flex-1 h-[60px] sm:h-[80px] flex items-center justify-center rounded-[20px] shadow-[0px_4px_4px_#00000040] transition-all focus:outline-none focus:ring-2 focus:ring-[#ff7421]
+    ${isLoading ? "bg-[#ffffff20] cursor-not-allowed" : "bg-[#00000045] cursor-pointer hover:bg-[#00000060]"}`}
                 >
                   <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
-                    LOGIN
+                    {isLoading ? "..." : "LOGIN"}
                   </span>
                 </button>
               </div>
