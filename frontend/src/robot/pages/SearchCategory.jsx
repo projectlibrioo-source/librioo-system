@@ -6,15 +6,18 @@ import BookCard from "../components/BookCard";
 import GuideButton from "../components/GuideButton";
 import CancelButton from "../components/CancelButton";
 // 2. Import the backend functions
-import { getCategories, searchByCategory } from "../../BackendFunctions";
+import { getCategories} from "../../BackendFunctions";
 
 const SearchCategory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   // 3. New State Variables
   const [categories, setCategories] = useState([]); // Stores the list of categories
-  const [bookResults, setBookResults] = useState([]); // Stores books when found
-  const [viewMode, setViewMode] = useState("categories"); // Toggle: "categories" or "books"
+  
+  // Remove viewMode if you don't want to show books on this same page immediately
+  // Add this new state to track the active selection
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  
   const [isLoading, setIsLoading] = useState(false);
 
   // 4. Load Categories from Backend on Startup
@@ -28,46 +31,34 @@ const SearchCategory = () => {
             // Fallback if backend is empty/down
             setCategories(["SCIENCE", "FICTION", "HISTORY", "TECNHOLOGY"]); 
         }
+        setIsLoading(false);
     }
     fetchCats();
   }, []);
 
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
-  // 5. Handle Search (When user hits Enter or clicks a Category)
-  const performSearch = async (categoryToSearch) => {
-    // Use the argument if provided (clicking a card), otherwise use input box
-    const term = categoryToSearch || searchQuery;
-    
-    if (!term.trim()) return;
-
-    setIsLoading(true);
-    try {
-        console.log("Searching for category:", term);
-        const books = await searchByCategory(term);
-        
-        setBookResults(books || []);
-        setViewMode("books"); // SWITCH THE VIEW TO SHOW BOOKS
-    } catch (error) {
-        console.error(error);
-    } finally {
-        setIsLoading(false);
-    }
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    // If user types, we deselect the current selection to avoid confusion
+    setSelectedCategory(null);
   };
 
-  // Wrapper for the SearchBar submit
+  // 3. Simplified Submit: Just selects the first matching category if user hits Enter
   const handleManualSubmit = (e) => {
       e.preventDefault();
-      performSearch(searchQuery);
+      // Optional: Auto-select the first visible category if user hits enter
+      if (visibleCategories.length > 0) {
+          setSelectedCategory(visibleCategories[0]);
+      }
   };
 
-  // Wrapper for clicking a specific Category Card
   const handleCategoryClick = (catName) => {
-      setSearchQuery(catName); // Update search bar to show what we clicked
-      performSearch(catName);
+      // Set the search bar text to match (optional, looks nice)
+      setSearchQuery(catName);
+      // Highlight the card
+      setSelectedCategory(catName); 
   };
 
-  // 6. Filter logic: If we are in "categories" mode, typing in the box filters the list
+  // 4. Live Filter Logic
   const visibleCategories = categories.filter(c => 
       c.toUpperCase().includes(searchQuery.toUpperCase())
   );
@@ -77,7 +68,7 @@ const SearchCategory = () => {
       <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-[clamp(12px,2vh,24px)] overflow-hidden">
         
         <h1 className="flex-shrink-0 ml-[80px] mb-[clamp(8px,1.5vh,16px)] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(20px,3.5vh,40px)] leading-tight">
-          {viewMode === "categories" ? "Search Book By Category" : `Results: ${searchQuery}`}
+          Search Book By Category
         </h1>
 
         <BackgroundContainer className="relative flex flex-col flex-1 min-h-0 overflow-hidden">
@@ -95,17 +86,17 @@ const SearchCategory = () => {
               </div>
 
               <div className="mr-[40px] w-[clamp(180px,20vw,240px)] flex-shrink-0 flex flex-col gap-[clamp(2px,0.5vh,6px)]">
-                {/* Back Button Logic: If viewing books, Go back to Categories. Else, do nothing/navigate */}
-                {viewMode === "books" ? (
-                     <button 
-                        onClick={() => { setViewMode("categories"); setSearchQuery(""); }}
-                        className="w-full py-2 mb-2 text-white rounded-lg bg-red-500/50 hover:bg-red-500/70"
-                     >
-                        CLEAR SEARCH
-                     </button>
-                ) : (
-                    <GuideButton className="w-full text-[clamp(12px,1.6vh,18px)]" />
-                )}
+                {/* 5. Simplified Button Section: Only Guide & Cancel */}
+                <GuideButton 
+                    disabled={!selectedCategory} 
+                    onClick={() => {
+                        if (selectedCategory) {
+                            console.log("Guiding to:", selectedCategory);
+                            // navigate("/robot/map", { state: { category: selectedCategory } }); 
+                        }
+                    }}
+                    className={`w-full text-[clamp(12px,1.6vh,18px)] ${!selectedCategory ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                />
                 <CancelButton className="w-full text-[clamp(12px,1.6vh,18px)]" />
               </div>
             </div>
@@ -116,42 +107,32 @@ const SearchCategory = () => {
               {/* LOADING STATE */}
               {isLoading && (
                   <div className="col-span-4 text-center text-[#caf9ff] text-xl animate-pulse">
-                    Fetching Data...
+                    Loading Categories...
                   </div>
               )}
 
-              {/* MODE 1: SHOW CATEGORIES (Default) */}
-              {!isLoading && viewMode === "categories" && visibleCategories.map((category, index) => (
+              {/* CATEGORY CARDS */}
+              {!isLoading && visibleCategories.map((category, index) => (
                 <div key={index} className="flex justify-center min-w-0" onClick={() => handleCategoryClick(category)}>
                   <BookCard
                     title={category}
                     image={null}
-                    coverText={category} // Shows text on cover
+                    coverText={category} 
                     author=""
-                    // Add pointer cursor so user knows it's clickable
-                    className="transition-transform cursor-pointer hover:scale-105" 
+                    // Dynamic Styling: Highlight if selected
+                    className={`transition-transform cursor-pointer hover:scale-105 
+                      ${selectedCategory === category ? 'ring-4 ring-[#ff7421] scale-105 shadow-[0_0_20px_#ff7421]' : ''}
+                    `}                  
                   />
                 </div>
               ))}
 
-              {/* MODE 2: SHOW BOOKS (After Search) */}
-              {!isLoading && viewMode === "books" && bookResults.map((book) => (
-                 <div key={book.id || Math.random()} className="flex justify-center min-w-0">
-                    <BookCard
-                        title={book.title || book.bookName || "Unknown"}
-                        author={book.author || book.writer || "Unknown"}
-                        image={book.image || book.imgUrl || null} // Shows actual image
-                        coverText={null}
-                    />
-                 </div>
-              ))}
-
-               {/* No Results Message */}
-               {!isLoading && viewMode === "books" && bookResults.length === 0 && (
+              {/* No Results Message */}
+              {!isLoading && visibleCategories.length === 0 && (
                    <div className="col-span-4 text-center text-[#caf9ff] opacity-60">
-                      No books found in this category.
+                     No categories found.
                    </div>
-               )}
+              )}
 
             </section>
 
