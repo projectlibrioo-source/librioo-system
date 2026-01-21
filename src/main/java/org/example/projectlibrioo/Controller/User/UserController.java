@@ -3,7 +3,9 @@ package org.example.projectlibrioo.Controller.User;
 import org.example.projectlibrioo.Model.Book;
 import org.example.projectlibrioo.Model.Guest;
 import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Repository.BookRepo;
 import org.example.projectlibrioo.Service.Admin.AdminService;
+import org.example.projectlibrioo.Service.RobotService.RobotService;
 import org.example.projectlibrioo.Service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,9 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private RobotService robotService;
 
     @PostMapping("/loginmember")
     public ResponseEntity<Member> loginAsMember(@RequestParam("libraryid") int libraryId){
@@ -64,4 +69,43 @@ public class UserController {
     public ResponseEntity<List<Integer>> searchByCategory(@RequestParam("category") String category){
         return new ResponseEntity<List<Integer>>(userService.searchByCategory(category),HttpStatus.OK);
     }
+
+    @GetMapping("/navigate/book")
+    public ResponseEntity<String> navigateByBookName(
+            @RequestParam("name") String bookName) {
+
+        List<Book> books = userService.getBookByName(bookName);
+
+        if (books.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Book not found");
+        }
+
+        int shelfNumber = books.get(0).getShelfNumber();
+        robotService.navigateToShelf(shelfNumber);
+
+        return ResponseEntity.ok("Robot navigating to shelf " + shelfNumber);
+    }
+
+
+    @GetMapping("/navigate/category")
+    public ResponseEntity<String> navigateByCategory(
+            @RequestParam("category") String category) {
+
+        List<Book> books = userService.getBooksByCategory(category);
+
+        if (books.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("No books in this category");
+        }
+
+        int shelfNumber = books.get(0).getShelfNumber();
+        robotService.navigateToShelf(shelfNumber);
+
+        return ResponseEntity.ok("Robot navigating to shelf " + shelfNumber);
+    }
+
+
 }

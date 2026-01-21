@@ -23,4 +23,6 @@ public interface BookRepo extends JpaRepository<Book, Integer> {
 
     @Query("SELECT B.shelfNumber FROM Book B WHERE B.category= :category")
     List<Integer> findShelfNumberByCategory(String category);
+
+    List<Book> findByCategoryIgnoreCase(String category);
 }

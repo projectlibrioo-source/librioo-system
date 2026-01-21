@@ -40,4 +40,8 @@ public class UserService {
     public List<Integer> searchByCategory(String category) {
         return bookRepo.findShelfNumberByCategory(category);
     }
+
+    public List<Book> getBooksByCategory(String category) {
+        return bookRepo.findByCategoryIgnoreCase(category);
+    }
 }
