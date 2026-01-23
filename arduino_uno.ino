@@ -39,9 +39,9 @@ const int sensorPins[6] = {A0, A1, A2, A3, A4, A5};
 int thresh[6] = {800, 800, 800, 800, 800, 800}; // tune per sensor if needed
 
 // ================= LINE FOLLOW CONTROL =================
-int baseSpeed = 200;        // 0..255
+int baseSpeed = 180;        // 0..255
 float Kp = 0.08;            // steering gain for "strength-weighted" error (start 0.05..0.15)
-int maxCorrection = 120;    // clamp correction
+int maxCorrection = 80;    // clamp correction
 const int weights[6] = {-5, -3, -1, 1, 3, 5}; // left negative, right positive
 
 // ================= MARKER / SHELF NAV =================
