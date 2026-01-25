@@ -7,7 +7,7 @@ import BookCard from "../components/BookCard";
 import GuideButton from "../components/GuideButton";
 import CancelButton from "../components/CancelButton";
 // 2. Import the backend functions
-import { getCategories, searchByCategory} from "../../BackendFunctions";
+import { getCategories, navigateByCategory} from "../../BackendFunctions";
 
 const SearchCategory = () => {
   const navigate = useNavigate();// Hook for navigation
@@ -62,7 +62,7 @@ const SearchCategory = () => {
   };
 
   // --- NEW: Handle the Guide Me Click Logic ---
-  const handleGuideClick = async () => {
+  /*const handleGuideClick = async () => {
     if (!selectedCategory) return;
 
     setIsCheckingLocation(true); // Start a small loading state
@@ -92,7 +92,38 @@ const SearchCategory = () => {
       setIsCheckingLocation(false);
     }
   };
+  */
+
+  // --- NEW: Handle the Guide Me Click Logic ---
+  const handleGuideClick = async () => {
+    // 1. Safety check: ensure a category is selected
+    if (!selectedCategory) {
+        alert("Please select a category first!");
+        return;
+    }
+
+    setIsCheckingLocation(true); 
+    console.log("Sending navigation command for:", selectedCategory);
+
+    try {
+      // ▼▼▼ KEY CHANGE: Call the function that moves the robot ▼▼▼
+      // This sends the command to your http://localhost:8080/api/navigate/category endpoint
+      const success = await navigateByCategory(selectedCategory);
+
+      if (success) {
+        // 2. If the backend says "OK", go to the Follow page
+        navigate("/robot/follow"); 
+      } 
+
+    } catch (error) {
+      console.error("Error sending command:", error);
+      alert("System Error: Could not connect to robot.");
+    } finally {
+      setIsCheckingLocation(false);
+    }
+  };
   // ---------------------------------------------
+ 
 
   // 4. Live Filter Logic
   const visibleCategories = categories.filter(c => 

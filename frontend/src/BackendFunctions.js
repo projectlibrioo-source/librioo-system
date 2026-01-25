@@ -113,11 +113,19 @@ export async function navigateByBookName(bookName) {
 }
 
 //Navigate by category
-export async function navigateByBookName(category) {
+export async function navigateByCategory(category) {
     try{
         const response = await fetch(`http://localhost:8080/api/navigate/category?category=${encodeURIComponent(category)}`, {
             method:"GET"
         });
+
+        if (response.ok) {
+            console.log("Category navigation sent: " + category);
+            return true;
+        } else {
+            console.error("Failed to send category navigation");
+            return false;
+        }
 
     }catch(e){
         alert(e);
