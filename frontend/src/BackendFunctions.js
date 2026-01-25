@@ -99,3 +99,15 @@ export async function getCategories() {
         alert(e);
     }
 }
+
+//Navigate by book name
+export async function navigateByBookName(bookName) {
+    try{
+        const response = await fetch(`http://localhost:8080/api/navigate/book?name=${encodeURIComponent(bookName)}`, {
+            method:"GET"
+        });
+
+    }catch(e){
+        alert(e);
+    }
+}
