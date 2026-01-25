@@ -9,7 +9,7 @@ import CancelButton from "../components/CancelButton";
 import blackAndBlueFictionBookCover1 from "../../assets/black-and-blue-fiction-book-cover-1.png";
 import redNeonMysticBookCover1 from "../../assets/red-neon-mystic-book-cover-1.png";
 
-import { searchBooksByName } from "../../BackendFunctions";
+import { searchBooksByName, navigateByBookName } from "../../BackendFunctions";
 
 const SearchBook = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,8 +49,25 @@ const SearchBook = () => {
         setIsLoading(false);
     }
   };
+  // ▼▼▼ UPDATED GUIDE ME FUNCTION ▼▼▼
+  const handleGuideMe = async () => {
+    // 1. Check if there is a book name typed in
+    if (!searchQuery.trim()) {
+        alert("Please search for a book name first!");
+        return;
+    }
+
+    console.log("Guiding to book:", searchQuery);
+
+    // 2. Call the backend function with the Search Query
+    // Example: If user typed "Harry Potter", we send "Harry Potter"
+    await navigateByBookName(searchQuery);
+
+    // 3. Go to the Follow Me page
+    navigate("/follow");
+  };
   
-  const handleGuideMe = () => console.log("Guide Me clicked");
+  //const handleGuideMe = () => console.log("Guide Me clicked");
 
   return (
     <RobotLayout>
