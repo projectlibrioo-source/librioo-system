@@ -64,7 +64,7 @@ const SearchBook = () => {
     await navigateByBookName(searchQuery);
 
     // 3. Go to the Follow Me page
-    navigate("/follow");
+    navigate("/robot/follow");
   };
   
   //const handleGuideMe = () => console.log("Guide Me clicked");
