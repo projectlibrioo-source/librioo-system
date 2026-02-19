@@ -112,13 +112,11 @@ public class AdminController {
 
             Member memberSaved = adminService.saveMemberData(member);
 
-//            if (bookSaved != null) {
-//                return ResponseEntity.ok(bookSaved);
-//            } else {
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//            }
-
-            return new ResponseEntity<>(HttpStatus.OK);
+            if (memberSaved != null) {
+                return new ResponseEntity<>(memberSaved,HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
