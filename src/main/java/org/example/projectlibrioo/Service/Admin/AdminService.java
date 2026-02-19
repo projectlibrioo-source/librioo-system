@@ -17,5 +17,12 @@ public class AdminService {
         return bookRepo.save(book);
     }
 
+    public Book getAllBooks(int bookId) {
+        return null;
+    }
 
+
+//    public Book getAllBooks(int bookId) {
+//        return bookRepo.findById(bookId);
+//    }
 }

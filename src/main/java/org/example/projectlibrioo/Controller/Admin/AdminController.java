@@ -70,6 +70,13 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/getallbooks")
+    public ResponseEntity<Book> getAllBooks(@RequestParam("bookid") int bookId){
+        Book returnedBook = adminService.getAllBooks(bookId);
+        return null;
+
+    }
+
     @GetMapping("/test")
     public String test() {
         return "API is working!";
