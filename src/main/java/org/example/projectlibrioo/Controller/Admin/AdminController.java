@@ -79,7 +79,17 @@ public class AdminController {
             return new ResponseEntity<>(returnedBook, HttpStatus.FOUND);
         }
 
+    }
 
+    @PutMapping("/updatebook")
+    public ResponseEntity<Book> updateBooks(@RequestBody Book book){
+        Book updatedBook = adminService.updateBooks(book);
+
+        if (updatedBook != null){
+            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/test")
