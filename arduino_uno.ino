@@ -42,3 +42,34 @@ void forward() {
   digitalWrite(RIGHT_MOTOR_FW, HIGH);
   digitalWrite(RIGHT_MOTOR_BW, LOW);
 }
+
+void stopMotors() {
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+
+  digitalWrite(LEFT_MOTOR_FW, LOW);
+  digitalWrite(LEFT_MOTOR_BW, LOW);
+  digitalWrite(RIGHT_MOTOR_FW, LOW);
+  digitalWrite(RIGHT_MOTOR_BW, LOW);
+}
+
+void turnLeft() {
+  analogWrite(ENA, baseSpeed);
+  analogWrite(ENB, baseSpeed);
+
+  digitalWrite(LEFT_MOTOR_FW, LOW);
+  digitalWrite(LEFT_MOTOR_BW, HIGH);   // left reverse
+  digitalWrite(RIGHT_MOTOR_FW, HIGH);  // right forward
+  digitalWrite(RIGHT_MOTOR_BW, LOW);
+}
+
+void turnRight() {
+  analogWrite(ENA, baseSpeed);
+  analogWrite(ENB, baseSpeed);
+
+  digitalWrite(LEFT_MOTOR_FW, HIGH);   // left forward
+  digitalWrite(LEFT_MOTOR_BW, LOW);
+  digitalWrite(RIGHT_MOTOR_FW, LOW);
+  digitalWrite(RIGHT_MOTOR_BW, HIGH);  // right reverse
+}
+

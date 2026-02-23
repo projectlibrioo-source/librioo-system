@@ -15,3 +15,18 @@ const char* wifi_password = "anc12345";
 #define TX2 19
 
 WebServer server(80);
+
+String makePage() {
+  String page =
+    "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+    "<title>Librioo Robot</title></head><body>"
+    "<h2>Librioo Robot</h2>"
+    "<p>Send shelf:</p>"
+    "<a href='/send?num=1'>Shelf 1</a><br>"
+    "<a href='/send?num=2'>Shelf 2</a><br>"
+    "<a href='/send?num=3'>Shelf 3</a><br>"
+    "<a href='/send?num=4'>Shelf 4</a><br><br>"
+    "<a href='/send?num=STOP' style='color:red;'>STOP</a><br>"
+    "</body></html>";
+  return page;
+}
