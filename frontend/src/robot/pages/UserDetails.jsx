@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout"; 
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-1.png";
 
@@ -7,7 +7,7 @@ const UserDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
- // 1. Get the user data AND the userType ('member' or 'guest')
+  // 1. Get the user data AND the userType ('member' or 'guest')
   const passedUser = location.state?.user || {};
   const userType = location.state?.userType || "member"; // Default to member if undefined
 
@@ -15,49 +15,37 @@ const UserDetails = () => {
   console.log("User Type:", userType);
 
   // 2. Prepare the ID Label and Value dynamically
-  // If guest, label is "Guest ID", otherwise "Library ID"
   const idLabel = userType === "guest" ? "Guest ID :" : "Library ID :";
   
   // 3. Map the data based on what your backend sends
   const formData = {
-    // Name: Checks 'fullName' (Guest) OR 'name' (Member)
     name: passedUser.fullName || passedUser.name || "", 
-
-    // ID: Checks 'guestID' (Guest) OR 'libraryId' (Member)
     id: userType === "guest" 
-        ? (passedUser.guestID || passedUser.guestId || "") // Added guestID based on your image
+        ? (passedUser.guestID || passedUser.guestId || "") 
         : (passedUser.libraryID || passedUser.ID || ""), 
-
-    // Email: 'email' is usually the same for both
     email: passedUser.email || "", 
-
-    // Contact: Checks 'phoneNumber' (Guest) OR 'contactNo' (Member)
     contactNo: passedUser.phoneNumber || passedUser.contactNo || passedUser.mobile || "",   
   };
 
   // 4. Handle Back Button Logic
   const handleBack = () => {
     if (userType === "guest") {
-        navigate("/robot/guest-login"); // Go back to guest login
+        navigate("/robot/guest-login"); 
     } else {
-        navigate("/robot/member-login"); // Go back to member login
+        navigate("/robot/member-login"); 
     }
   };
 
-  // Optional: Redirect back to login if someone tries to access this page directly without logging in
   useEffect(() => {
     if (!passedUser.libraryId && !passedUser.id) {
-        // console.warn("No user data found, redirecting...");
-        // navigate("/robot/member-login"); // Uncomment this later to secure the page
+        // navigate("/robot/member-login"); // Secure the page if needed
     }
   }, [passedUser, navigate]);
 
-
   const handleProceed = () => {
       console.log("Proceeding with user:", formData);
-      // Pass the user data to the NEXT page (Selection) as well
       navigate("/robot/search", { state: { user: formData } }); 
-    };
+  };
 
   const formFields = [
     { id: "name", label: "Name :", value: formData.name, type: "text" },
@@ -68,181 +56,147 @@ const UserDetails = () => {
 
   return (
     <RobotLayout>
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
+      {/* Safe Float Animation */}
+      <style>
+        {`
+          @keyframes safeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+          }
+          .animate-safe-float {
+            animation: safeFloat 6s ease-in-out infinite;
+          }
+        `}
+      </style>
 
-        {/* Title Section */}
-        <div style={{ 
-          display: 'flex',
-          justifyContent: 'flex-start',
-          paddingLeft: 'clamp(20px, 25vw, 320px)',
-          width: '100%',
-          marginBottom: 'clamp(20px, 4vh, 60px)',
-          marginTop: 'clamp(10px, 2vh, 40px)',
-          flexShrink: 0
-        }}>
-          <h1 
-            className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal]"
-            style={{ fontSize: 'clamp(24px, 4vh, 60px)' }}
-          >
-            User Details
-          </h1>
-        </div>
+      <div className="relative flex flex-col items-center justify-center w-full h-full p-4 overflow-x-hidden md:p-8">
+        
+        {/* --- HOLOGRAPHIC BACKGROUND ORBS --- */}
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
-        {/* Content Area */}
-        <div style={{ 
-          paddingLeft: 'clamp(0px, 12vw, 100px)',
-          flex: 1,
-          minHeight: '100px',
-          marginRight: '60px',
-          display: 'flex',
-          overflow: 'visible',
-          paddingBottom: '20px' 
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'row', 
-            gap: 'clamp(15px, 4vw, 100px)', 
-            alignItems: 'stretch',
-            width: '100%',
-            height: '100%',
-            flexWrap: 'wrap'
-          }}>
+        {/* --- MAIN CONTENT WRAPPER --- */}
+        <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full">
+          
+          {/* LEFT SIDE: Text and Form Container */}
+          <div className="flex-1 flex flex-col w-full max-w-[650px] justify-center pt-8 md:pt-0">
             
-            {/* Left side: Form & Buttons */}
-            <div style={{ 
-              flex: 1, 
-              minWidth: '300px',
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: 'clamp(15px, 2vh, 30px)', 
-            }}>
+            <h1 className="
+              [font-family:'ADLaM_Display-Regular',Helvetica] 
+              text-[#caf9ff] 
+              text-[clamp(32px,5vw,55px)] 
+              leading-tight 
+              drop-shadow-lg 
+              mb-6 md:mb-10 
+              text-center md:text-left
+            ">
+              User Details
+            </h1>
+
+            <form 
+              className="flex flex-col w-full gap-6"
+              onSubmit={(e) => { e.preventDefault(); handleProceed(); }}
+            >
               
-              {/* --- Form Section --- */}
-              <form 
-                className="flex flex-col gap-[15px] sm:gap-[25px] w-full"
-                onSubmit={(e) => { e.preventDefault(); handleProceed(); }}
-              >
+              {/* GLASSMORPHIC FORM CARD */}
+              <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-6 sm:p-8 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 sm:gap-6">
                 {formFields.map((field) => (
-                  /* CONTAINER STYLE: 
-                     Matches the outer dark glassmorphism box in your image 
-                  */
                   <div 
                     key={field.id}
                     className="
-                      w-full 
-                      h-[80px] sm:h-[100px]
-                      bg-[#d9d9d926] rounded-[20px] shadow-[0px_4px_4px_#00000040]
-                      flex flex-row items-center
-                      px-4 sm:px-6
-                      gap-[100px]
+                      w-full flex flex-col sm:flex-row items-start sm:items-center 
+                      gap-2 sm:gap-6 bg-white/5 border border-white/10 rounded-[20px] 
+                      p-3 sm:p-4 transition-all hover:bg-white/10 hover:border-cyan-400/30
                     "
                   >
                     {/* Label */}
                     <label
                       htmlFor={field.id}
                       className="
-                        w-[100px] sm:w-[160px] flex-shrink-0 ml-[10px]
-                        [-webkit-text-fill-color:white] 
-                        [font-family:'Aldrich-Regular',Helvetica] 
-                        text-[25px] sm:text-[33px]
+                        w-[120px] sm:w-[150px] flex-shrink-0 
+                        text-[#caf9ff] 
+                        [font-family:'Aldrich',sans-serif] 
+                        text-[18px] sm:text-[22px]
                         whitespace-nowrap
-                        text-center
+                        pl-2
                       "
                     >
                       {field.label}
                     </label>
 
-                    {/* INPUT FIELD STYLE: 
-                       Matches the inner lighter box in your image 
-                    */}
-                    <div className="flex-1 mr-[20px] h-[50px] sm:h-[50px] bg-[#ffffff20] rounded-[15px] flex items-center shadow-inner">
+                    {/* Input Container (Darker inner shadow) */}
+                    <div className="flex-1 w-full bg-black/50 rounded-[12px] flex items-center shadow-inner border border-white/5 overflow-hidden">
                       <input
                         id={field.id}
                         type={field.type}
                         value={field.value}
                         readOnly
                         className="
-                          w-full h-full
-                          bg-transparent
-                          px-3
+                          w-full h-[45px] sm:h-[50px]
+                          bg-transparent px-4
                           text-white
-                          [font-family:'Aldrich-Regular',Helvetica] 
-                          text-[25px] sm:text-[22px]
-                          text-center
-                          placeholder-gray-400
-                          focus:outline-none 
-                          cursor-default
+                          [font-family:'Aldrich',sans-serif] 
+                          text-[16px] sm:text-[20px]
+                          focus:outline-none cursor-default
                         "
                       />
                     </div>
                   </div>
                 ))}
+              </div>
 
-                {/* --- Navigation Buttons --- */}
-                <div className="flex flex-row gap-[50px] sm:gap-[50px] w-full mt-4">
-                  
-                  {/* Back Button */}
-                  <button
-                    type="button"
-                    onClick={handleBack}
-                    className="
-                      flex-1 h-[60px] sm:h-[80px] 
-                      flex items-center justify-center 
-                      bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                      cursor-pointer transition-all hover:bg-[#00000060] 
-                      focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                    "
-                  >
-                    <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
-                      BACK
-                    </span>
-                  </button>
+              {/* ACTION BUTTONS */}
+              <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full">
+                
+                {/* Back Button */}
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="
+                    flex-1 max-w-[200px] h-[60px] 
+                    flex items-center justify-center 
+                    bg-red-500/10 backdrop-blur-md border border-red-500/30 rounded-[20px] shadow-lg
+                    cursor-pointer transition-all duration-300
+                    hover:bg-red-500/20 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]
+                    focus:outline-none focus:ring-2 focus:ring-red-500
+                  "
+                >
+                  <span className="text-[#fcfbfa] [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[18px] tracking-widest font-bold">
+                    BACK
+                  </span>
+                </button>
 
-                  {/* Proceed Button */}
-                  <button
-                    type="submit"
-                    className="
-                      flex-1 h-[60px] sm:h-[80px] 
-                      flex items-center justify-center 
-                      bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                      cursor-pointer transition-all hover:bg-[#00000060] 
-                      focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                    "
-                  >
-                    <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2.5vw,32px)]">
-                      PROCEED
-                    </span>
-                  </button>
+                {/* Proceed Button */}
+                <button
+                  type="submit"
+                  className="
+                    flex-1 max-w-[200px] h-[60px] 
+                    flex items-center justify-center 
+                    bg-cyan-500/20 backdrop-blur-md border border-cyan-400 rounded-[20px] shadow-lg
+                    cursor-pointer transition-all duration-300
+                    hover:bg-cyan-400/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]
+                    focus:outline-none focus:ring-2 focus:ring-cyan-400
+                  "
+                >
+                  <span className="text-[#caf9ff] [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[18px] tracking-widest font-bold drop-shadow-md">
+                    PROCEED
+                  </span>
+                </button>
 
-                </div>
-              </form>
-
-            </div>
-
-            {/* Right side: Robot image (Desktop) */}
-            <div style={{ 
-              flexShrink: 0, 
-              width: 'clamp(100px, 18vw, 400px)',
-              display: 'flex',
-              alignItems: 'flex-start',
-              overflow: 'hidden',
-              marginTop: '-2px' 
-            }} className="hidden sm:flex">
-              <img
-                style={{ 
-                  width: '100%', 
-                  height: 'auto',
-                  maxHeight: '600px',
-                  objectFit: 'contain'
-                }}
-                alt="Smart Library Assistant Robot"
-                src={robotImage}
-              />
-            </div>
-            
-             
+              </div>
+            </form>
 
           </div>
+
+          {/* RIGHT SIDE: Floating Robot Image (Desktop Only) */}
+          <div className="hidden md:flex flex-1 items-center justify-center w-full max-w-[350px] lg:max-w-[450px] shrink-0 animate-safe-float">
+            <img
+              className="w-full h-auto max-h-[70vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              alt="Smart Library Assistant Robot"
+              src={robotImage}
+            />
+          </div>
+
         </div>
       </div>
     </RobotLayout>
