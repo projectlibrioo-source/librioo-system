@@ -103,3 +103,17 @@ bool isStopMarker(bool sL2, bool sL1, bool sC, bool sR1, bool sR2) {
 
   return (blackCount >= 4);
 }
+
+// ================= LINE FOLLOW STEP =================
+void lineFollowStep(bool sL2, bool sL1, bool sC, bool sR1, bool sR2) {
+  // Assumption: LOW = black line
+  if (sC == LOW) {
+    forward();
+  } else if (sL1 == LOW || sL2 == LOW) {
+    turnLeft();
+  } else if (sR1 == LOW || sR2 == LOW) {
+    turnRight();
+  } else {
+    stopMotors(); // lost line
+  }
+}
