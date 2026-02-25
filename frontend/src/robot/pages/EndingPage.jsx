@@ -17,169 +17,136 @@ const EndingPage = () => {
 
   return (
     <RobotLayout>
-      <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden p-4">
+      {/* Custom CSS for a safe, restricted floating animation. */}
+      <style>
+        {`
+          @keyframes safeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+          }
+          .animate-safe-float {
+            animation: safeFloat 6s ease-in-out infinite;
+          }
+          .animate-safe-float-delayed {
+            animation: safeFloat 6s ease-in-out 3s infinite;
+          }
+        `}
+      </style>
 
-        {/* --- BACKGROUND ROBOTS CONTAINER --- 
-            Changes made:
-            1. Added 'pb-[60px] lg:pb-[100px]' to lift the robots up from the bottom.
-        */}
-        <div className="
-          absolute inset-0 z-0 w-full h-full 
-          flex justify-between items-end 
-          gap-10 px-4 
-          pb-[60px] lg:pb-[100px] /* Pushes robots up */
-          pointer-events-none
-        ">
-          
-          {/* LEFT ROBOT */}
-          <div style={{ 
-            flexShrink: 0, 
-            width: 'clamp(100px, 20vw, 400px)',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'flex-start',
-            opacity: 0.3
-          }}>
+      {/* MAIN CONTAINER */}
+      <div className="flex-1 min-h-[80vh] w-full relative flex flex-col items-center justify-center overflow-hidden p-4">
+
+        {/* --- HOLOGRAPHIC BACKGROUND ORBS --- */}
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#03fcba]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+        {/* --- CENTERED CONTENT WRAPPER (Now a Flex Row to enforce gaps!) --- */}
+        <div className="relative w-full max-w-[1600px] flex flex-row items-center justify-center gap-2 sm:gap-6 lg:gap-12 px-2 md:px-8">
+
+          {/* LEFT ROBOT (No longer absolute. Forced to sit on the left with a gap) */}
+          <div className="flex justify-end z-0 w-[80px] sm:w-[150px] md:w-[220px] lg:w-[320px] shrink-0 opacity-40 animate-safe-float pointer-events-none">
             <img
-              style={{ 
-                width: '100%', 
-                height: '100%',
-                minHeight: '120px',
-                maxHeight: '620px',
-                objectFit: 'contain',
-                objectPosition: 'bottom left'
-              }}
+              className="w-full h-auto scale-125 max-h-[45vh] object-contain drop-shadow-2xl"
               alt="Robot Left"
               src={robotLeft}
             />
           </div>
 
-          {/* RIGHT ROBOT */}
-          <div style={{ 
-            flexShrink: 0, 
-            width: 'clamp(100px, 20vw, 400px)',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'flex-end',
-            opacity: 0.3
-          }}>
+          {/* --- GLASSMORPHIC CONTENT CARD (z-10) --- */}
+          <div className="z-10 flex flex-col items-center bg-black/40 backdrop-blur-xl border border-white/10 p-6 sm:p-8 md:p-12 lg:p-16 rounded-[40px] shadow-[0_0_50px_rgba(0,0,0,0.6)] w-full max-w-[90%] md:max-w-[600px] lg:max-w-[800px] text-center shrink">
+            
+            {/* Text Group */}
+            <div className="flex flex-col items-center gap-4 mb-8 lg:gap-8 lg:mb-12">
+              <h1 className="
+                [font-family:'ADLaM_Display-Regular',Helvetica] 
+                text-[#03fcba] 
+                text-[clamp(26px,3.5vw,55px)]
+                leading-tight
+                drop-shadow-[0_0_20px_rgba(3,252,186,0.4)]
+              ">
+                Transaction Complete!
+              </h1>
+
+              <p className="
+                [font-family:'Aldrich',sans-serif] 
+                text-[#fcfbfa] 
+                text-[clamp(16px,2vw,32px)]
+                leading-normal
+                opacity-95
+              ">
+                Thank you for using our Library Assistance.
+              </p>
+
+              <p className="
+                [font-family:'ADLaM_Display-Regular',Helvetica] 
+                text-[#caf9ff]
+                text-[clamp(14px,1.5vw,24px)]
+                leading-relaxed
+                max-w-[500px]
+                opacity-80
+              ">
+                The return date has been sent via SMS to your mobile phone.
+              </p>
+            </div>
+
+            {/* --- BUTTONS SECTION --- */}
+            <div className="flex flex-col sm:flex-row gap-5 lg:gap-[40px] w-full justify-center items-center">
+              
+              {/* Button 1: Return to Home */}
+              <button
+                onClick={handleHomeClick}
+                className="
+                  group w-full sm:w-[180px] lg:w-[240px] h-[55px] lg:h-[65px]
+                  flex items-center justify-center 
+                  bg-[#03fcba] rounded-[20px] 
+                  shadow-[0_0_20px_rgba(3,252,186,0.3)] 
+                  cursor-pointer transition-all duration-300 ease-out
+                  hover:scale-105 hover:bg-[#04ffbc] hover:shadow-[0_0_30px_rgba(3,252,186,0.6)]
+                  focus:outline-none focus:ring-4 focus:ring-white/50
+                "
+              >
+                <span className="
+                  text-[#111212] font-['Orbitron',sans-serif] 
+                  text-[14px] lg:text-[18px] font-bold tracking-widest whitespace-nowrap
+                ">
+                  RETURN HOME
+                </span>
+              </button>
+
+              {/* Button 2: End Session */}
+              <button
+                onClick={handleEndSessionClick}
+                className="
+                  group w-full sm:w-[180px] lg:w-[240px] h-[55px] lg:h-[65px]
+                  flex items-center justify-center 
+                  bg-[#ff7421] rounded-[20px] 
+                  shadow-[0_0_20px_rgba(255,116,33,0.3)] 
+                  cursor-pointer transition-all duration-300 ease-out
+                  hover:scale-105 hover:bg-[#ff853a] hover:shadow-[0_0_30px_rgba(255,116,33,0.6)]
+                  focus:outline-none focus:ring-4 focus:ring-white/50
+                "
+              >
+                <span className="
+                  text-[#111212] font-['Orbitron',sans-serif] 
+                  text-[14px] lg:text-[18px] font-bold tracking-widest whitespace-nowrap
+                ">
+                  END SESSION
+                </span>
+              </button>
+
+            </div>
+          </div>
+
+          {/* RIGHT ROBOT (Forced to sit on the right with a gap) */}
+          <div className="flex justify-start z-0 w-[80px] sm:w-[150px] md:w-[220px] lg:w-[320px] shrink-0 opacity-40 animate-safe-float-delayed pointer-events-none">
             <img
-              style={{ 
-                width: '100%', 
-                height: '100%',
-                minHeight: '120px',
-                maxHeight: '680px',
-                objectFit: 'contain',
-                objectPosition: 'bottom right'
-              }}
+              className="w-full h-auto scale-125 max-h-[45vh] object-contain drop-shadow-2xl"
               alt="Robot Right"
               src={robotRight}
             />
           </div>
-        
-        </div>
-
-
-        {/* --- TEXT & BUTTON CONTENT (z-10) --- */}
-        <div className="z-10 flex flex-col items-center w-full max-w-[90%] lg:max-w-[800px] text-center mt-[-20px] lg:mt-0">
-          
-          {/* Text Group */}
-          <div className="flex flex-col items-center gap-6 lg:gap-10 mb-8 lg:mb-12">
-            <h1 className="
-              [font-family:'ADLaM_Display-Regular',Helvetica] 
-              text-[#caf9ff] 
-              text-[32px] lg:text-[60px]
-              leading-tight
-            ">
-              Transaction Complete!
-            </h1>
-
-            <p className="
-              [font-family:'Aldrich-Regular',Helvetica] 
-              text-[#fcfbfa] 
-              text-[24px] lg:text-[40px]
-              leading-normal
-              drop-shadow-md
-            ">
-              Thank you for using our Library Assistance.
-            </p>
-
-            <p className="
-              [font-family:'ADLaM_Display-Regular',Helvetica] 
-              text-[#f0f0f0]
-              text-[18px] lg:text-[36px]
-              leading-normal
-              max-w-[600px]
-            ">
-              The return date has been sent via SMS to your mobile phone
-            </p>
-          </div>
-
-          {/* --- BUTTONS SECTION --- */}
-          <div className="flex flex-col sm:flex-row gap-[12px] lg:gap-[100px] w-full justify-center items-center">
-            
-            {/* Button 1: Return to Home */}
-            <button
-              onClick={handleHomeClick}
-              className="
-                /* BUTTON RESIZING LOGIC:
-                   - w-[70%]: On mobile, takes 70% of screen width (resizes with window).
-                   - sm:w-[180px]: On tablet, fixes to 180px.
-                   - lg:w-[220px]: On desktop, fixes to 220px.
-                */
-                w-[70%] sm:w-[180px] lg:w-[220px]
-                h-[45px] lg:h-[55px]
-                flex items-center justify-center 
-                bg-[#03fcba] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                cursor-pointer transition-all hover:bg-[#00000060] 
-                focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-              "
-            >
-              <span
-          className="
-            text-[#111212]
-            font-orbitron
-            text-[16px] lg:text-[20px]
-            whitespace-nowrap
-            font-bold
-          "
-        >
-                RETURN HOME
-              </span>
-            </button>
-
-            {/* Button 2: End Session */}
-            <button
-              onClick={handleEndSessionClick}
-              className="
-                /* Same resizing logic here */
-                w-[70%] sm:w-[180px] lg:w-[220px]
-                h-[45px] lg:h-[55px]
-                flex items-center justify-center 
-                bg-[#ff7421] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                cursor-pointer transition-all hover:bg-[#ff8c42] 
-                focus:outline-none focus:ring-2 focus:ring-white
-              "
-            >
-              <span
-            className="
-                text-[#111212]
-                font-orbitron
-                text-[16px] lg:text-[20px]
-                whitespace-nowrap
-                font-bold
-              "
-             >
-                END SESSION
-              </span>
-            </button>
-
-          </div>
 
         </div>
-
       </div>
     </RobotLayout>
   );
