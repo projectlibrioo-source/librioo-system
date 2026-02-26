@@ -27,7 +27,13 @@ const FollowPage = () => {
           {/* "FOLLOW ME" TEXT (Your original styling upgraded with a drop shadow) */}
           <h1 
             className="
-              
+              text-[#fcfbfa] 
+              text-center
+              leading-tight
+              drop-shadow-[0_0_25px_rgba(255,116,33,0.8)]
+              /* Responsive Styles */
+              text-[50px] sm:text-[70px] lg:text-[90px]
+              tracking-[6px] sm:tracking-[10px] lg:tracking-[15px]
             "
             style={{
               
