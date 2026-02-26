@@ -36,6 +36,7 @@ const FollowPage = () => {
               tracking-[6px] sm:tracking-[10px] lg:tracking-[15px]
             "
             style={{
+              fontFamily: "'Aldrich', sans-serif"
               
             }}
           >
