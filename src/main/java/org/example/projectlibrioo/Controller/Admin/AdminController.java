@@ -1,6 +1,7 @@
 package org.example.projectlibrioo.Controller.Admin;
 import org.example.projectlibrioo.Model.Book;
 import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.ReturnDTO;
 import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.Transactions.TransactionService;
@@ -147,6 +148,14 @@ public class AdminController {
         else {
             return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @PostMapping("/getfines")
+    public ResponseEntity<Double> calculateFines(@RequestBody
+    ReturnDTO returnBook){
+        double fine = transactionService.getFines(returnBook);
+
+        return new ResponseEntity<>(fine,HttpStatus.OK);
     }
 
 

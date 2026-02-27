@@ -6,6 +6,8 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.example.projectlibrioo.Model.ReturnDTO;
+import java.time.temporal.ChronoUnit;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,5 +41,28 @@ public class TransactionService {
         return transactionRepo.save(transactionBook);
 
     }
+
+    public Double getFines(ReturnDTO returnBook) {
+        double fine =0.0;
+
+        Transactions returnedData = transactionRepo.findByIds(returnBook.getLibraryId(),returnBook.getBookId());
+
+        if(returnedData.getReturnDate().isBefore(LocalDate.now())){
+
+            long overdueDays = ChronoUnit.DAYS.between(
+                    returnedData.getReturnDate(),
+                    LocalDate.now()
+            );
+            fine = overdueDays * 10;
+
+        }
+
+        else {
+            fine = 0;
+
+        }
+        return fine;
+    }
+
 
     }
