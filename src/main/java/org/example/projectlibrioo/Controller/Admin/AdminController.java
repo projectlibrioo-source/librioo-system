@@ -1,6 +1,7 @@
 package org.example.projectlibrioo.Controller.Admin;
 
 import org.example.projectlibrioo.Model.Book;
+import org.example.projectlibrioo.Model.Guest;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,25 @@ public class AdminController {
                 return ResponseEntity.ok(bookSaved);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("ERROR: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/addguest")
+    public ResponseEntity<?> addGuest(@RequestBody Guest guest) {
+        try {
+
+            Guest guestSaved = adminService.saveGuestData(guest);
+
+            if (guestSaved != null) {
+                return new ResponseEntity<>(guestSaved,HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
         } catch (Exception e) {
