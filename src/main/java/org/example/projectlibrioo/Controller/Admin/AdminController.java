@@ -75,5 +75,9 @@ public class AdminController {
         return "API is working!";
     }
 
+    public String test2(){
+        return "test2";
+    }
+
 
 }
