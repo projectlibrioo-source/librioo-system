@@ -1,19 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
 
 const SelectionPage = () => {
   const navigate = useNavigate();
+  
+  // 1. ADD STATE TO TRACK SELECTION
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  // 2. UPDATE HANDLERS TO SET STATE INSTEAD OF NAVIGATING
   const handleReadHereClick = () => {
-    console.log("Read Here clicked");
-    // navigate("/robot/read");
+    setSelectedOption("read");
   };
 
   const handleBorrowBookClick = () => {
-    console.log("Borrow Book clicked");
-    // navigate("/robot/borrow");
+    setSelectedOption("borrow");
+  };
+
+  // 3. ADD PROCEED HANDLER
+  const handleProceedClick = () => {
+    if (selectedOption === "read") {
+      navigate("/robot/ending");
+    } else if (selectedOption === "borrow") {
+      navigate("/robot/borrow");
+    }
   };
 
   const handleBackClick = () => {
@@ -22,153 +33,135 @@ const SelectionPage = () => {
 
   return (
     <RobotLayout>
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden px-[20px] sm:px-[100px]">
+      <div className="relative flex flex-col items-center justify-center w-full h-full px-6 overflow-hidden md:px-16">
+        
+        {/* Holographic glowing background orbs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
-        {/* Title Section */}
-        <div style={{ 
-          display: 'flex',
-          justifyContent: 'flex-start',
-          paddingLeft: 'clamp(20px, 25vw, 170px)',
-          width: '100%',
-          marginBottom: 'clamp(20px, 4vh, 60px)',
-          marginTop: 'clamp(10px, 2vh, 40px)',
-          flexShrink: 0
-        }}>
-          <h1 
-            className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] tracking-[0] leading-[normal]"
-            style={{ fontSize: 'clamp(24px, 4vh, 60px)' }}
-          >
-            What would you like to do?
-          </h1>
-        </div>
-
-        {/* Content Area */}
-        <div style={{ 
-          paddingLeft: 'clamp(0px, 12vw, 100px)',
-          flex: 1,
-          minHeight: '100px',
-          display: 'flex',
-          overflow: 'visible',
-          paddingBottom: '20px' 
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'row', 
-            gap: 'clamp(15px, 4vw, 100px)', 
-            alignItems: 'stretch',
-            width: '100%',
-            height: '100%',
-            flexWrap: 'wrap'
-          }}>
+        {/* Main Content Container */}
+        <div className="z-10 flex flex-col items-center justify-between w-full h-full gap-10 py-10 max-w-7xl md:flex-row lg:gap-20">
+          
+          {/* Left Side: Text and Buttons */}
+          <div className="flex flex-col justify-center flex-1 w-full h-full max-w-2xl">
             
-            {/* Left side: Options & Nav Buttons */}
-            <div style={{ 
-              flex: 1, 
-              minWidth: '300px',
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: 'clamp(20px, 3vh, 40px)', 
-              maxWidth: '650px' 
-            }}>
+            <h1 className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(32px,5vw,60px)] leading-tight drop-shadow-lg mb-8 md:mb-12 text-center md:text-left">
+              What would you <br className="hidden md:block" />
+              like to <span className="text-white">do?</span>
+            </h1>
+
+            {/* Selection Buttons Container */}
+            <div className="flex flex-col w-full gap-6 md:gap-8">
               
-              {/* --- Selection Buttons --- */}
-              <div className="flex flex-col gap-[20px] sm:gap-[30px] w-full">
-                
-                {/* Button 1: Read Here */}
-                <button
-                  onClick={handleReadHereClick}
-                  className="
-                    w-full 
-                    h-[130px] sm:h-[120px] 
-                    flex items-center justify-center 
-                    bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                    cursor-pointer transition-all hover:bg-[#00000060] 
-                    focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                  "
-                >
-                  <span className="
-                    [-webkit-text-stroke:1px_#ff7421] 
-                    [font-family:'Aldrich-Regular',Helvetica] 
-                    text-[#fcfbfa] 
-                    text-[24px] sm:text-[40px] 
-                    whitespace-nowrap
-                  ">
-                    Read Here
-                  </span>
-                </button>
+              {/* Button 1: Read Here */}
+              <button
+                onClick={handleReadHereClick}
+                className={`
+                  group relative w-full h-[100px] sm:h-[130px]
+                  flex items-center justify-center 
+                  backdrop-blur-xl border rounded-[30px] shadow-2xl
+                  cursor-pointer transition-all duration-300 ease-out
+                  hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(202,249,255,0.2)]
+                  focus:outline-none focus:ring-2 focus:ring-[#ff7421]
+                  /* DYNAMIC CLASSES FOR SELECTION STATE */
+                  ${selectedOption === "read" 
+                    ? "bg-white/10 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.4)]" 
+                    : "bg-black/20 border-white/20 hover:bg-white/5 hover:border-cyan-400/50"}
+                `}
+              >
+                <span className="
+                  [-webkit-text-stroke:1px_#ff7421] 
+                  [font-family:'Aldrich',sans-serif] 
+                  text-[#fcfbfa] text-[28px] sm:text-[40px] tracking-widest
+                  drop-shadow-[0_0_10px_rgba(255,116,33,0.5)]
+                  group-hover:drop-shadow-[0_0_15px_rgba(255,116,33,0.8)] transition-all
+                ">
+                  Read Here
+                </span>
+              </button>
 
-                {/* Button 2: Borrow Book */}
-                <button
-                  onClick={handleBorrowBookClick}
-                  className="
-                    w-full 
-                    h-[130px] sm:h-[120px] 
-                    flex items-center justify-center 
-                    bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                    cursor-pointer transition-all hover:bg-[#00000060] 
-                    focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                  "
-                >
-                  <span className="
-                    [-webkit-text-stroke:1px_#ff7421] 
-                    [font-family:'Aldrich-Regular',Helvetica] 
-                    text-[#fcfbfa] 
-                    text-[24px] sm:text-[40px] 
-                    whitespace-nowrap
-                  ">
-                    Borrow Book
-                  </span>
-                </button>
-
-              </div>
-
-              {/* --- Back Button --- */}
-              {/* UPDATED: 'justify-start' keeps it left. Widths changed to be smaller. */}
-              <div className="flex justify-start w-full mt-2">
-                <button
-                  type="button"
-                  onClick={handleBackClick}
-                  className="
-                    w-[150px] sm:w-[180px] 
-                    h-[50px] sm:h-[70px] 
-                    flex items-center justify-center 
-                    bg-[#00000045] rounded-[20px] shadow-[0px_4px_4px_#00000040] 
-                    cursor-pointer transition-all hover:bg-[#00000060] 
-                    focus:outline-none focus:ring-2 focus:ring-[#ff7421]
-                  "
-                >
-                  <span className="[-webkit-text-fill-color:white] [font-family:'Aldrich-Regular',Helvetica] font-normal text-[clamp(16px,2vw,24px)]">
-                    BACK
-                  </span>
-                </button>
-              </div>
+              {/* Button 2: Borrow Book */}
+              <button
+                onClick={handleBorrowBookClick}
+                className={`
+                  group relative w-full h-[100px] sm:h-[130px]
+                  flex items-center justify-center 
+                  backdrop-blur-xl border rounded-[30px] shadow-2xl
+                  cursor-pointer transition-all duration-300 ease-out
+                  hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(202,249,255,0.2)]
+                  focus:outline-none focus:ring-2 focus:ring-[#ff7421]
+                  /* DYNAMIC CLASSES FOR SELECTION STATE */
+                  ${selectedOption === "borrow" 
+                    ? "bg-white/10 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.4)]" 
+                    : "bg-black/20 border-white/20 hover:bg-white/5 hover:border-cyan-400/50"}
+                `}
+              >
+                <span className="
+                  [-webkit-text-stroke:1px_#ff7421] 
+                  [font-family:'Aldrich',sans-serif] 
+                  text-[#fcfbfa] text-[28px] sm:text-[40px] tracking-widest
+                  drop-shadow-[0_0_10px_rgba(255,116,33,0.5)]
+                  group-hover:drop-shadow-[0_0_15px_rgba(255,116,33,0.8)] transition-all
+                ">
+                  Borrow Book
+                </span>
+              </button>
 
             </div>
 
-            {/* Right side: Robot image (Desktop) */}
-            <div style={{ 
-              flexShrink: 0, 
-              width: 'clamp(100px, 18vw, 400px)',
-              display: 'flex',
-              alignItems: 'flex-start',
-              overflow: 'hidden',
-              marginTop: '20px' 
-            }} className="hidden sm:flex">
-              <img
-                style={{ 
-                  width: '100%', 
-                  height: 'auto',
-                  maxHeight: '600px',
-                  objectFit: 'contain'
-                }}
-                alt="Smart Library Assistant Robot"
-                src={robotImage}
-              />
+            {/* Back & Proceed Buttons Container */}
+            <div className="flex flex-row justify-center w-full gap-4 mt-10 md:justify-start md:mt-12">
+              
+              {/* Back Button */}
+              <button
+                type="button"
+                onClick={handleBackClick}
+                className="
+                  flex-1 max-w-[160px] h-[60px] 
+                  flex items-center justify-center 
+                  bg-red-500/10 backdrop-blur-md border border-red-500/30 rounded-[20px] shadow-lg
+                  cursor-pointer transition-all duration-300
+                  hover:bg-red-500/20 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]
+                  focus:outline-none focus:ring-2 focus:ring-red-500
+                "
+              >
+                <span className="text-[#fcfbfa] [font-family:'Aldrich',sans-serif] text-[18px] tracking-widest font-bold opacity-90">
+                  BACK
+                </span>
+              </button>
+
+              {/* Proceed Button */}
+              <button
+                type="button"
+                onClick={handleProceedClick}
+                disabled={!selectedOption}
+                className={`
+                  flex-1 max-w-[200px] h-[60px] 
+                  flex items-center justify-center 
+                  backdrop-blur-md border rounded-[20px] shadow-lg
+                  transition-all duration-300
+                  [font-family:'Aldrich',sans-serif] text-[18px] tracking-widest font-bold
+                  ${selectedOption 
+                    ? "bg-cyan-500/20 border-cyan-400 text-[#caf9ff] cursor-pointer hover:bg-cyan-400/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)] focus:ring-2 focus:ring-cyan-400" 
+                    : "bg-gray-500/10 border-gray-500/30 text-gray-500 cursor-not-allowed"}
+                `}
+              >
+                PROCEED
+              </button>
+
             </div>
-            
-             
 
           </div>
+
+          {/* Right Side: Robot Image */}
+          <div className="hidden md:flex flex-1 items-center justify-center w-full max-w-md lg:max-w-lg animate-[bounce_6s_ease-in-out_infinite]">
+            <img
+              className="w-full h-auto max-h-[600px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              alt="Smart Library Assistant Robot"
+              src={robotImage}
+            />
+          </div>
+
         </div>
       </div>
     </RobotLayout>
