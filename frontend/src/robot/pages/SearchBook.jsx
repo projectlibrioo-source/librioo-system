@@ -1,142 +1,141 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout";
-import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
+import BackgroundContainer from "../components/BackgroundContainer";
+import SearchBar from "../components/SearchBar";
+import BookCard from "../components/BookCard";
+import GuideButton from "../components/GuideButton";
+import CancelButton from "../components/CancelButton";
+import blackAndBlueFictionBookCover1 from "../../assets/black-and-blue-fiction-book-cover-1.png";
+import redNeonMysticBookCover1 from "../../assets/red-neon-mystic-book-cover-1.png";
 
-const SearchPage = () => {
+import { searchBooksByName, navigateByBookName } from "../../BackendFunctions";
+
+const SearchBook = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // 2. STATE FOR BOOKS
+  // We start with an empty array. The data will fill up when we search.
+  const [bookData, setBookData] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false); // To prevent double clicking
+  
   const navigate = useNavigate();
-  const location = useLocation();
-  const userData = location.state?.user || {};
 
-  // 1. State to track which button is selected ('name' or 'category')
-  const [selectedOption, setSelectedOption] = useState(null);
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
-  const handleBackClick = () => {
-    navigate("/robot/user-details", { state: { user: userData } });
-  };
+  // 3. CONNECTED SEARCH HANDLER
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return; // Don't search empty strings
 
-  // 2. Button Click Handlers (Select Only)
-  const selectNameSearch = () => {
-    setSelectedOption("name");
-  };
+    setIsLoading(true);
 
-  const selectCategorySearch = () => {
-    setSelectedOption("category");
-  };
+    try {
+        console.log("Searching backend for:", searchQuery);
+        
+        // Call the function your teammate wrote
+        const results = await searchBooksByName(searchQuery);
+        
+        console.log("Backend results:", results);
+        
+        // Update the screen
+        // NOTE: If results is null/undefined, fallback to empty array []
+        setBookData(results || []); 
 
-  // 3. Proceed Button Logic (Navigates based on selection)
-  const handleProceedClick = () => {
-    if (selectedOption === "name") {
-      navigate("/robot/search-book", { state: { user: userData } });
-    } else if (selectedOption === "category") {
-      navigate("/robot/search-category", { state: { user: userData } });
+    } catch (error) {
+        console.error("Error fetching books:", error);
+        alert("Failed to connect to the library server.");
+    } finally {
+        setIsLoading(false);
     }
   };
+  // ▼▼▼ UPDATED GUIDE ME FUNCTION ▼▼▼
+  const handleGuideMe = async () => {
+    // 1. Check if there is a book name typed in
+    if (!searchQuery.trim()) {
+        alert("Please search for a book name first!");
+        return;
+    }
+
+    console.log("Guiding to book:", searchQuery);
+
+    // 2. Call the backend function with the Search Query
+    // Example: If user typed "Harry Potter", we send "Harry Potter"
+    await navigateByBookName(searchQuery);
+
+    // 3. Go to the Follow Me page
+    navigate("/robot/follow");
+  };
+  
+  //const handleGuideMe = () => console.log("Guide Me clicked");
 
   return (
     <RobotLayout>
-      <div className="h-full w-full flex flex-col lg:flex-row items-center justify-center px-6 lg:px-[100px] gap-10 lg:gap-20 flex-1">
+      <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-[clamp(12px,2vh,24px)] overflow-hidden">
         
-        {/* LEFT COLUMN: Options & Buttons */}
-        <div className="z-10 flex flex-col w-full max-w-2xl lg:w-1/2">
-          
-          {/* Title Section */}
-          <div className="mb-10">
-            <h1 
-              className="mb-4 text-5xl font-bold text-white lg:text-7xl drop-shadow-lg"
-              style={{ fontFamily: "'ADLaM_Display-Regular', Helvetica" }}
-            >
-              Search <span className="text-[#e0f7fa]">Books</span>
-            </h1>
-            <p className="text-xl font-light text-white/90 drop-shadow-sm">
-              How would you like to find your next read?
-            </p>
-          </div>
+        {/* Title - scales with viewport height */}
+        <h1 className="flex-shrink-0 ml-[80px] mb-[clamp(8px,1.5vh,16px)] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(20px,3.5vh,40px)] leading-tight">
+          Search Book By Name
+        </h1>
 
-          {/* Selection Area */}
-          <div className="flex flex-col w-full gap-6 lg:max-w-md">
+        <BackgroundContainer className="relative flex flex-col flex-1 min-h-0 overflow-hidden">
+          <div className="w-full h-full overflow-y-auto custom-scrollbar pl-[40px] pr-6 pt-[clamp(15px,2.5vh,30px)]">
             
-            {/* Search By Name Option */}
-            <button
-              onClick={selectNameSearch}
-              className={`w-full h-[80px] rounded-2xl flex items-center justify-center transition-all duration-300 border-2 backdrop-blur-md focus:outline-none ${
-                selectedOption === 'name' 
-                  ? 'bg-white/30 border-[#ff7421] shadow-[0_0_20px_rgba(255,116,33,0.4)] scale-[1.02]' 
-                  : 'bg-black/20 border-white/30 hover:bg-white/10'
-              }`}
-            >
-              <span className="text-2xl font-medium tracking-wide text-white drop-shadow-md" style={{ fontFamily: "'Aldrich', sans-serif" }}>
-                Search by Name
-              </span>
-            </button>
+            {/* Search and buttons section - scales proportionally */}
+            <div className="flex flex-row items-start w-full gap-[clamp(30px,5vw,60px)]">
+              <div className="ml-[40px] flex-1 max-w-[630px] min-w-0 mt-2"> 
+                <SearchBar
+                  query={searchQuery}
+                  onChange={handleSearchChange}
+                  onSubmit={handleSearchSubmit}
+                  className="w-full"
+                />
+              </div>
 
-            {/* Search By Category Option */}
-            <button
-              onClick={selectCategorySearch}
-              className={`w-full h-[80px] rounded-2xl flex items-center justify-center transition-all duration-300 border-2 backdrop-blur-md focus:outline-none ${
-                selectedOption === 'category' 
-                  ? 'bg-white/30 border-[#ff7421] shadow-[0_0_20px_rgba(255,116,33,0.4)] scale-[1.02]' 
-                  : 'bg-black/20 border-white/30 hover:bg-white/10'
-              }`}
-            >
-              <span className="text-2xl font-medium tracking-wide text-white drop-shadow-md" style={{ fontFamily: "'Aldrich', sans-serif" }}>
-                Search by Category
-              </span>
-            </button>
-
-            {/* Navigation Buttons Grid */}
-            <div className="flex flex-row w-full gap-4 mt-6">
-              
-              {/* BACK Button (Glassy Outline Style) */}
-              <button
-                type="button"
-                onClick={handleBackClick}
-                className="relative flex-1 transition-all duration-300 group rounded-2xl hover:-translate-y-1 focus:outline-none"
-              >
-                <div className="h-[70px] relative bg-black/10 backdrop-blur-md border-2 border-white/40 rounded-2xl flex items-center justify-center transition-colors duration-300 group-hover:bg-white/20 group-hover:border-white/70">
-                  <span className="text-xl font-bold tracking-wide text-white lg:text-2xl drop-shadow-md" style={{ fontFamily: "'Aldrich', sans-serif" }}>
-                    BACK
-                  </span>
-                </div>
-              </button>
-
-              {/* PROCEED Button (Glowing Primary Style - Only active if an option is selected) */}
-              <button
-                type="button"
-                onClick={handleProceedClick}
-                disabled={!selectedOption}
-                className={`flex-1 relative group rounded-2xl p-[2px] overflow-hidden transition-transform focus:outline-none ${!selectedOption ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:scale-[1.02]'}`}
-              >
-                {/* Glowing border layer */}
-                <span className="absolute inset-0 bg-gradient-to-r from-[#ff7421] via-[#ffaa77] to-[#ff7421] rounded-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
-                
-                {/* Inner button surface */}
-                <div className="h-[66px] relative bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl flex items-center justify-center transition-colors duration-300 group-hover:bg-white/30">
-                  <span className="text-xl font-bold tracking-wide text-white lg:text-2xl shadow-black drop-shadow-md" style={{ fontFamily: "'Aldrich', sans-serif" }}>
-                    PROCEED
-                  </span>
-                </div>
-              </button>
+              <div className="mr-[40px] w-[clamp(180px,20vw,240px)] flex-shrink-0 flex flex-col gap-[clamp(2px,0.5vh,6px)]">
+                <GuideButton onClick={handleGuideMe} className="w-full text-[clamp(12px,1.6vh,18px)]" />
+                <CancelButton className="w-full text-[clamp(12px,1.6vh,18px)]" />
+              </div>
             </div>
 
+            {/* Grid section - vertical spacing scales with viewport height */}
+            <section className="mt-[clamp(20px,3vh,60px)] mr-[60px] mb-[20px] grid grid-cols-4 gap-x-[20px] gap-y-[clamp(20px,3vh,60px)] pr-4">
+              {/* Optional: Loading Indicator */}
+              {isLoading && (
+                 <div className="col-span-4 text-center text-[#caf9ff] text-xl animate-pulse">
+                    Scanning Library...
+                 </div>
+              )}
+
+              {/* Optional: No Results Message */}
+              {!isLoading && bookData.length === 0 && searchQuery !== "" && (
+                 <div className="col-span-4 text-center text-[#caf9ff] opacity-60">
+                    No books found named "{searchQuery}"
+                 </div>
+              )}
+
+              {/* 4. MAP REAL DATA */}
+              {bookData.map((book) => (
+                <div key={book.id || Math.random()} className="flex justify-center min-w-0">
+                  <BookCard
+                    // CRITICAL: Ensure these match what your backend sends! 
+                    // If the backend sends "bookName" instead of "title", change it here.
+                    title={book.title || book.bookName || "Unknown Title"} 
+                    author={book.author || book.writer || "Unknown Author"}
+                    
+                    // The backend won't return your local imports. 
+                    // It will return a URL string or null.
+                    image={book.image || book.imgUrl || null} 
+                  />
+                </div>
+              ))}
+            </section>
+
           </div>
-        </div>
-
-        {/* RIGHT COLUMN: Robot Image */}
-        <div className="relative items-center justify-center hidden w-full h-full lg:flex lg:w-1/2">
-          {/* Holographic glowing orb behind the robot */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-cyan-100/30 blur-[100px] rounded-full z-0 pointer-events-none"></div>
-          
-          <img
-            src={robotImage}
-            alt="Smart Library Assistant Robot"
-            className="relative z-10 scale-125 max-h-[85vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
-          />
-        </div>
-
+        </BackgroundContainer>
       </div>
     </RobotLayout>
   );
 };
 
-export default SearchPage;
+export default SearchBook;
