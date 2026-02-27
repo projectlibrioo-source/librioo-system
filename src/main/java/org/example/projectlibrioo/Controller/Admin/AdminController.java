@@ -76,4 +76,5 @@ public class AdminController {
     }
 
 
+    public String test1(){return "he hee";}
 }
