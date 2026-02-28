@@ -102,6 +102,17 @@ public class AdminController {
 
     }
 
+    @PutMapping("/updatemember")
+    public ResponseEntity<Member> updateMembers(@RequestBody Member member){
+        Member updatedMember = adminService.updateMember(member);
+
+        if (updatedMember != null){
+            return new ResponseEntity<>(updatedMember, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/test")
     public String test() {
         return "API is working!";

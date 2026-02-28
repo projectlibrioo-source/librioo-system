@@ -39,5 +39,9 @@ public class AdminService {
         }
     }
 
+    public Member updateMember(Member member) {
+        return memberRepo.save(member);
+    }
+
 
 }
