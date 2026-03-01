@@ -113,6 +113,17 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/getallguests")
+    public ResponseEntity<Guest> getAllGuests(@RequestParam("guestid") int guestId){
+        Guest returnedGuest = adminService.getAllGuests(guestId);
+        if (returnedGuest == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(returnedGuest, HttpStatus.FOUND);
+        }
+
+    }
+
     @GetMapping("/test")
     public String test() {
         return "API is working!";

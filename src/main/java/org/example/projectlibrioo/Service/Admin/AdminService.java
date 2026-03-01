@@ -43,5 +43,15 @@ public class AdminService {
         return memberRepo.save(member);
     }
 
+    public Guest getAllGuests(int guestId) {
+        Guest guest = guestRepo.findGuestByGuestID(guestId);
+
+        if (guest != null){
+            return guest;
+        }else {
+            return null;
+        }
+    }
+
 
 }
