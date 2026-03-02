@@ -53,5 +53,9 @@ public class AdminService {
         }
     }
 
+    public Guest updateGuest(Guest guest) {
+        return guestRepo.save(guest);
+    }
+
 
 }
