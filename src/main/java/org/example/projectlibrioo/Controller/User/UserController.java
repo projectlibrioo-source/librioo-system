@@ -3,6 +3,7 @@ package org.example.projectlibrioo.Controller.User;
 import org.example.projectlibrioo.Model.Book;
 import org.example.projectlibrioo.Model.Guest;
 import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Repository.BookRepo;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.RobotService.RobotService;
@@ -22,9 +23,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AdminService adminService;
-
     @Autowired
     private RobotService robotService;
+
+    static int savedId = 0;
 
     @PostMapping("/loginmember")
     public ResponseEntity<Member> loginAsMember(@RequestParam("libraryid") int libraryId){
@@ -33,6 +35,7 @@ public class UserController {
         if (member == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
+            savedId = member.getLibraryID();
             return new ResponseEntity<>(member, HttpStatus.OK);
         }
     }
@@ -105,6 +108,12 @@ public class UserController {
         robotService.navigateToShelf(shelfNumber);
 
         return ResponseEntity.ok("Robot navigating to shelf " + shelfNumber);
+    }
+
+    @PostMapping("/borrowrobot")
+    public ResponseEntity<Boolean> borrowBookWithRobot(@RequestBody Transactions borrowBook){
+        boolean bookBorrowed = userService.proceedBorrowing(borrowBook, savedId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
