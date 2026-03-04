@@ -146,6 +146,17 @@ public class AdminController {
         }
     }
 
+    @DeleteMapping("/deleteguest")
+    public ResponseEntity<String> deleteGuests(@RequestParam("guestid") int guestId){
+        Boolean guestDeleted = adminService.deleteGuest(guestId);
+
+        if (guestDeleted){
+            return new ResponseEntity<>("Book deleted successfully",HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
     @GetMapping("/test")
     public String test() {
         return "API is working!";
