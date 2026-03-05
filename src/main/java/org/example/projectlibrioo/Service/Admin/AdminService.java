@@ -69,6 +69,22 @@ public class AdminService {
         }
     }
 
+    public Boolean deleteGuest(int guestId) {
+        Guest guestToDelete = guestRepo.findGuestByGuestID(guestId);
+        if (guestToDelete!=null){
+            try{
+                guestRepo.delete(guestToDelete);
+                return true;
+
+            }catch (Exception e){
+                return false;
+            }
+
+        }else {
+            return false;
+        }
+    }
+
     public Guest updateGuest(Guest guest) {
         return guestRepo.save(guest);
     }
