@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepo extends JpaRepository<Member, Integer> {
 
     Member findUserByLibraryID(int libraryID);
+
 }
