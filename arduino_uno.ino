@@ -20,3 +20,15 @@ void setup() {
   Serial.println("UNO READY (Shelf-based line follow)");
 }
 
+// ================= LOOP =================
+void loop() {
+  // Always listen for new target shelf
+  readShelfFromESP32();
+
+  // Follow line only when a target shelf is set
+  if (running) {
+    shelfLineFollowLoop();
+  } else {
+    stopMotors();
+  }
+}
