@@ -141,8 +141,8 @@ public class AdminController {
         Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
 
         if (bookBorrowed){
-            return new ResponseEntity<>
-                    (transactionService.saveTransaction(transactionBook),HttpStatus.OK);
+            transactionBook.setStatus("Borrowed");
+            return new ResponseEntity<>(transactionService.saveTransaction(transactionBook),HttpStatus.OK);
 
         }
         else {
