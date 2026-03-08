@@ -1,8 +1,10 @@
 package org.example.projectlibrioo.Controller.Admin;
-
 import org.example.projectlibrioo.Model.Book;
-import org.example.projectlibrioo.Model.Guest;
+import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.ReturnDTO;
+import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Service.Admin.AdminService;
+import org.example.projectlibrioo.Service.Transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
 public class AdminController {
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private TransactionService transactionService;
+
 
     /*@PostMapping("/addbook")
     public ResponseEntity<Book> addBook(@RequestPart("book") Book book, @RequestPart("bookImage") MultipartFile bookImage) throws Exception{
@@ -47,6 +55,7 @@ public class AdminController {
         }
     }*/
 
+    //Manage books
     @PostMapping("/addbook")
     public ResponseEntity<?> addBook(
             @RequestPart("book") String bookJson,  // ✅ Accept as String
@@ -71,14 +80,48 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/addguest")
-    public ResponseEntity<?> addGuest(@RequestBody Guest guest) {
+    @GetMapping("/getallbooks")
+    public ResponseEntity<Book> getAllBooks(@RequestParam("bookid") int bookId){
+        Book returnedBook = adminService.getAllBooks(bookId);
+        if (returnedBook == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(returnedBook, HttpStatus.FOUND);
+        }
+
+    }
+
+    @PutMapping("/updatebook")
+    public ResponseEntity<Book> updateBooks(@RequestBody Book book){
+        Book updatedBook = adminService.updateBooks(book);
+
+        if (updatedBook != null){
+            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/deletebook")
+    public ResponseEntity<String> deleteBooks(@RequestParam("bookid") int bookId){
+        Boolean bookDeleted = adminService.deleteBooks(bookId);
+
+        if (bookDeleted){
+            return new ResponseEntity<>("Book deleted successfully",HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+    //Manage Users
+    @PostMapping("/addmember")
+    public ResponseEntity<?> addMember(@RequestBody Member member) {
         try {
 
-            Guest guestSaved = adminService.saveGuestData(guest);
+            Member memberSaved = adminService.saveMemberData(member);
 
-            if (guestSaved != null) {
-                return new ResponseEntity<>(guestSaved,HttpStatus.OK);
+            if (memberSaved != null) {
+                return new ResponseEntity<>(memberSaved,HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
@@ -95,8 +138,44 @@ public class AdminController {
         return "API is working!";
     }
 
-    public String test2(){
-        return "test2";
+
+    @PostMapping("/borrowbook")
+    public ResponseEntity<Transactions> borrowBook(@RequestBody Transactions transactionBook){
+        Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
+
+        if (bookBorrowed){
+            return new ResponseEntity<>
+                    (transactionService.saveTransaction(transactionBook),HttpStatus.OK);
+
+        }
+        else {
+            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/getfines")
+    public ResponseEntity<Double> calculateFines(@RequestBody
+    ReturnDTO returnBook){
+        double fine = transactionService.getFines(returnBook);
+
+        return new ResponseEntity<>(fine,HttpStatus.OK);
+    }
+
+    //Get all transactions
+    @GetMapping("/transactions")
+    public List<Transactions> getAllTransactions(){
+        return transactionService.getAllTransactions();
+    }
+
+    // Get transaction by specific date
+    @GetMapping("/transactions/{date}")
+    public List<Transactions> getTransactionsByDate(@PathVariable String date){
+        return transactionService.getTransactionsByDate(LocalDate.parse(date));
+    }
+
+    @GetMapping("/transactions/search")
+    public List<Transactions> searchBetweenDates(@RequestParam String start, @RequestParam String end){
+        return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
     }
 
 
