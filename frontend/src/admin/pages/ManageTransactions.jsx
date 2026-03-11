@@ -43,6 +43,12 @@ const ManageTransactions = () => {
                                         <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 whitespace-nowrap">Verify</button>
                                     </div>
                                 </div>
+
+                                 <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Patron Type</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled placeholder='Auto filled after verify'/>
+                                </div>
+
                                 <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Name</label>
                                     <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled />
