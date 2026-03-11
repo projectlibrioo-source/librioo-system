@@ -93,3 +93,17 @@ void setup() {
   Serial.print(WiFi.localIP());
   Serial.println("/");
 }
+
+void loop() {
+  server.handleClient();
+
+  // Optional: read replies from UNO (if UNO TX connected to ESP32 RX2)
+  if (Serial2.available()) {
+    String msg = Serial2.readStringUntil('\n');
+    msg.trim();
+    if (msg.length() > 0) {
+      Serial.print("UNO -> ESP32: ");
+      Serial.println(msg);
+    }
+  }
+}
