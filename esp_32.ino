@@ -86,4 +86,10 @@ void setup() {
   server.on("/", handleRoot);
   server.on("/send", handleSend);
   server.onNotFound(handleNotFound);
+  server.begin();
+
+  Serial.println("Web server started");
+  Serial.print("Open: http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("/");
 }
