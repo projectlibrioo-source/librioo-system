@@ -56,3 +56,6 @@ void handleSend() {
   server.send(200, "text/plain", "Sent: " + cmd);
 
 }
+
+void handleNotFound() {
+}
