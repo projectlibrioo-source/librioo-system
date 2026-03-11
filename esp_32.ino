@@ -68,4 +68,8 @@ void setup() {
 
   // Serial2: RX=GPIO16, TX=GPIO19
   Serial2.begin(9600, SERIAL_8N1, RX2, TX2);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);
+  WiFi.begin(wifi_ssid, wifi_password);
 }
