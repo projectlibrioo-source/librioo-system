@@ -5,7 +5,77 @@ const ManageBooks = () => {
     const [activeTab, setActiveTab] = useState('ADD');
     const tabs = ['ADD', 'DELETE', 'UPDATE'];
 
+        return (
+        <AdminLayout>
+            <div className="min-h-full p-8 space-y-8 font-sans bg-gray-50">
+                <h2 className="text-3xl font-bold text-gray-900">Manage Books</h2>
 
+                <div className="max-w-4xl p-8 mx-auto space-y-8 bg-white border border-gray-200 shadow-sm rounded-xl">
+                    <div className="flex space-x-4 mb-6 border-b border-gray-200">
+                        <button
+                            onClick={() => setActiveTab('ADD')}
+                            className={`pb-2 px-1 ${activeTab === 'ADD' ? 'border-b-2 border-blue-600 text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            ADD
+                        </button>
+                        
+                    </div>
+
+                    <div>
+                        {/* Add Book Section */}
+                        {activeTab === 'ADD' && (
+                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={(e) => { e.preventDefault(); /* BACKEND: Handle Submit */ }}>
+                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Book ID</label>
+                                        <input type="number" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 101" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Book Title</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. The Great Gatsby" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">ISBN</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 978-3-16-148410-0" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Author</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. F. Scott Fitzgerald" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Fiction" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Cover Image</label>
+                                        <input type="file" accept="image/*" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Shelf Number</label>
+                                        <input type="number" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 5" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2 flex items-center mt-2">
+                                        <input type="checkbox" id="availability" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
+                                        <label htmlFor="availability" className="ml-2 block text-sm font-medium text-gray-700">Available for Borrowing</label>
+                                    </div>
+                                </div>
+                                <div className="pt-4">
+                                    <button type="submit" className="w-full px-4 py-2 text-white transition bg-black rounded-md hover:bg-gray-800">
+                                        Add Book
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+
+                        {/* from here */}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </AdminLayout>
+    );
 };
 
 export default ManageBooks;
