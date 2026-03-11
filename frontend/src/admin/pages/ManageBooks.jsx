@@ -24,12 +24,7 @@ const ManageBooks = () => {
                         >
                             UPDATE
                         </button>
-                        <button
-                            onClick={() => setActiveTab('DELETE')}
-                            className={`pb-2 px-1 ${activeTab === 'DELETE' ? 'border-b-2 border-blue-600 text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
-                        >
-                            DELETE
-                        </button>
+                        
                     </div>
 
                     <div>
@@ -79,6 +74,61 @@ const ManageBooks = () => {
                         )}
 
                         {/* from here */}
+
+                        {/* Update Book Section */}
+                        {activeTab === 'UPDATE' && (
+                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={(e) => { e.preventDefault(); /* BACKEND: Handle Submit */ }}>
+                                <div className="col-span-1 sm:col-span-2 mb-6">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Find Book By</label>
+                                    <div className="flex rounded-md shadow-sm border border-gray-300 overflow-hidden focus-within:ring-1 focus-within:ring-blue-500 bg-gray-50 px-3 py-2 items-center">
+                                        <span className="text-gray-500 text-sm font-medium mr-2">Book ID:</span>
+                                        <input type="text" className="flex-1 block w-full bg-transparent border-none focus:ring-0 p-0 text-sm" placeholder="Enter Book ID to edit..." />
+                                        <button type="button" className="ml-2 inline-flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 pt-4 border-t border-gray-200">
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <h4 className="text-sm font-bold text-gray-900 mb-2">Update Details</h4>
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Book Title</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">ISBN</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Author</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Cover Image (Update if needed)</label>
+                                        <input type="file" accept="image/*" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Shelf Number</label>
+                                        <input type="number" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-1 sm:col-span-2 flex items-center mt-2">
+                                        <input type="checkbox" id="availabilityUpdate" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
+                                        <label htmlFor="availabilityUpdate" className="ml-2 block text-sm font-medium text-gray-700">Available for Borrowing</label>
+                                    </div>
+                                </div>
+                                <div className="pt-4">
+                                    <button type="submit" className="w-full px-4 py-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700">
+                                        Update Book
+                                    </button>
+                                </div>
+                            </form>
+                        )}
 
 
                         
