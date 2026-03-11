@@ -46,4 +46,7 @@ void handleSend() {
 
   String cmd = server.arg("num");
   cmd.trim();
+
+  //Send to UNO with newline
+  Serial2.println(cmd);
 }
