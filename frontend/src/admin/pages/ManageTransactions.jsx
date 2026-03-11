@@ -42,7 +42,23 @@ const ManageTransactions = () => {
                                 </div>
                             </div>
 
-                            
+                            <div className="mb-8">
+                                <h3 className="pb-2 mb-6 text-xl font-bold text-gray-900 border-b">Book Details</h3>
+                                <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Find Book By</label>
+                                    <div className="flex gap-2 sm:col-span-2">
+                                        <div className="flex flex-1 bg-gray-50 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden px-3 py-2 items-center">
+                                            <span className="text-gray-500 text-sm font-medium mr-2">Book ID / Barcode:</span>
+                                            <input type="text" placeholder="Scan or enter Book ID..." className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm" />
+                                        </div>
+                                        <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 whitespace-nowrap">Verify</button>
+                                    </div>
+                                </div>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Title</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled />
+                                </div>
+                            </div>
 
                             
 
