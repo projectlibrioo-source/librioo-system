@@ -60,7 +60,26 @@ const ManageTransactions = () => {
                                 </div>
                             </div>
 
-                            
+                            <div className="mb-8">
+                                <h3 className="pb-2 mb-6 text-xl font-bold text-gray-900 border-b">Transaction Summary</h3>
+                                <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Borrow Date</label>
+                                    <input type="date" className="block w-full px-3 py-2 text-gray-500 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                </div>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Expected Return Date</label>
+                                    <input type="date" className="block w-full px-3 py-2 text-gray-500 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                </div>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Transaction ID</label>
+                                    <div className="relative sm:col-span-2">
+                                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <Lock className="w-4 h-4 text-gray-400" />
+                                        </span>
+                                        <input type="text" className="block w-full py-2 pl-10 pr-3 font-mono text-gray-500 bg-gray-200 border border-gray-300 rounded-md" value="TR-AUTO-GEN" readOnly />
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="flex justify-end pt-4 border-t">
                                 <button type="button" className="px-6 py-2 border rounded font-medium hover:bg-gray-50 transition mr-2">Clear Form</button>
