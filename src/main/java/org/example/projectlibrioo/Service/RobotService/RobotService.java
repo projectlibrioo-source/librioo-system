@@ -75,12 +75,23 @@ public class RobotService {
         return robot.orElse(null);
     }
 
-    // Update robot maintenance
+    // Update robot details
     public Robot updateRobot(Robot robot) {
         if (robotRepo.existsById(robot.getRobotID())) {
             return robotRepo.save(robot);
         }
         return null;
     }
+
+    // Delete robot
+    public boolean deleteRobot(int robotId) {
+        if (robotRepo.existsById(robotId)) {
+            robotRepo.deleteById(robotId);
+            return true;
+        }
+        return false;
+    }
+
+
 
 }
