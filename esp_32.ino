@@ -53,4 +53,6 @@ void handleSend() {
   Serial.print("Sent to UNO: ");
   Serial.println(cmd);
 
+  server.send(200, "text/plain", "Sent: " + cmd);
+
 }
