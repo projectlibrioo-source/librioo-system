@@ -62,3 +62,7 @@ void handleNotFound() {
   Serial.println(server.uri());
   server.send(404, "text/plain", "Not found");
 }
+
+void setup() {
+  Serial.begin(115200);
+}
