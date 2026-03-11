@@ -92,6 +92,10 @@ public class RobotService {
         return false;
     }
 
+    // Check if robot exists by name
+    public boolean existsByRobotName(String robotName) {
+        return robotRepo.existsByRobotName(robotName);
+    }
 
 
 }
