@@ -34,3 +34,6 @@ void handleRoot() {
   Serial.println("HTTP: /");
   server.send(200, "text/html", makePage());
 }
+
+void handleSend() {
+}
