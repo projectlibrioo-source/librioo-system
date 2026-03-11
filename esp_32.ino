@@ -43,4 +43,7 @@ void handleSend() {
     server.send(400, "text/plain", "Missing num");
     return;
   }
+
+  String cmd = server.arg("num");
+  cmd.trim();
 }
