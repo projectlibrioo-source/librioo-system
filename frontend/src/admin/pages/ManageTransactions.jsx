@@ -18,6 +18,13 @@ const ManageTransactions = () => {
                         >
                             BORROW
                         </button>
+
+                        <button
+                            onClick={() => setActiveTab('RETURN')}
+                            className={`pb-2 px-1 ${activeTab === 'RETURN' ? 'border-b-2 border-blue-600 text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            RETURN
+                        </button>
                         
                     </div>
 
