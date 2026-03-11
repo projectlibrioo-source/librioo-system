@@ -82,4 +82,8 @@ void setup() {
   Serial.println("\nConnected!");
   Serial.print("ESP32 IP address: ");
   Serial.println(WiFi.localIP());
+
+  server.on("/", handleRoot);
+  server.on("/send", handleSend);
+  server.onNotFound(handleNotFound);
 }
