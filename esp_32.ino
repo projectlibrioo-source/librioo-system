@@ -60,4 +60,5 @@ void handleSend() {
 void handleNotFound() {
   Serial.print("404: ");
   Serial.println(server.uri());
+  server.send(404, "text/plain", "Not found");
 }
