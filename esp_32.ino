@@ -38,4 +38,9 @@ void handleRoot() {
 void handleSend() {
   Serial.print("HTTP: /send  uri=");
   Serial.println(server.uri());
+
+  if (!server.hasArg("num")) {
+    server.send(400, "text/plain", "Missing num");
+    return;
+  }
 }
