@@ -31,4 +31,5 @@ String makePage() {
 }
 
 void handleRoot() {
+  Serial.println("HTTP: /");
 }
