@@ -58,4 +58,6 @@ void handleSend() {
 }
 
 void handleNotFound() {
+  Serial.print("404: ");
+  Serial.println(server.uri());
 }
