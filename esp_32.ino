@@ -49,4 +49,8 @@ void handleSend() {
 
   //Send to UNO with newline
   Serial2.println(cmd);
+
+  Serial.print("Sent to UNO: ");
+  Serial.println(cmd);
+
 }
