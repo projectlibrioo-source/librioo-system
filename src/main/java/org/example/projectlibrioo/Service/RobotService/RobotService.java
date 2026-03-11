@@ -10,6 +10,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class RobotService {
     private final ShelfPathMap shelfPathMap;
@@ -59,6 +61,18 @@ public class RobotService {
     // Get all robots
     public List<Robot> getAllRobots() {
         return robotRepo.findAll();
+    }
+
+    // Get robot by ID
+    public Robot getRobotById(int robotId) {
+        Optional<Robot> robot = robotRepo.findById(robotId);
+        return robot.orElse(null);
+    }
+
+    // Get robot by name
+    public Robot getRobotByName(String robotName) {
+        Optional<Robot> robot = robotRepo.findByRobotName(robotName);
+        return robot.orElse(null);
     }
 
 }
