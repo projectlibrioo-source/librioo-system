@@ -36,4 +36,6 @@ void handleRoot() {
 }
 
 void handleSend() {
+  Serial.print("HTTP: /send  uri=");
+  Serial.println(server.uri());
 }
