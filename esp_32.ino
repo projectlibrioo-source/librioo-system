@@ -78,4 +78,8 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
+
+  Serial.println("\nConnected!");
+  Serial.print("ESP32 IP address: ");
+  Serial.println(WiFi.localIP());
 }
