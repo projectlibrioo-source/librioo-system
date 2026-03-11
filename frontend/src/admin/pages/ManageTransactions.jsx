@@ -21,7 +21,39 @@ const ManageTransactions = () => {
                         
                     </div>
 
-                                        
+                    {activeTab === 'BORROW' && (
+                        <form onSubmit={e => e.preventDefault()}>
+                            {/* BACKEND: POST /api/transactions/borrow */}
+                            <div className="mb-8">
+                                <h3 className="pb-2 mb-6 text-xl font-bold text-gray-900 border-b">Member Details</h3>
+                                <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Find User By</label>
+                                    <div className="flex gap-2 sm:col-span-2">
+                                        <div className="flex flex-1 bg-gray-50 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden px-3 py-2 items-center">
+                                            <span className="text-gray-500 text-sm font-medium mr-2">User ID:</span>
+                                            <input type="text" placeholder="Enter User ID..." className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm" />
+                                        </div>
+                                        <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 whitespace-nowrap">Verify</button>
+                                    </div>
+                                </div>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Name</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled />
+                                </div>
+                            </div>
+
+                            
+
+                            
+
+                            <div className="flex justify-end pt-4 border-t">
+                                <button type="button" className="px-6 py-2 border rounded font-medium hover:bg-gray-50 transition mr-2">Clear Form</button>
+                                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">Confirm Borrow</button>
+                            </div>
+                        </form>
+                    )}
+
+                    
                 </div>
             </div>
         </AdminLayout>
