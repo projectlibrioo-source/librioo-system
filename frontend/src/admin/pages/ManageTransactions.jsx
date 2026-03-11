@@ -116,23 +116,64 @@ const ManageTransactions = () => {
                                         <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 whitespace-nowrap">Look Up</button>
                                     </div>
                                 </div>
+                               
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Title</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled placeholder='Auto-filled after look up'/>
+                                </div>
+                            </div>
+
+            
+
+                            <div className="mb-8">
+                                <h3 className="pb-2 mb-6 text-xl font-bold text-gray-900 border-b">Patron Details</h3>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Patron Type</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled />
+                                </div>
                                 <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Borrowed By</label>
                                     <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled />
                                 </div>
+                            </div>
+
+
+
+                            <div className="mb-8">
+                                <h3 className="pb-2 mb-6 text-xl font-bold text-gray-900 border-b">Return Summary</h3>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Borrow Date</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled placeholder='mm/dd/yyyy'/>
+                                </div>
+
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Due Date</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled placeholder='mm/dd/yyyy'/>
+                                </div><br></br>
+                                
+                                <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Return Date</label>
+                                    <input type="date" className="block w-full px-3 py-2 text-gray-500 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                </div>
                                 <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Overdue Days</label>
-                                    <input type="number" className="block w-full px-3 py-2 bg-red-50 text-red-600 font-bold border border-red-200 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled value={0} />
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled value="0" />
+                                </div>
+                                <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Fine Rate / Day</label>
+                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled value="-----" />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-bold text-gray-900 sm:text-right">Fines Total</label>
-                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled value="Rs. 0.00" />
+                                    <input type="text" className="block w-full px-3 py-2 bg-green-100 border border-gray-300 rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" disabled value="Rs. 0.00" />
                                 </div>
                             </div>
 
-                            <div className="flex justify-end pt-4 border-t">
+                            <div className="flex justify-end gap-4 pt-4 border-t">
+                                 <button type="submit" className="px-6 py-2 border border-black-600 text-black-600 rounded font-medium hover:bg-green-50 transition">Clear Form</button>
                                 <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded font-medium hover:bg-green-700 transition">Complete Return</button>
                             </div>
+                            
                         </form>
                     )}
 
