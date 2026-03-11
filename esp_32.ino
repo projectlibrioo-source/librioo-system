@@ -29,3 +29,6 @@ String makePage() {
     "</body></html>";
   return page;
 }
+
+void handleRoot() {
+}
