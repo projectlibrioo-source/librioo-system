@@ -18,7 +18,18 @@ const ManageBooks = () => {
                         >
                             ADD
                         </button>
-                        
+                        <button
+                            onClick={() => setActiveTab('UPDATE')}
+                            className={`pb-2 px-1 ${activeTab === 'UPDATE' ? 'border-b-2 border-blue-600 text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            UPDATE
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('DELETE')}
+                            className={`pb-2 px-1 ${activeTab === 'DELETE' ? 'border-b-2 border-blue-600 text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            DELETE
+                        </button>
                     </div>
 
                     <div>
@@ -70,7 +81,7 @@ const ManageBooks = () => {
                         {/* from here */}
 
 
-
+                        
                     </div>
                 </div>
             </div>
