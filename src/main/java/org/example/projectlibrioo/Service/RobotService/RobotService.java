@@ -75,4 +75,12 @@ public class RobotService {
         return robot.orElse(null);
     }
 
+    // Update robot maintenance
+    public Robot updateRobot(Robot robot) {
+        if (robotRepo.existsById(robot.getRobotID())) {
+            return robotRepo.save(robot);
+        }
+        return null;
+    }
+
 }
