@@ -22,6 +22,14 @@ SoftwareSerial espLink(10, 11); // RX=10, TX=11
 
 int baseSpeed = 100;
 
+// ================= SHELF CONTROL =================
+bool running = false;          // line following active?
+int targetShelf = 0;           // shelf number received from ESP32
+int stopCount = 0;             // how many stops passed so far
+
+// Stop detection debounce (prevents counting the same stop many times)
+bool inStop = false;
+
 // ================= SETUP =================
 void setup() {
   pinMode(IR_L2, INPUT);
