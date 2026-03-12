@@ -50,6 +50,26 @@ public class RobotController {
         return new ResponseEntity<>(robots, HttpStatus.OK);
     }
 
+    // Get robot by ID or name (GET /api/robots/search)
+    @GetMapping("/robots/search")
+    public ResponseEntity<?> searchRobot(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String name) {
+
+        if (id != null) {
+            Robot robot = robotService.getRobotById(id);
+            if (robot != null) {
+                return new ResponseEntity<>(robot, HttpStatus.OK);
+            }
+        } else if (name != null) {
+            Robot robot = robotService.getRobotByName(name);
+            if (robot != null) {
+                return new ResponseEntity<>(robot, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     // Get robot by ID (GET /api/robots/{id})
     @GetMapping("/robots/{id}")
     public ResponseEntity<Robot> getRobotById(@PathVariable int id) {
