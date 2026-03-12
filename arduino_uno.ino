@@ -1,3 +1,18 @@
+#include <SoftwareSerial.h>
+
+// ================= ESP32 LINK =================
+// ESP32 TX (GPIO17) -> UNO D10
+// ESP32 GND -> UNO GND
+SoftwareSerial espLink(10, 11); // RX=10, TX=11
+
+// ================= LINE SENSORS =================
+#define IR_L2 A0
+#define IR_L1 A1
+#define IR_C  A2
+#define IR_R1 A3
+#define IR_R2 A4
+
+
 // ================= SETUP =================
 void setup() {
   pinMode(IR_L2, INPUT);
