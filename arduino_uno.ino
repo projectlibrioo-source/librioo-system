@@ -12,6 +12,15 @@ SoftwareSerial espLink(10, 11); // RX=10, TX=11
 #define IR_R1 A3
 #define IR_R2 A4
 
+// ================= MOTORS (L298N) =================
+#define LEFT_MOTOR_FW   8
+#define LEFT_MOTOR_BW   7
+#define RIGHT_MOTOR_FW  5
+#define RIGHT_MOTOR_BW  4
+#define ENA 9   // PWM
+#define ENB 3   // PWM
+
+int baseSpeed = 100;
 
 // ================= SETUP =================
 void setup() {
