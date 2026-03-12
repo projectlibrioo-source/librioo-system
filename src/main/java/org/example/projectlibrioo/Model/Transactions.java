@@ -17,6 +17,7 @@ public class Transactions {
     private int libraryId;
     private int bookId;
     private LocalDate borrowDate;
+    private String category;
     private LocalDate returnDate;
     private String status;
 }

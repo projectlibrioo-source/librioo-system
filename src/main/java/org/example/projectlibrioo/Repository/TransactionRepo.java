@@ -25,6 +25,7 @@ public interface TransactionRepo extends JpaRepository<Transactions,Integer> {
     List<Transactions> findByBorrowDateBetween(LocalDate startDate, LocalDate endDate);
 
 
+    Transactions findByBookId(int bookId);
 }
 
 
