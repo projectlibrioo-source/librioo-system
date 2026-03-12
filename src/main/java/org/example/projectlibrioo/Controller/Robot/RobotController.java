@@ -15,8 +15,33 @@ public class RobotController {
     @Autowired
     private RobotService robotService;
 
+    // Add new robot (POST /api/robots/add)
+    @PostMapping("/robots/add")
+    public ResponseEntity<?> addRobot(@RequestBody Robot robot) {
+        try {
+            // Check if robot with same name exists
+            if (robotService.existsByRobotName(robot.getRobotName())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Robot with this name already exists");
+            }
+
+            Robot savedRobot = robotService.saveRobot(robot);
+            if (savedRobot != null) {
+                return new ResponseEntity<>(savedRobot, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("ERROR: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/robot/test")
     public String test() {
         return "Robot API is working!";
     }
+
+
 }
