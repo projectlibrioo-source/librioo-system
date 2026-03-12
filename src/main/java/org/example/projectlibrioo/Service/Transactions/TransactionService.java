@@ -64,21 +64,13 @@ public class TransactionService {
         return fine;
     }
 
-    public TransactionService(TransactionRepo transactionRepo) {
-        this.transactionRepo = transactionRepo;
+    public boolean markAsReturned(ReturnDTO returnDTO) {
+        Transactions data = transactionRepo.findByIds(returnDTO.getLibraryId(), returnDTO.getBookId());
+        data.setStatus("Returned");
+        return true;
+
     }
-
-    public List<Transactions> getTransactionsByDate(LocalDate Date){
-        return transactionRepo.findByBorrowDate(Date);
-    }
-
-    public List<Transactions> getTransactionsBetweenDates(LocalDate start, LocalDate end) {
-        return transactionRepo.findByBorrowDateBetween(start, end);
-    }
-
-    public List<Transactions> getAllTransactions() {
-        return transactionRepo.findAll();
-    }
-
-
 }
+
+
+

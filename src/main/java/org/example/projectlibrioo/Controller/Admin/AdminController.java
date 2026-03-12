@@ -161,22 +161,14 @@ public class AdminController {
         return new ResponseEntity<>(fine,HttpStatus.OK);
     }
 
-    //Get all transactions
-    @GetMapping("/transactions")
-    public List<Transactions> getAllTransactions(){
-        return transactionService.getAllTransactions();
+
+    @PutMapping("/returnbook")
+    public ResponseEntity<Boolean> returnBook(@RequestBody ReturnDTO returnDTO){
+        boolean bookReturned = transactionService.markAsReturned(returnDTO);
+        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
     }
 
-    // Get transaction by specific date
-    @GetMapping("/transactions/{date}")
-    public List<Transactions> getTransactionsByDate(@PathVariable String date){
-        return transactionService.getTransactionsByDate(LocalDate.parse(date));
-    }
 
-    @GetMapping("/transactions/search")
-    public List<Transactions> searchBetweenDates(@RequestParam String start, @RequestParam String end){
-        return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
-    }
 
 
 }
