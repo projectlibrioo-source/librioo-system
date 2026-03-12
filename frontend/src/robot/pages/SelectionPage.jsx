@@ -33,17 +33,17 @@ const SelectionPage = () => {
 
   return (
     <RobotLayout>
-      <div className="relative flex flex-col items-center justify-center w-full h-full px-6 overflow-hidden md:px-16">
+      <div className="h-full w-full relative flex flex-col items-center justify-center overflow-hidden px-6 md:px-16">
         
         {/* Holographic glowing background orbs */}
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* Main Content Container */}
-        <div className="z-10 flex flex-col items-center justify-between w-full h-full gap-10 py-10 max-w-7xl md:flex-row lg:gap-20">
+        <div className="z-10 w-full max-w-7xl flex flex-col md:flex-row items-center justify-between gap-10 lg:gap-20 h-full py-10">
           
           {/* Left Side: Text and Buttons */}
-          <div className="flex flex-col justify-center flex-1 w-full h-full max-w-2xl">
+          <div className="flex-1 flex flex-col w-full max-w-2xl justify-center h-full">
             
             <h1 className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(32px,5vw,60px)] leading-tight drop-shadow-lg mb-8 md:mb-12 text-center md:text-left">
               What would you <br className="hidden md:block" />
@@ -51,7 +51,7 @@ const SelectionPage = () => {
             </h1>
 
             {/* Selection Buttons Container */}
-            <div className="flex flex-col w-full gap-6 md:gap-8">
+            <div className="flex flex-col gap-6 md:gap-8 w-full">
               
               {/* Button 1: Read Here */}
               <button
@@ -110,7 +110,7 @@ const SelectionPage = () => {
             </div>
 
             {/* Back & Proceed Buttons Container */}
-            <div className="flex flex-row justify-center w-full gap-4 mt-10 md:justify-start md:mt-12">
+            <div className="flex flex-row gap-4 justify-center md:justify-start w-full mt-10 md:mt-12">
               
               {/* Back Button */}
               <button
