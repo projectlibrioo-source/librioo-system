@@ -20,6 +20,7 @@ public interface TransactionRepo extends JpaRepository<Transactions,Integer> {
 
 
 
+    Transactions findByBookId(int bookId);
 }
 
 

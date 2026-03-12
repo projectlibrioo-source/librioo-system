@@ -1,6 +1,7 @@
 package org.example.projectlibrioo.Service.Transactions;
 
 import org.example.projectlibrioo.Model.Transactions;
+import org.example.projectlibrioo.Repository.FineRepo;
 import org.example.projectlibrioo.Repository.TransactionRepo;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,19 @@ import java.util.List;
 public class TransactionService {
     @Autowired
     private TransactionRepo transactionRepo;
+    @Autowired
+    private FineRepo fineRepo;
 
     public Boolean checkEligibility(Transactions transactionBook){
         int libraryId = transactionBook.getLibraryId();
+        String userCategory = transactionBook.getCategory();
+
         List<Transactions> bookDetails = transactionRepo.getBorrowedData(libraryId);
         int bookCount = bookDetails.toArray().length;
 
-        if(bookCount >= 5){
+        int loans = fineRepo.findMaxLoanByCategory(userCategory);
+
+        if(bookCount >= loans){
             return false;
         }
 
@@ -43,7 +50,10 @@ public class TransactionService {
     }
 
     public Double getFines(ReturnDTO returnBook) {
-        double fine =0.0;
+        double fine = 0.0;
+        String userCategory = returnBook.getCategory();
+
+
 
         Transactions returnedData = transactionRepo.findByIds(returnBook.getLibraryId(),returnBook.getBookId());
 
@@ -53,7 +63,9 @@ public class TransactionService {
                     returnedData.getReturnDate(),
                     LocalDate.now()
             );
-            fine = overdueDays * 10;
+
+            fine = fineRepo.findFineByCategory(userCategory) * overdueDays;
+
 
         }
 
@@ -64,13 +76,27 @@ public class TransactionService {
         return fine;
     }
 
-    public boolean markAsReturned(ReturnDTO returnDTO) {
-        Transactions data = transactionRepo.findByIds(returnDTO.getLibraryId(), returnDTO.getBookId());
-        data.setStatus("Returned");
-        return true;
+    public Transactions confirmReturn(ReturnDTO bookToReturn){
+        Transactions returnedData = transactionRepo.findByIds(bookToReturn.getLibraryId(),bookToReturn.getBookId());
+        returnedData.setStatus("Returned");
+
+        return transactionRepo.save(returnedData);
+
+
 
     }
+
+
+    public TransactionService(TransactionRepo transactionRepo) {
+        this.transactionRepo = transactionRepo;
+    }
+
+    public List<Transactions> getTransactionsByDate(LocalDate Date){
+        return transactionRepo.findByBorrowDate(Date);
+    }
+
+
+    public Transactions getAllUSers(int bookId) {
+        return transactionRepo.findByBookId(bookId);
+    }
 }
-
-
-

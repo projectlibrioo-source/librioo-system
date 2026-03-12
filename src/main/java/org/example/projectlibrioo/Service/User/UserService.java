@@ -3,6 +3,7 @@ package org.example.projectlibrioo.Service.User;
 import org.example.projectlibrioo.Model.Book;
 import org.example.projectlibrioo.Model.Guest;
 import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Repository.BookRepo;
 import org.example.projectlibrioo.Repository.GuestRepo;
 import org.example.projectlibrioo.Repository.MemberRepo;
@@ -43,5 +44,9 @@ public class UserService {
 
     public List<Book> getBooksByCategory(String category) {
         return bookRepo.findByCategoryIgnoreCase(category);
+    }
+
+    public boolean proceedBorrowing(Transactions borrowBook, int savedId) {
+        return true;
     }
 }
