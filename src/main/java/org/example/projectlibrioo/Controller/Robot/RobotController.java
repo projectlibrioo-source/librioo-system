@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -78,6 +80,33 @@ public class RobotController {
             return new ResponseEntity<>(robot, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Update robot maintenance (PUT /api/robots/{id}/maintenance)
+    @PutMapping("/robots/{id}/maintenance")
+    public ResponseEntity<?> updateRobotMaintenance(
+            @PathVariable int id,
+            @RequestBody Map<String, String> maintenanceData) {
+        try {
+            LocalDate lastServiceDate = LocalDate.parse(maintenanceData.get("lastServiceDate"));
+            LocalDate nextServiceDate = LocalDate.parse(maintenanceData.get("nextServiceDate"));
+            String partReplaced = maintenanceData.get("partReplaced");
+            String technicianNotes = maintenanceData.get("technicianNotes");
+
+            Robot updatedRobot = robotService.updateRobotMaintenance(
+                    id, lastServiceDate, nextServiceDate, partReplaced, technicianNotes
+            );
+
+            if (updatedRobot != null) {
+                return new ResponseEntity<>(updatedRobot, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("ERROR: " + e.getMessage());
         }
     }
 
