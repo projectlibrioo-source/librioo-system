@@ -167,6 +167,23 @@ public class RobotController {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    // Get service history (simplified - returns maintenance info for a robot)
+    @GetMapping("/robots/{id}/maintenance")
+    public ResponseEntity<?> getMaintenanceHistory(@PathVariable int id) {
+        Robot robot = robotService.getRobotById(id);
+        if (robot != null) {
+            Map<String, Object> history = new HashMap<>();
+            history.put("lastServiceDate", robot.getLastServiceDate());
+            history.put("nextServiceDate", robot.getNextServiceDate());
+            history.put("partReplaced", robot.getPartReplaced());
+            history.put("technicianNotes", robot.getTechnicianNotes());
+            history.put("status", robot.getStatus());
+            return new ResponseEntity<>(history, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/robot/test")
     public String test() {
         return "Robot API is working!";
