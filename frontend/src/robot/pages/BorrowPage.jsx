@@ -5,4 +5,8 @@ import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-
 
 export default function BorrowPage() {
   
+  const [bookId, setBookId] = useState("");
+  const [bookName, setBookName] = useState("");
+  const navigate = useNavigate();
+
 }
