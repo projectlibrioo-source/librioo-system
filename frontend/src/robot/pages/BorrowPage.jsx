@@ -15,4 +15,11 @@ export default function BorrowPage() {
     // Add your backend logic here
   };
 
+  const handleCancel = () => {
+    setBookId("");
+    setBookName("");
+    // Optional: navigate back if needed, e.g., navigate("/robot/search");
+  };
+
+
 }
