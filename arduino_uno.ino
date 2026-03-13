@@ -75,6 +75,18 @@ void turnRight() {
 }
 
 
+// ================= SENSOR READ =================
+void readSensors(bool &sL2, bool &sL1, bool &sC, bool &sR1, bool &sR2) {
+  sL2 = digitalRead(IR_L2);
+  sL1 = digitalRead(IR_L1);
+  sC  = digitalRead(IR_C);
+  sR1 = digitalRead(IR_R1);
+  sR2 = digitalRead(IR_R2);
+
+  
+}
+
+
 
 // ================= SETUP =================
 void setup() {
