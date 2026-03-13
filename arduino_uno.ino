@@ -30,6 +30,30 @@ int stopCount = 0;             // how many stops passed so far
 // Stop detection debounce (prevents counting the same stop many times)
 bool inStop = false;
 
+
+
+// ================= MOTOR HELPERS =================
+void forward() {
+  analogWrite(ENA, baseSpeed);
+  analogWrite(ENB, baseSpeed);
+
+  digitalWrite(LEFT_MOTOR_FW, HIGH);
+  digitalWrite(LEFT_MOTOR_BW, LOW);
+  digitalWrite(RIGHT_MOTOR_FW, HIGH);
+  digitalWrite(RIGHT_MOTOR_BW, LOW);
+}
+
+void stopMotors() {
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+
+  digitalWrite(LEFT_MOTOR_FW, LOW);
+  digitalWrite(LEFT_MOTOR_BW, LOW);
+  digitalWrite(RIGHT_MOTOR_FW, LOW);
+  digitalWrite(RIGHT_MOTOR_BW, LOW);
+}
+
+
 // ================= SETUP =================
 void setup() {
   pinMode(IR_L2, INPUT);
