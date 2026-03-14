@@ -43,6 +43,9 @@ export default function BorrowPage() {
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
+        {/* --- MAIN CONTENT WRAPPER --- */}
+        <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
+        
     </RobotLayout>
 
 
