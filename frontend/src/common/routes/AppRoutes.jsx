@@ -9,6 +9,9 @@ import SelectionPage from "../../robot/pages/SelectionPage";
 import BorrowPage from "../../robot/pages/BorrowPage";
 import EndingPage from "../../robot/pages/EndingPage";
 import AdminDashboard from "../../admin/pages/AdminDashboard";
+import AdminSettings from "../../admin/pages/Settings";
+import ManageUsers from "../../admin/pages/ManageUsers";
+import AdminLogin from "../../admin/pages/AdminLogin";
 
 import GuestLogin from "../../robot/pages/GuestLogin";
 
@@ -30,6 +33,9 @@ function AppRoutes() {
         <Route path="/robot/borrow" element={<BorrowPage />} />
         <Route path="/robot/ending" element={<EndingPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/admin/manage-users" element={<ManageUsers />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
         <Route path="/robot/guest-login" element={<GuestLogin />} />
 
