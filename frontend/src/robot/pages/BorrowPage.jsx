@@ -69,6 +69,23 @@ export default function BorrowPage() {
                {/* GLASSMORPHIC FORM CARD */}
               <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-6 sm:p-8 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 sm:gap-6"></div>
 
+                {/* Book ID Input */}
+                <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 bg-white/5 border border-white/10 rounded-[20px] p-3 sm:p-4 transition-all focus-within:bg-white/10 focus-within:border-cyan-400/50">
+                  <label className="w-[120px] sm:w-[150px] flex-shrink-0 text-[#caf9ff] [font-family:'Aldrich',sans-serif] text-[18px] sm:text-[22px] whitespace-nowrap pl-2">
+                    Book ID :
+                  </label>
+                  <div className="flex-1 w-full bg-black/50 rounded-[12px] flex items-center shadow-inner border border-white/5 overflow-hidden transition-colors">
+                    <input
+                      type="text"
+                      value={bookId}
+                      onChange={(e) => setBookId(e.target.value)}
+                      required
+                      className="w-full h-[45px] sm:h-[50px] bg-transparent px-4 text-white [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[20px] focus:outline-none placeholder-gray-500"
+                      placeholder="Enter ID..."
+                    />
+                  </div>
+                </div>
+                
             </form>
 
       </div>
