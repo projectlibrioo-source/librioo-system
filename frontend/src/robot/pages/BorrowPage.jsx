@@ -103,10 +103,12 @@ export default function BorrowPage() {
                   </div>
                 </div>
 
+              </div> 
+
+              {/* ACTION BUTTONS */}
+              <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
 
 
-
-              </div>  
             </form>
 
       </div>
