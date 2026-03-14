@@ -21,5 +21,11 @@ export default function BorrowPage() {
     // Optional: navigate back if needed, e.g., navigate("/robot/search");
   };
 
+  return (
+    <RobotLayout>
+
+
+    </RobotLayout>
+
 
 }
