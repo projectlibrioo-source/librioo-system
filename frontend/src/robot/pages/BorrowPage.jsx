@@ -108,6 +108,23 @@ export default function BorrowPage() {
               {/* ACTION BUTTONS */}
               <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
 
+                {/* Cancel Button */}
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="
+                    flex-1 max-w-[200px] h-[60px] 
+                    flex items-center justify-center 
+                    bg-red-500/10 backdrop-blur-md border border-red-500/30 rounded-[20px] shadow-lg
+                    cursor-pointer transition-all duration-300
+                    hover:bg-red-500/20 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]
+                    focus:outline-none focus:ring-2 focus:ring-red-500
+                  "
+                >
+                  <span className="text-[#fcfbfa] [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[18px] tracking-widest font-bold">
+                    CANCEL
+                  </span>
+                </button>
 
             </form>
 
