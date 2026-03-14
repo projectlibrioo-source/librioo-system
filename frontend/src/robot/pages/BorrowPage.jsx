@@ -44,7 +44,7 @@ export default function BorrowPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* --- MAIN CONTENT WRAPPER --- */}
-        <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
+        <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full">
 
           {/* LEFT SIDE: Text and Form Container */}
           <div className="flex-1 flex flex-col w-full max-w-[650px] justify-center pt-8 md:pt-0">
@@ -145,8 +145,20 @@ export default function BorrowPage() {
 
               </div>
             </form>
+        </div>
 
+        {/* RIGHT SIDE: Floating Robot Image (Desktop Only) */}
+            <div className="hidden md:flex flex-1 items-center justify-center w-full max-w-[350px] lg:max-w-[450px] shrink-0 animate-safe-float">
+              <img
+                className="w-full h-auto max-h-[70vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                alt="Smart Library Assistant Robot"
+                src={robotImage}
+              />
+            </div>
       </div>
+    </div>
+    
+
     </RobotLayout>
   );
 }
