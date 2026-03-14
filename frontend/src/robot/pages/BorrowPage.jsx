@@ -106,7 +106,7 @@ export default function BorrowPage() {
               </div> 
 
               {/* ACTION BUTTONS */}
-              <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
+              <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full">
 
                 {/* Cancel Button */}
                 <button
@@ -126,6 +126,24 @@ export default function BorrowPage() {
                   </span>
                 </button>
 
+                {/* Borrow Button */}
+                <button
+                  type="submit"
+                  className="
+                    flex-1 max-w-[200px] h-[60px] 
+                    flex items-center justify-center 
+                    bg-cyan-500/20 backdrop-blur-md border border-cyan-400 rounded-[20px] shadow-lg
+                    cursor-pointer transition-all duration-300
+                    hover:bg-cyan-400/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]
+                    focus:outline-none focus:ring-2 focus:ring-cyan-400
+                  "
+                >
+                  <span className="text-[#caf9ff] [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[18px] tracking-widest font-bold drop-shadow-md">
+                    BORROW
+                  </span>
+                </button>
+
+              </div>
             </form>
 
       </div>
