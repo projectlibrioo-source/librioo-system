@@ -60,7 +60,12 @@ export default function BorrowPage() {
             ">
               Borrow Book
             </h1>
-            
+
+            <form 
+              onSubmit={handleBorrow} 
+              className="flex flex-col w-full gap-6"
+            ></form>
+
       </div>
     </RobotLayout>
   );
