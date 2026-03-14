@@ -24,6 +24,18 @@ export default function BorrowPage() {
   return (
     <RobotLayout>
 
+      {/* Safe Float Animation */}
+      <style>
+        {`
+          @keyframes safeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+          }
+          .animate-safe-float {
+            animation: safeFloat 6s ease-in-out infinite;
+          }
+        `}
+      </style>
 
     </RobotLayout>
 
