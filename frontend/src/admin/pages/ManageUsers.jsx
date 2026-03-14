@@ -181,6 +181,40 @@ const ManageUsers = () => {
                         <div>
                             <h3 className="mb-6 text-xl font-bold text-gray-900">Delete User</h3>
                             {/* BACKEND: DELETE /api/users/{id} */}
+                            <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                                <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                    <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Find User By</label>
+                                    <div className="flex gap-2 sm:col-span-2">
+                                        <div className="flex flex-1 bg-gray-100 border-none rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden px-3 py-2 items-center">
+                                            <span className="text-gray-500 text-sm font-medium mr-2">User ID:</span>
+                                            <input type="text" placeholder="Enter User ID..." className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm" />
+                                        </div>
+                                        <button type="button" className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm font-medium whitespace-nowrap">Find User</button>
+                                    </div>
+                                </div>
+
+                                <div className="border-t pt-4 mt-6">
+                                    <h4 className="text-sm font-bold text-gray-700 mb-4 bg-red-50 p-3 rounded border border-red-200 text-red-800">Review Data Below Before Deletion</h4>
+                                    <div className="space-y-4">
+                                        <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                            <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Role</label>
+                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2" disabled value="Member" />
+                                        </div>
+                                        <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                            <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Full Name</label>
+                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2" disabled value="John Doe" />
+                                        </div>
+                                        <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
+                                            <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Email</label>
+                                            <input type="email" className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2" disabled value="johndoe@example.com" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-end pt-4 border-t">
+                                    {/* Usually you'd want a confirmation before real deletion */}
+                                    <button className="px-6 py-2 bg-red-600 text-white rounded font-medium hover:bg-red-700 transition">Delete User</button>
+                                </div>
+                            </form>
                         </div>
                     )}
 
