@@ -46,6 +46,21 @@ export default function BorrowPage() {
         {/* --- MAIN CONTENT WRAPPER --- */}
         <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
 
+          {/* LEFT SIDE: Text and Form Container */}
+          <div className="flex-1 flex flex-col w-full max-w-[650px] justify-center pt-8 md:pt-0">
+            
+            <h1 className="
+              [font-family:'ADLaM_Display-Regular',Helvetica] 
+              text-[#caf9ff] 
+              text-[clamp(32px,5vw,55px)] 
+              leading-tight 
+              drop-shadow-lg 
+              mb-6 md:mb-10 
+              text-center md:text-left
+            ">
+              Borrow Book
+            </h1>
+            
       </div>
     </RobotLayout>
   );
