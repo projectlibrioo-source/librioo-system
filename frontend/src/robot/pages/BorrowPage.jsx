@@ -37,6 +37,8 @@ export default function BorrowPage() {
         `}
       </style>
 
+      <div className="relative flex flex-col items-center justify-center w-full h-full p-4 overflow-x-hidden md:p-8"></div>
+
     </RobotLayout>
 
 
