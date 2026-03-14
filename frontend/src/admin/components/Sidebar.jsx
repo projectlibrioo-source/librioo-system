@@ -1,4 +1,6 @@
 import React from 'react';
+import logo from "../../assets/logoLib3-1.png";
+
 import { NavLink } from 'react-router-dom';
 import {
     LayoutDashboard,
@@ -46,9 +48,11 @@ const Sidebar = () => {
     return (
         <div className="w-64 bg-[#EDF5FE] h-screen flex flex-col border-r border-blue-100 font-sans">
             <div className="flex items-center justify-center p-6 border-b border-blue-200/50">
-                <h1 className="text-2xl font-bold text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
-                    Librioo
-                </h1>
+                <img
+            src={logo}
+            alt="Librioo Logo"
+            className="h-15 w-auto"
+          />
             </div>
 
             <div className="flex-1 py-4 overflow-y-auto">

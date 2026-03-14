@@ -33,7 +33,7 @@ const AdminLogin = () => {
           <img
             src={logo}
             alt="Librioo Logo"
-            className="h-10 w-auto"
+            className="h-20 w-auto"
           />
           <p className="mt-4 text-[15px] leading-7 text-[#6b7280] max-w-[240px]">
             Library administration system for managing books, users,
