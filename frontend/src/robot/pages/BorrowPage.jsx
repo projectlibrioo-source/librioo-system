@@ -64,7 +64,12 @@ export default function BorrowPage() {
             <form 
               onSubmit={handleBorrow} 
               className="flex flex-col w-full gap-6"
-            ></form>
+            >
+
+               {/* GLASSMORPHIC FORM CARD */}
+              <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-6 sm:p-8 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 sm:gap-6"></div>
+
+            </form>
 
       </div>
     </RobotLayout>
