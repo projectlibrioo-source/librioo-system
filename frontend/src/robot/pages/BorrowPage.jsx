@@ -39,6 +39,10 @@ export default function BorrowPage() {
 
       <div className="relative flex flex-col items-center justify-center w-full h-full p-4 overflow-x-hidden md:p-8"></div>
 
+        {/* --- HOLOGRAPHIC BACKGROUND ORBS --- */}
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
+
     </RobotLayout>
 
 
