@@ -37,7 +37,7 @@ export default function BorrowPage() {
         `}
       </style>
 
-      <div className="relative flex flex-col items-center justify-center w-full h-full p-4 overflow-x-hidden md:p-8"></div>
+      <div className="relative flex flex-col items-center justify-center w-full h-full p-4 overflow-x-hidden md:p-8">
 
         {/* --- HOLOGRAPHIC BACKGROUND ORBS --- */}
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
@@ -45,8 +45,8 @@ export default function BorrowPage() {
 
         {/* --- MAIN CONTENT WRAPPER --- */}
         <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full"></div>
-        
+
+      </div>
     </RobotLayout>
-
-
+  );
 }
