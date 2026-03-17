@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import logo from "../../assets/logoLib3-1.png";
 
 const AdminLogin = () => {
@@ -6,24 +9,48 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/admin/dashboard";
 
-    if (!adminId.trim() || !password.trim()) {
-      setError("Please enter your admin ID/email and password.");
-      return;
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!adminId.trim() || !password.trim()) {
+    setError("Please enter your admin ID/email and password.");
+    return;
+  }
+
+  setError("");
+  setLoading(true);
+
+  try {
+    await signInWithEmailAndPassword(auth, adminId.trim(), password);
+    navigate("/admin/dashboard");
+  } catch (err) {
+    console.log("Error code:", err.code);
+    console.log("Error message:", err.message);
+    switch (err.code) {
+      case "auth/user-not-found":
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+        setError("Invalid email or password. Please try again.");
+        break;
+      case "auth/invalid-email":
+        setError("Please enter a valid email address.");
+        break;
+      case "auth/too-many-requests":
+        setError("Too many failed attempts. Please try again later.");
+        break;
+      default:
+        setError("Login failed. Please try again.");
     }
-
-    setError("");
-
-    // BACKEND: POST /api/admin/login
-    console.log("Admin login:", {
-      adminId,
-      password,
-      rememberMe,
-    });
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#f6f7fb] flex">
