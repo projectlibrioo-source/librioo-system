@@ -1,5 +1,8 @@
 package org.example.projectlibrioo.Controller.Admin;
-import org.example.projectlibrioo.Model.*;
+import org.example.projectlibrioo.Model.Book;
+import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.ReturnDTO;
+import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.Transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -140,8 +144,8 @@ public class AdminController {
         Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
 
         if (bookBorrowed){
-            transactionBook.setStatus("Borrowed");
-            return new ResponseEntity<>(transactionService.saveTransaction(transactionBook),HttpStatus.OK);
+            return new ResponseEntity<>
+                    (transactionService.saveTransaction(transactionBook),HttpStatus.OK);
 
         }
         else {
@@ -161,17 +165,28 @@ public class AdminController {
     }
 
     @PostMapping("/getfines")
-    public ResponseEntity<Double> calculateFines(@RequestBody ReturnDTO returnBook){
+    public ResponseEntity<Double> calculateFines(@RequestBody
+    ReturnDTO returnBook){
         double fine = transactionService.getFines(returnBook);
 
         return new ResponseEntity<>(fine,HttpStatus.OK);
     }
 
-    @PutMapping("/confirmreturn")
-    public ResponseEntity<Transactions> confirmTheReturn(@RequestBody ReturnDTO returnDTO){
-        Transactions bookReturned = transactionService.confirmReturn(returnDTO);
+    //Get all transactions
+    @GetMapping("/transactions")
+    public List<Transactions> getAllTransactions(){
+        return transactionService.getAllTransactions();
+    }
 
-        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
+    // Get transaction by specific date
+    @GetMapping("/transactions/{date}")
+    public List<Transactions> getTransactionsByDate(@PathVariable String date){
+        return transactionService.getTransactionsByDate(LocalDate.parse(date));
+    }
+
+    @GetMapping("/transactions/search")
+    public List<Transactions> searchBetweenDates(@RequestParam String start, @RequestParam String end){
+        return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
     }
 
     @GetMapping("/searchbook")

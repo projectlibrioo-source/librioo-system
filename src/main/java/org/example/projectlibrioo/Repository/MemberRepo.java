@@ -16,4 +16,5 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     @Query("SELECT m FROM Member m WHERE m.fullName = :fullname OR m.libraryID = :libraryid")
     List<Member> findAllMembersByKeyword(@Param("fullname") String fullname,
                                          @Param("libraryid") Integer libraryid);
+    long countByStatus(String status); // ACTIVE users
 }
