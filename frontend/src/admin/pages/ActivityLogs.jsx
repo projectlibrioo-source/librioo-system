@@ -1,87 +1,193 @@
-import React from 'react';
-import { Bot, User, BookOpen, Settings } from 'lucide-react';
+// src/admin/pages/ActivityLogs.jsx
+import React, { useState, useEffect, useMemo } from 'react';
+import { Bot, User, BookOpen, Settings, Search, X, Download, Loader2 } from 'lucide-react';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { firestore } from '../firebase';
 import AdminLayout from '../layouts/AdminLayout';
 
+const FILTER_OPTIONS = [
+    { label: 'All',             value: 'all',    color: 'bg-gray-200 text-gray-700',      activeColor: 'bg-gray-700 text-white' },
+    { label: 'Robot Actions',   value: 'robot',  color: 'bg-blue-100 text-blue-700',      activeColor: 'bg-blue-600 text-white' },
+    { label: 'Member Activity', value: 'member', color: 'bg-purple-100 text-purple-700',  activeColor: 'bg-purple-600 text-white' },
+    { label: 'Book Search',     value: 'search', color: 'bg-green-100 text-green-700',    activeColor: 'bg-green-600 text-white' },
+    { label: 'Borrow',          value: 'borrow', color: 'bg-orange-100 text-orange-700',  activeColor: 'bg-orange-500 text-white' },
+    { label: 'Return',          value: 'return', color: 'bg-teal-100 text-teal-700',      activeColor: 'bg-teal-600 text-white' },
+    { label: 'Admin Updates',   value: 'admin',  color: 'bg-red-100 text-red-700',        activeColor: 'bg-red-500 text-white' },
+    { label: 'System Logs',     value: 'system', color: 'bg-slate-100 text-slate-600',    activeColor: 'bg-slate-600 text-white' },
+];
+
+const ICON_CONFIG = {
+    bot:      { Icon: Bot,      color: 'text-blue-500',   bg: 'bg-blue-100' },
+    book:     { Icon: BookOpen, color: 'text-green-600',  bg: 'bg-green-100' },
+    user:     { Icon: User,     color: 'text-purple-600', bg: 'bg-purple-100' },
+    settings: { Icon: Settings, color: 'text-slate-500',  bg: 'bg-slate-100' },
+};
+
+const TYPE_BADGE = {
+    robot:  'bg-blue-100 text-blue-700',
+    member: 'bg-purple-100 text-purple-700',
+    search: 'bg-green-100 text-green-700',
+    borrow: 'bg-orange-100 text-orange-700',
+    return: 'bg-teal-100 text-teal-700',
+    admin:  'bg-red-100 text-red-600',
+    system: 'bg-slate-100 text-slate-600',
+};
+
+const formatDate = (timestamp) => {
+    if (!timestamp) return '';
+    const d = timestamp.toDate();
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};
+
+const formatTime = (timestamp) => {
+    if (!timestamp) return '';
+    const d = timestamp.toDate();
+    return d.toLocaleTimeString('en-US', { hour12: false });
+};
+
 const ActivityLogs = () => {
-    const logs = [
-        {
-            date: 'Nov/3/2024', events: [
-                { time: '10:15:22', icon: Bot, message: 'Robot connected to Wi-Fi and is online', type: 'system' },
-                { time: '10:17:40', icon: BookOpen, message: 'Book search request created: "Data Structures"', type: 'search' },
-                { time: '10:18:02', icon: User, message: 'Member logged in: M-0241', type: 'user' },
-                { time: '10:18:45', icon: BookOpen, message: 'Book borrowed: "Data Structures - 3rd Edition"', type: 'borrow' },
-            ]
-        },
-        {
-            date: 'Nov/4/2024', events: [
-                { time: '09:31:10', icon: User, message: 'User selected book category: Computer Science', type: 'user' },
-                { time: '09:32:44', icon: Bot, message: 'Command sent to robot: Navigate to Shelf C-12', type: 'command' },
-                { time: '09:33:01', icon: Bot, message: 'Robot started path following (Line Tracking Mode)', type: 'robot' },
-                { time: '09:33:58', icon: Bot, message: 'Robot arrived at Shelf C-12', type: 'robot' },
-                { time: '09:34:10', icon: Settings, message: 'Robot status updated: Task Completed', type: 'system' },
-                { time: '10:15:20', icon: BookOpen, message: 'Book returned: "Operating Systems Concepts"', type: 'return' },
-                { time: '11:02:14', icon: User, message: 'New guest browsing session started', type: 'user' },
-                { time: '11:15:40', icon: Settings, message: 'Admin updated book availability: 12 items restocked', type: 'admin' },
-                { time: '11:45:22', icon: Settings, message: 'System auto-backup completed', type: 'system' },
-            ]
-        },
-    ];
+    const [logs, setLogs]               = useState([]);
+    const [loading, setLoading]         = useState(true);
+    const [activeFilter, setActiveFilter] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // ✅ Real-time listener from Firestore
+    useEffect(() => {
+        const q = query(collection(firestore, 'activityLogs'), orderBy('timestamp', 'desc'));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const data = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setLogs(data);
+            setLoading(false);
+        }, (err) => {
+            console.error("Failed to fetch logs:", err);
+            setLoading(false);
+        });
+
+        return () => unsubscribe(); // cleanup on unmount
+    }, []);
+
+    // Group logs by date
+    const groupedLogs = useMemo(() => {
+        const filtered = logs.filter(log => {
+            const matchesFilter = activeFilter === 'all' || log.type === activeFilter;
+            const matchesSearch = log.message?.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesFilter && matchesSearch;
+        });
+
+        const groups = {};
+        filtered.forEach(log => {
+            const date = formatDate(log.timestamp);
+            if (!groups[date]) groups[date] = [];
+            groups[date].push(log);
+        });
+
+        return Object.entries(groups); // [ [date, events[]], ... ]
+    }, [logs, activeFilter, searchQuery]);
+
+    const totalCount = groupedLogs.reduce((sum, [, events]) => sum + events.length, 0);
 
     return (
         <AdminLayout>
-            <div className="min-h-full p-8 space-y-8 font-sans bg-gray-50">
-                <h2 className="text-3xl font-bold text-gray-900">Activity Log</h2>
+            <div className="min-h-full p-8 space-y-6 font-sans bg-gray-50">
 
-                <div className="bg-[#DCE6F2] rounded-lg shadow-sm overflow-hidden border border-gray-300">
-                    {/* Header Controls */}
-                    <div className="bg-[#C8D6E8] flex justify-between items-center p-4 border-b border-gray-300">
-                        <div className="flex space-x-1">
-                            <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-                            <span className="font-bold text-gray-700">Chronological</span>
+                {/* Page Header */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-3xl font-bold text-gray-900">Activity Log</h2>
+                        <p className="mt-1 text-sm text-gray-500">
+                            {loading ? 'Loading...' : <>Showing <span className="font-semibold text-gray-700">{totalCount}</span> events</>}
+                        </p>
+                    </div>
+                    <button className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                        <Download className="w-4 h-4" />
+                        Export
+                    </button>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+                    {/* Search */}
+                    <div className="p-4 border-b border-gray-100">
+                        <div className="relative max-w-md">
+                            <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                            <input
+                                type="text" placeholder="Search activity logs..."
+                                value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                                className="w-full pl-9 pr-9 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                            />
+                            {searchQuery && (
+                                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-2.5">
+                                    <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                                </button>
+                            )}
                         </div>
-                        <span className="font-bold text-gray-700">Activity Timeline</span>
                     </div>
 
-                    {/* Filter Bar */}
-                    <div className="bg-[#E9EFF6] p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-sm font-bold border-b border-gray-300">
-                        <div className="flex flex-wrap gap-4 text-gray-800">
-                            <span>Filter by:</span>
-                            <span className="flex items-center gap-1"><BookOpen className="w-4 h-4 text-green-600" /> Book Search</span>
-                            <span className="flex items-center gap-1"><Bot className="w-4 h-4 text-blue-500" /> Robot Actions</span>
-                            <span className="flex items-center gap-1"><User className="w-4 h-4 text-blue-700" /> Member Activity</span>
-                            <span className="flex items-center gap-1"><BookOpen className="w-4 h-4 text-red-500" /> Borrow/Return</span>
-                            <span className="flex items-center gap-1"><Settings className="w-4 h-4 text-gray-600" /> Admin Updates</span>
-                            <span className="flex items-center gap-1"><Settings className="w-4 h-4 text-gray-500" /> System Logs</span>
-                        </div>
-                        <button className="px-4 py-1 text-gray-700 transition-colors border border-blue-300 rounded shadow-sm bg-blue-200/50 hover:bg-blue-200">
-                            Clear
-                        </button>
-                    </div>
-
-                    {/* Timeline Content */}
-                    <div className="p-8 bg-[#F3F0EC]">
-                        {logs.map((group, groupIdx) => (
-                            <div key={groupIdx} className="mb-8">
-                                <h4 className="mb-4 font-bold text-gray-800">{group.date}</h4>
-                                <div className="relative pl-4 space-y-2 border-l-2 border-gray-400">
-                                    {group.events.map((event, idx) => (
-                                        <div key={idx} className="flex items-start group">
-                                            <div className="w-24 flex-shrink-0 text-sm font-mono text-gray-600 pt-0.5">
-                                                {event.time}
-                                            </div>
-                                            <div className="flex items-center text-sm font-medium text-gray-700">
-                                                <event.icon className="w-4 h-4 mr-3 text-gray-600" /> {/* Dynamic icon color could be better */}
-                                                {event.message}
-                                            </div>
-                                            {/* Line connector visualization */}
-                                            <div className="absolute -left-[5px] top-0 bottom-0 w-2.5 flex flex-col items-center justify-center">
-                                                {/* Simple line implementation for now */}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                    {/* Filter Pills */}
+                    <div className="px-4 py-3 flex flex-wrap gap-2 border-b border-gray-100 bg-gray-50">
+                        {FILTER_OPTIONS.map(f => (
+                            <button key={f.value} onClick={() => setActiveFilter(f.value)}
+                                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${activeFilter === f.value ? f.activeColor : f.color}`}>
+                                {f.label}
+                            </button>
                         ))}
+                    </div>
+
+                    {/* Timeline */}
+                    <div className="p-6 space-y-8">
+                        {loading ? (
+                            <div className="flex items-center justify-center py-16 text-gray-400">
+                                <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                                <span className="text-sm">Loading activity logs...</span>
+                            </div>
+                        ) : groupedLogs.length === 0 ? (
+                            <div className="text-center py-16 text-gray-400">
+                                <Search className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                                <p className="font-medium">No activity found</p>
+                                <p className="text-sm mt-1">Try adjusting your filters or search query</p>
+                            </div>
+                        ) : (
+                            groupedLogs.map(([date, events]) => (
+                                <div key={date}>
+                                    {/* Date Header */}
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <span className="text-sm font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-full">{date}</span>
+                                        <div className="flex-1 h-px bg-gray-100" />
+                                        <span className="text-xs text-gray-400">{events.length} events</span>
+                                    </div>
+
+                                    {/* Events */}
+                                    <div className="relative pl-6 border-l-2 border-gray-200 space-y-1">
+                                        {events.map((event) => {
+                                            const { Icon, color, bg } = ICON_CONFIG[event.icon] || ICON_CONFIG.settings;
+                                            return (
+                                                <div key={event.id} className="relative flex items-start gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors group">
+                                                    {/* Timeline dot */}
+                                                    <div className="absolute -left-[25px] top-4 w-3 h-3 rounded-full bg-white border-2 border-gray-300 group-hover:border-blue-400 transition-colors" />
+                                                    {/* Icon */}
+                                                    <div className={`flex-shrink-0 w-8 h-8 rounded-full ${bg} flex items-center justify-center`}>
+                                                        <Icon className={`w-4 h-4 ${color}`} />
+                                                    </div>
+                                                    {/* Content */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-sm text-gray-800">{event.message}</p>
+                                                        <div className="flex items-center gap-2 mt-1">
+                                                            <span className="text-xs font-mono text-gray-400">{formatTime(event.timestamp)}</span>
+                                                            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${TYPE_BADGE[event.type] || TYPE_BADGE.system}`}>
+                                                                {event.type?.charAt(0).toUpperCase() + event.type?.slice(1)}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

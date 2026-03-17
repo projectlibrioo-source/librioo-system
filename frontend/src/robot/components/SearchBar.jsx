@@ -1,31 +1,25 @@
 import React from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
-// Added className prop to allow parents to position it
-const SearchBar = ({ query, onChange, onSubmit, className = "" }) => (
+const SearchBar = ({ query, onChange, onSubmit, className = "", placeholder = "Search..." }) => (
   <form
     onSubmit={onSubmit}
-    // Removed 'absolute top-[215px] left-[65px] z-30' from here
-    // Added ${className} at the end to accept parent styles
-    className={`w-[630px] h-[40px] bg-[#ece6f0] rounded-full flex items-center shadow-md overflow-hidden ${className}`}
+    className={`w-full h-[60px] md:h-[70px] bg-white/20 backdrop-blur-xl border-2 border-white/30 hover:bg-white/30 transition-all rounded-2xl flex items-center px-4 shadow-inner overflow-hidden ${className}`}
   >
-    {/* Input Field */}
     <input
       type="search"
       value={query}
       onChange={onChange}
-      placeholder="Search Books By Name"
-      className="flex-1 px-4 bg-transparent outline-none text-[#49454f] placeholder:text-[#49454f]/70 placeholder:font-semibold [font-family:'Aldrich-Regular',Helvetica] text-[16px]"
-      style={{ fontWeight: 600 }}
+      placeholder={placeholder}
+      className="flex-1 px-2 bg-transparent outline-none text-white placeholder-white/60 text-[18px] md:text-xl font-medium tracking-wide"
+      style={{ fontFamily: "'Aldrich', sans-serif" }}
     />
-
-    {/* Icon Button */}
     <button
       type="submit"
       aria-label="Search"
-      className="w-[40px] h-[40px] flex items-center justify-center bg-gradient-to-r from-[#4b4b6b] to-[#5c6ac4] text-white rounded-full hover:from-[#5c6ac4] hover:to-[#7c8fdc] transition-all"
+      className="w-[45px] h-[45px] flex items-center justify-center bg-white/20 text-white rounded-xl hover:bg-white/40 transition-all shadow-sm"
     >
-      <MagnifyingGlassIcon className="w-5 h-5 text-white" />
+      <MagnifyingGlassIcon className="w-6 h-6 text-white" />
     </button>
   </form>
 );

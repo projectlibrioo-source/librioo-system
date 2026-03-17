@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import logActivity from '../utils/logActivity';
 import logo from "../../assets/logoLib3-1.png";
 
 const AdminLogin = () => {
@@ -28,7 +29,11 @@ const AdminLogin = () => {
 
   try {
     await signInWithEmailAndPassword(auth, adminId.trim(), password);
+    // ✅ Log admin login
+    await logActivity("admin", "settings", `Admin logged in: ${adminId.trim()}`);
     navigate("/admin/dashboard");
+
+    
   } catch (err) {
     console.log("Error code:", err.code);
     console.log("Error message:", err.message);
