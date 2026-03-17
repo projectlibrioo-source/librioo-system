@@ -28,3 +28,53 @@ const Reports = () => {
                     <p className="text-3xl font-bold text-green-600 mt-2">LKR 2,500</p>
                 </div>
             </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Report Builder */}
+                <div className="lg:col-span-1 border border-gray-200 rounded-lg shadow-sm bg-white p-6 h-fit">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">Report Builder</h3>
+                    <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                        
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Report Focus</label>
+                            <select
+                                value={reportType}
+                                onChange={(e) => setReportType(e.target.value)}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+                            >
+                                <option>Library Managing Reports</option>
+                                <option>System Reports (Technical)</option>
+                            </select>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <input type="date" className="p-2 border rounded-md" />
+                            <input type="date" className="p-2 border rounded-md" />
+                        </div>
+
+                        {reportType === 'Library Managing Reports' && (
+                            <select className="p-2 border rounded-md">
+                                <option>All Categories</option>
+                                <option>Fiction</option>
+                                <option>Science</option>
+                            </select>
+                        )}
+
+                        {reportType === 'System Reports (Technical)' && (
+                            <>
+                                <select className="p-2 border rounded-md">
+                                    <option>All Robots</option>
+                                    <option>Robot Alpha</option>
+                                </select>
+                                <select className="p-2 border rounded-md">
+                                    <option>Distance Traveled</option>
+                                    <option>Error Events</option>
+                                </select>
+                            </>
+                        )}
+
+                        <button className="w-full py-2 bg-blue-600 text-white rounded-md">
+                            Generate Report
+                        </button>
+                    </form>
+            </div>
