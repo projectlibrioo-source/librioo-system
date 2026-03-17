@@ -19,6 +19,8 @@ import GuestLogin from "../../robot/pages/GuestLogin";
 
 
 import SearchCategory from "../../robot/pages/SearchCategory";
+import ActivityLogs from "../../admin/pages/ActivityLogs";
+import Notifications from "../../admin/pages/Notifications";
 
 function AppRoutes() {
   return (
@@ -41,6 +43,8 @@ function AppRoutes() {
         <Route path="/admin/manage-users" element={<ManageUsers />} />
         <Route path="/admin/manage-books" element={<ManageBooks />} />
         <Route path="/admin/settings" element={<Settings />} />
+        <Route path="/admin/activity-logs" element={<ActivityLogs />} />
+        <Route path="/admin/notifications" element={<Notifications />} />
 
 
       </Routes>
