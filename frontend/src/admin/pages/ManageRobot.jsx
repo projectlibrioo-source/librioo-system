@@ -73,6 +73,32 @@ const ManageRobot = () => {
                                 <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">Save Robot</button>
                             </form>
 
+                             <h4 className="font-bold text-gray-800 mb-2">Current Robots</h4>
+                            <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
+                                {/* BACKEND: Fetch /api/robots list */}
+                                <div className="grid grid-cols-4 border-b border-gray-200 bg-blue-100/50">
+                                    <div className="p-4 font-bold text-center text-gray-800 border-r border-gray-200">Robot ID</div>
+                                    <div className="p-4 font-bold text-center text-gray-800 border-r border-gray-200">Robot Name</div>
+                                    <div className="p-4 font-bold text-center text-gray-800 border-r border-gray-200">Model</div>
+                                    <div className="p-4 font-bold text-center text-gray-800">Shelf Location</div>
+                                </div>
+                                <div className="grid grid-cols-4 border-b border-gray-100">
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">R-001</div>
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">Robot Alpha</div>
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">MK-III</div>
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">Aisle 2</div>
+                                </div>
+                                <div className="grid grid-cols-4">
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">R-002</div>
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">Robot Beta</div>
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">MK-IV</div>
+                                    <div className="p-4 text-center text-gray-600 border-r border-gray-200">Aisle 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+
           
 
         </AdminLayout>
