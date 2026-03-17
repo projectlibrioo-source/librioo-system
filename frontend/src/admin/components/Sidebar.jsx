@@ -19,7 +19,7 @@ const Sidebar = () => {
     const menuItems = [
         {
             section: 'Main', items: [
-                { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
+                { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/admin-dashboard' },
                 { name: 'Books', icon: BookOpen, path: '/admin/books' },
                 { name: 'Users', icon: Users, path: '/admin/users' },
                 { name: 'Transactions', icon: ArrowLeftRight, path: '/admin/transactions' },
