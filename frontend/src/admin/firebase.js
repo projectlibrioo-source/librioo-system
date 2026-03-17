@@ -1,6 +1,8 @@
 // src/admin/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 
 // 🔴 Replace these with your Firebase project config
 // Firebase Console → Project Settings → Your Apps → SDK setup
@@ -17,4 +19,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getDatabase(app);
+export const firestore = getFirestore(app);
 export default app;

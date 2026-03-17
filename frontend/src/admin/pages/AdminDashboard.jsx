@@ -1,108 +1,126 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
 import { useAuth } from "../context/AuthContext";
 import StatCard from '../components/StatCard';
 import RobotCard from '../components/RobotCard';
 import AdminLayout from '../layouts/AdminLayout';
 
+// Firebase
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase"; // your firebase config
+
 const AdminDashboard = () => {
+
   const { currentUser } = useAuth();
-  console.log("Current user:", currentUser);
-    // ---------------------------------------------------------------------------
-    // BACKEND INTEGRATION NOTES
-    // ---------------------------------------------------------------------------
-    // 1. Fetch Dashboard Stats:
-    //    Endpoints like GET /api/dashboard/stats should return:
-    //    { totalBooks: 867, totalUsers: 69, activeUsers: 8, ... }
 
-    // 2. Fetch Robot Status:
-    //    Endpoints like GET /api/robots should return list of robots with:
-    //    { id, name, status, battery, user, task, location, tasksToday }
-    // ---------------------------------------------------------------------------
+  // ---------------- STATE ----------------
+  const [stats, setStats] = useState([]);
+  const [robots, setRobots] = useState([]);
 
-    // Mock Data (Replace with API response state)
-    const stats = [
-        { title: 'Total Books', count: 867 },
-        { title: 'Total Users', count: 69 },
-        { title: 'Active Users', count: 8 },
-        { title: 'Books Borrowed', count: 38 },
-        { title: 'Overdue Books', count: 4 },
-        { title: 'Active Robots', count: 3 },
-    ];
+  // ---------------- LOAD DASHBOARD STATS ----------------
+  useEffect(() => {
 
+    axios.get("http://localhost:8080/api/dashboard")
+      .then(res => {
 
-    const robots = [
-        {
-            id: 1,
-            name: 'Robot-A01',
-            status: 'Online',
-            battery: 87,
-            user: 'John',
-            task: 'Searching',
-            location: 'Section A',
-            tasksToday: 10,
-            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A01&backgroundColor=b6e3f4'
-        },
-        {
-            id: 2,
-            name: 'Robot-A02',
-            status: 'Online',
-            battery: 50,
-            user: 'Amanda',
-            task: 'Searching',
-            location: 'Section A',
-            tasksToday: 20,
-            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A02&backgroundColor=b6e3f4'
-        },
-        {
-            id: 3,
-            name: 'Robot-A03',
-            status: 'Online',
-            battery: 10,
-            user: 'Greg',
-            task: 'Searching',
-            location: 'Section A',
-            tasksToday: 10,
-            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A03&backgroundColor=b6e3f4'
-        },
-        {
-            id: 4,
-            name: 'Robot-A04',
-            status: 'Offline',
-            battery: 90,
-            user: 'Emma',
-            task: 'No',
-            location: 'Section A',
-            tasksToday: 20,
-            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A04&backgroundColor=b6e3f4'
-        },
-    ];
+        const data = res.data;
 
+        setStats([
+          { title: 'Total Books', count: data.totalBooks },
+          { title: 'Total Users', count: data.totalUsers },
+          { title: 'Active Users', count: data.activeUsers },
+          { title: 'Books Borrowed', count: data.booksBorrowed },
+          { title: 'Overdue Books', count: data.overdueBooks },
+          { title: 'Active Robots', count: data.activeRobots },
+        ]);
 
+      })
+      .catch(err => console.error("Dashboard error:", err));
 
-     return (
-        <AdminLayout>
-            <div className="min-h-full p-8 space-y-8 bg-gray-50/50">
-                <h2 className="mb-8 text-3xl font-bold text-gray-900">Dashboard</h2>
+  }, []);
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 gap-6 mb-12 md:grid-cols-2 lg:grid-cols-3">
-                    {stats.map((stat, idx) => (
-                        <StatCard key={idx} title={stat.title} count={stat.count} />
-                    ))}
-                </div>
+  // ---------------- LOAD ROBOTS (SPRING BOOT API) ----------------
+  useEffect(() => {
 
-                {/* Robot Status Grid */}
-                <h3 className="mb-4 text-xl font-bold text-gray-800">Robot Status</h3>
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-                    {robots.map((robot) => (
-                        <RobotCard key={robot.id} {...robot} />
-                    ))}
-                </div>
-            </div>
-        </AdminLayout>
-    );
+    axios.get("http://localhost:8080/api/robots/overview")
+      .then(res => {
 
+        // Map backend data → UI format
+        const formatted = res.data.map(r => ({
+          id: r.robotID,
+          name: r.robotName,
+          status: r.status,
+          battery: 80, // static for now or from Firebase later
+          user: "N/A",
+          task: "Idle",
+          location: "Library",
+          tasksToday: 0,
+          image: `https://api.dicebear.com/7.x/bottts/svg?seed=${r.robotName}`
+        }));
 
+        setRobots(formatted);
+
+      })
+      .catch(err => console.error("Robot API error:", err));
+
+  }, []);
+
+  // ---------------- REAL-TIME FIREBASE ROBOT STATUS ----------------
+  useEffect(() => {
+
+    const robotRef = ref(db, "robot");
+
+    onValue(robotRef, (snapshot) => {
+
+      const data = snapshot.val();
+
+      if (!data) return;
+
+      // Update robots dynamically
+      setRobots(prev =>
+        prev.map(robot => ({
+          ...robot,
+          status: data.status || robot.status,
+          task: data.currentCommand || "Idle",
+          location: "Shelf " + (data.targetShelf || "-")
+        }))
+      );
+
+    });
+
+  }, []);
+
+  // ---------------- UI ----------------
+  return (
+    <AdminLayout>
+      <div className="min-h-full p-8 space-y-8 bg-gray-50/50">
+
+        <h2 className="mb-8 text-3xl font-bold text-gray-900">
+          Dashboard
+        </h2>
+
+        {/* -------- Stats -------- */}
+        <div className="grid grid-cols-1 gap-6 mb-12 md:grid-cols-2 lg:grid-cols-3">
+          {stats.map((stat, idx) => (
+            <StatCard key={idx} title={stat.title} count={stat.count} />
+          ))}
+        </div>
+
+        {/* -------- Robot Section -------- */}
+        <h3 className="mb-4 text-xl font-bold text-gray-800">
+          Robot Status
+        </h3>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+          {robots.map((robot) => (
+            <RobotCard key={robot.id} {...robot} />
+          ))}
+        </div>
+
+      </div>
+    </AdminLayout>
+  );
 };
 
 export default AdminDashboard;
