@@ -98,3 +98,55 @@ const Contact = () => {
         </div>
     </div>
 
+
+{/* Table */}
+<div className="overflow-x-auto">
+    <table className="min-w-full text-sm text-left">
+        <thead>
+            <tr>
+                <th></th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {filteredAdmins.map((mem, idx) => (
+                <tr key={idx}>
+                    <td><input type="checkbox" /></td>
+                    <td>{mem.id}</td>
+                    <td>{mem.name}</td>
+                    <td>{mem.role}</td>
+                    <td>{mem.status}</td>
+                    <td>{mem.phone}</td>
+                    <td>{mem.email}</td>
+                    <td>
+                        <button>Edit</button>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+</div>
+
+{/* Pagination */}
+<div className="p-4 border-t flex justify-between">
+    <span>Showing 1 to 3 of 3 entries</span>
+    <div>
+        <button>Prev</button>
+        <button>1</button>
+        <button>Next</button>
+    </div>
+</div>
+
+</div>
+</div>
+</AdminLayout>
+);
+};
+
+export default Contact;
