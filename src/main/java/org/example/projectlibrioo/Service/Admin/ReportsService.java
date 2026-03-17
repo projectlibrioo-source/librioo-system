@@ -21,7 +21,7 @@ public class ReportsService {
 
     public DashboardStatsDTO getDashboardStats() {
         DashboardStatsDTO stats = new DashboardStatsDTO();
-        stats.setTotalLoans(1234);
+        stats.setTotalLoans(transactionRepo.count());
         stats.setSystemUptime(99.9);
         stats.setRevenue(2500.0);
         return stats;
