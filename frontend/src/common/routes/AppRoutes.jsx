@@ -13,7 +13,7 @@ import AdminDashboard from "../../admin/pages/AdminDashboard";
 import ManageUsers from "../../admin/pages/ManageUsers";
 import ManageBooks from "../../admin/pages/ManageBooks";
 import Settings from "../../admin/pages/Settings";
-
+import Dashboard from "../../admin/pages/Dashboard";
 import GuestLogin from "../../robot/pages/GuestLogin";
 
 
@@ -45,7 +45,7 @@ function AppRoutes() {
         <Route path="/admin/settings" element={<Settings />} />
         <Route path="/admin/activity-logs" element={<ActivityLogs />} />
         <Route path="/admin/notifications" element={<Notifications />} />
-
+        <Route path="/admin/dashboard" element={<Dashboard />} />
 
       </Routes>
     </BrowserRouter>
