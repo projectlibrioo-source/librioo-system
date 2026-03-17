@@ -6,9 +6,13 @@ const CancelButton = ({ className = "" }) => {
   return (
     <button
       onClick={() => navigate(-1)}
-      className={`w-[240px] h-[45px] bg-[#d9d9d933] rounded-[10px] border border-[#ffffff4d] shadow-md flex items-center justify-center cursor-pointer hover:bg-[#d9d9d955] hover:scale-105 transition-all ${className}`}
+      className={`relative transition-all duration-300 group rounded-2xl hover:-translate-y-1 focus:outline-none flex-1 ${className}`}
     >
-      <span className="[font-family:'Aldrich-Regular',Helvetica] text-white text-[18px]">CANCEL</span>
+      <div className="h-full min-h-[50px] md:min-h-[66px] w-full relative bg-black/10 backdrop-blur-md border border-white/40 rounded-2xl flex items-center justify-center transition-colors duration-300 group-hover:bg-white/20 px-6">
+        <span className="text-[clamp(14px,1.6vh,20px)] text-white font-bold tracking-wide" style={{ fontFamily: "'Aldrich', sans-serif" }}>
+          CANCEL
+        </span>
+      </div>
     </button>
   );
 };
