@@ -32,6 +32,60 @@ const RobotStatus = () => {
                     </div>
                 </div>
 
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    {robots.map((robot, idx) => (
+                        <div key={idx} className="bg-[#E6F3FA] rounded-3xl p-6 shadow-sm border border-blue-100 flex flex-col items-center relative overflow-hidden">
+                            <div className="z-10 mb-6 text-center">
+                                <h3 className="text-2xl font-bold text-gray-900">{robot.name}</h3>
+                                <p className="text-sm font-bold text-gray-800">ID : {robot.id}</p>
+                            </div>
+
+                            <div className="z-10 w-full space-y-3 text-sm font-bold text-gray-900">
+                                <div className="flex items-center justify-between">
+                                    <span>O Current User :</span>
+                                    <span>{robot.currentUser}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span>O User ID      :</span>
+                                    <span>{robot.userId}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span>O Status       :</span>
+                                    <span>{robot.status}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span>O Last Active  :</span>
+                                    <span>{robot.lastActive}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span>O Current Shelf :</span>
+                                    <span>{robot.currentShelf}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span>O Battery      :</span>
+                                    <span>{robot.battery}%</span>
+                                </div>
+                            </div>
+
+                            <div className="z-10 flex items-center justify-between w-full px-4 mt-8">
+                                <div className="flex items-end space-x-2">
+                                    {/* Battery Icon mockup */}
+                                    <div className="relative w-8 h-12 bg-gray-300 rounded border-2 border-green-600 flex flex-col justify-end p-0.5">
+                                        <div className="w-full bg-green-500" style={{ height: `${robot.battery}%` }}></div>
+                                    </div>
+                                    <img src={robot.image} alt={robot.name} className="w-16 h-16" />
+                                </div>
+
+                                <div className="text-right">
+                                    <p className="text-sm font-bold text-gray-900">Remaining</p>
+                                    <p className="text-sm font-bold text-gray-900">{robot.remaining}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
         </AdminLayout>
 
         );
