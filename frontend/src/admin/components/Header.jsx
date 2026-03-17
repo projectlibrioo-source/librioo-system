@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Bell, LogOut, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
     // BACKEND: Replace with standard React Router hooks for navigation or state management if needed
@@ -78,8 +80,13 @@ const Header = () => {
                 <button
                     className="flex items-center ml-4 font-medium text-gray-700 transition-colors hover:text-red-500"
                     onClick={() => {
-                        // BACKEND: Call Logout API endpoint (e.g., POST /api/auth/logout)
-                        console.log("Logout clicked - Implement API call here");
+                        const { logout } = useAuth();
+                        const navigate = useNavigate();
+
+                        const handleLogout = async () => {
+                            await logout();        // signs out from Firebase
+                            navigate('/admin/login'); // redirects to login page
+                        };
                     }}
                 >
                     Logout

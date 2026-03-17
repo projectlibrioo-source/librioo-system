@@ -31,7 +31,7 @@ const Sidebar = () => {
             section: 'System', items: [
                 { name: 'Settings',      icon: Settings, path: '/admin/settings' },
                 { name: 'Reports',       icon: FileText, path: '/admin/reports' },
-                { name: 'Contact',       icon: Phone,    path: '/admin/contact' },
+                { name: 'Contact',       icon: Phone,    path: '/admin/contacts' },
                 { name: 'Notifications', icon: Bell,     path: '/admin/notifications' },
             ]
         }
