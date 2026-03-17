@@ -7,8 +7,12 @@ const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
   const location = useLocation();
 
+  // Still loading — render nothing
+  if (currentUser === undefined) return null;
+
+  // Not logged in — redirect to login
   if (!currentUser) {
-    return <Navigate to="/admin/pages/AdminLogin" state={{ from: location }} replace />;
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
   return children;

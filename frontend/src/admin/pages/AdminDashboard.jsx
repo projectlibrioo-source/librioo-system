@@ -1,10 +1,12 @@
 import React from 'react';
+import { useAuth } from "../context/AuthContext";
 import StatCard from '../components/StatCard';
 import RobotCard from '../components/RobotCard';
 import AdminLayout from '../layouts/AdminLayout';
 
 const AdminDashboard = () => {
-
+  const { currentUser } = useAuth();
+  console.log("Current user:", currentUser);
     // ---------------------------------------------------------------------------
     // BACKEND INTEGRATION NOTES
     // ---------------------------------------------------------------------------

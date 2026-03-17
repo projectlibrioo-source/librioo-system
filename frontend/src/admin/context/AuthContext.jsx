@@ -8,7 +8,7 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(undefined); // ← undefined, not null
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,9 +21,14 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => signOut(auth);
 
+  // Show nothing until Firebase confirms auth state
+  if (loading) {
+    return null;
+  }
+
   return (
     <AuthContext.Provider value={{ currentUser, logout }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
