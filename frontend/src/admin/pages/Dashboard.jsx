@@ -28,6 +28,55 @@ const Dashboard = () => {
     ];
 
 
+    const robots = [
+        {
+            id: 1,
+            name: 'Robot-A01',
+            status: 'Online',
+            battery: 87,
+            user: 'John',
+            task: 'Searching',
+            location: 'Section A',
+            tasksToday: 10,
+            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A01&backgroundColor=b6e3f4'
+        },
+        {
+            id: 2,
+            name: 'Robot-A02',
+            status: 'Online',
+            battery: 50,
+            user: 'Amanda',
+            task: 'Searching',
+            location: 'Section A',
+            tasksToday: 20,
+            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A02&backgroundColor=b6e3f4'
+        },
+        {
+            id: 3,
+            name: 'Robot-A03',
+            status: 'Online',
+            battery: 10,
+            user: 'Greg',
+            task: 'Searching',
+            location: 'Section A',
+            tasksToday: 10,
+            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A03&backgroundColor=b6e3f4'
+        },
+        {
+            id: 4,
+            name: 'Robot-A04',
+            status: 'Offline',
+            battery: 90,
+            user: 'Emma',
+            task: 'No',
+            location: 'Section A',
+            tasksToday: 20,
+            image: 'https://api.dicebear.com/7.x/bottts/svg?seed=A04&backgroundColor=b6e3f4'
+        },
+    ];
+
+
+
      return (
         <AdminLayout>
             <div className="min-h-full p-8 space-y-8 bg-gray-50/50">
