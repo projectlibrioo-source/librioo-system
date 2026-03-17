@@ -78,3 +78,57 @@ const Reports = () => {
                         </button>
                     </form>
             </div>
+
+
+            {/* Preview Table Container */}
+<div className="lg:col-span-2 space-y-6">
+    
+    <div className="p-6 bg-white border rounded-lg shadow-sm">
+        <h3 className="text-xl font-bold">
+            Preview: {reportType}
+        </h3>
+
+        {/* Search */}
+        <input
+            type="text"
+            placeholder={`Search by ${searchField}`}
+            className="border p-2 rounded-md w-full"
+        />
+
+        {/* Table */}
+        <table className="min-w-full text-sm mt-4">
+            <thead>
+                {reportType === 'Library Managing Reports' ? (
+                    <tr>
+                        <th>Date</th>
+                        <th>Patrons</th>
+                        <th>Loans</th>
+                        <th>Overdues</th>
+                    </tr>
+                ) : (
+                    <tr>
+                        <th>Date</th>
+                        <th>Robot ID</th>
+                        <th>Events</th>
+                        <th>Battery</th>
+                    </tr>
+                )}
+            </thead>
+        </table>
+    </div>
+
+    {/* Popular Items */}
+    {reportType === 'Library Managing Reports' && (
+        <div className="p-6 bg-white border rounded-lg shadow-sm">
+            <h3 className="text-xl font-bold">Popular Items</h3>
+        </div>
+    )}
+</div>
+
+</div> {/* grid */}
+</div> {/* container */}
+</AdminLayout>
+);
+};
+
+export default Reports;
