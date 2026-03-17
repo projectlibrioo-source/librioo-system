@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 public class AdminService {
 
@@ -53,6 +55,11 @@ public class AdminService {
 
     public Member saveMemberData(Member member) {
         return memberRepo.save(member);
+    }
+
+
+    public List<Book> getAllBooksByKeyword(String title, String author, Long isbn) {
+        return bookRepo.findAllBooksByKeyword(title,author,isbn);
     }
 
 

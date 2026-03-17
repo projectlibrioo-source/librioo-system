@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
@@ -173,6 +175,19 @@ public class AdminController {
         Transactions bookReturned = transactionService.confirmReturn(returnDTO);
 
         return new ResponseEntity<>(bookReturned, HttpStatus.OK);
+    }
+
+    @GetMapping("/searchbook")
+    public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title,
+                                                  @RequestParam(required = false) String author,
+                                                  @RequestParam(required = false) Long isbn){
+
+        List<Book> listOfBooks = adminService.getAllBooksByKeyword(title,author,isbn);
+         if (listOfBooks!=null){
+             return new ResponseEntity<>(listOfBooks, HttpStatus.OK);
+         }else {
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         }
     }
 
 }
