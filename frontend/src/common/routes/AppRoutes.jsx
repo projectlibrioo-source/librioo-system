@@ -23,6 +23,7 @@ import ManageTransactions from "../../admin/pages/ManageTransactions";
 import Settings from "../../admin/pages/Settings";
 import ActivityLogs from "../../admin/pages/ActivityLogs";
 import Notifications from "../../admin/pages/Notifications";
+import ManageRobot from "../../admin/pages/ManageRobot";
 
 // Auth
 import { AuthProvider } from "../../admin/context/AuthContext";
@@ -46,6 +47,8 @@ function AppRoutes() {
           <Route path="/robot/ending"           element={<EndingPage />} />
           <Route path="/robot/guest-login"      element={<GuestLogin />} />
           <Route path="/robot/search-category"  element={<SearchCategory />} />
+
+          <Route path="/admin/manage-robot" element={<ManageRobot />} />
 
           {/* ── Admin Public ────────────────────────────────────── */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -71,6 +74,8 @@ function AppRoutes() {
           } />
           <Route path="/admin/notifications" element={
             <ProtectedRoute><Notifications /></ProtectedRoute>
+
+            
           } />
 
           {/* ── Redirects ───────────────────────────────────────── */}
