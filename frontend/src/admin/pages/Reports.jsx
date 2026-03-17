@@ -14,121 +14,209 @@ const Reports = () => {
                 </div>
 
                 {/* Usage Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
-                    <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">Total Loans</p>
-                    <p className="text-3xl font-bold text-blue-600 mt-2">1,234</p>
-                </div>
-                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
-                    <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">System Uptime</p>
-                    <p className="text-3xl font-bold text-green-500 mt-2">99.9%</p>
-                </div>
-                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
-                    <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">Revenue</p>
-                    <p className="text-3xl font-bold text-green-600 mt-2">LKR 2,500</p>
-                </div>
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
+                        <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">Total Loans</p>
+                        <p className="text-3xl font-bold text-blue-600 mt-2">1,234</p>
+                    </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Report Builder */}
-                <div className="lg:col-span-1 border border-gray-200 rounded-lg shadow-sm bg-white p-6 h-fit">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Report Builder</h3>
-                    <form className="space-y-4" onSubmit={e => e.preventDefault()}>
-                        
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Report Focus</label>
-                            <select
-                                value={reportType}
-                                onChange={(e) => setReportType(e.target.value)}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
-                            >
-                                <option>Library Managing Reports</option>
-                                <option>System Reports (Technical)</option>
-                            </select>
+                    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
+                        <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">System Uptime</p>
+                        <p className="text-3xl font-bold text-green-500 mt-2">99.9%</p>
+                    </div>
+
+                    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
+                        <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">Revenue</p>
+                        <p className="text-3xl font-bold text-green-600 mt-2">LKR 2,500</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Report Builder */}
+                    <div className="lg:col-span-1 border border-gray-200 rounded-lg shadow-sm bg-white p-6 h-fit">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Report Builder</h3>
+                        <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                            
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Report Focus</label>
+                                <select
+                                    value={reportType}
+                                    onChange={(e) => setReportType(e.target.value)}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+                                >
+                                    <option>Library Managing Reports</option>
+                                    <option>System Reports (Technical)</option>
+                                </select>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">From</label>
+                                    <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">To</label>
+                                    <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                </div>
+                            </div>                  {reportType === 'Library Managing Reports' && (
+
+                       
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Book Category</label>
+                                    <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                                        <option>All Categories</option>
+                                        <option>Fiction</option>
+                                        <option>Science</option>
+                                    </select>
+                                </div>
+                            )}
+
+                            {reportType === 'System Reports (Technical)' && (
+                              <>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Robot Unit</label>
+                                        <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                                            <option>All Robots</option>
+                                            <option>Robot Alpha</option>
+                                            <option>Robot Beta</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Metric Type</label>
+                                        <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                                            <option>Distance Traveled</option>
+                                            <option>Error Events</option>
+                                            <option>Service History</option>
+                                        </select>
+                                    </div>
+                                </>
+                            )}
+
+                            <button className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium mt-4">Generate Report</button>
+                        </form>
+                    </div>
+
+
+                    {/* Preview Table Container */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Generated Report Preview */}
+                        <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
+                                <h3 className="text-xl font-bold text-gray-800">Preview: {reportType}</h3>
+                                <div className="space-x-2">
+                                    <button className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">Export PDF</button>
+                                    <button className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">Export Excel</button>
+                                </div>
+                            </div>
+                            <div className="mb-4">
+                                <div className="relative w-full sm:w-2/3 flex items-center border border-gray-300 rounded-md bg-white focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 overflow-hidden">
+                                    <select
+                                        value={searchField}
+                                        onChange={(e) => setSearchField(e.target.value)}
+                                        className="bg-gray-50 text-gray-600 text-sm border-none focus:ring-0 py-2 pl-3 pr-8 h-full"
+                                    >
+                                        <option value="Date">Date</option>
+                                        {reportType === 'Library Managing Reports' ? <option value="Loans">Loans</option> : <option value="Robot">Robot</option>}
+                                    </select>
+                                    <div className="h-6 w-px bg-gray-300"></div>
+                                    <input type="text" placeholder={`Search by ${searchField}...`} className="w-full pl-3 pr-4 py-2 text-sm border-none focus:ring-0" />
+                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                        <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full text-sm text-left text-gray-500">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                        {reportType === 'Library Managing Reports' ? (
+                                            <tr>
+                                                <th className="px-4 py-2">Date</th>
+                                                <th className="px-4 py-2">Patrons</th>
+                                                <th className="px-4 py-2">Loans</th>
+                                                <th className="px-4 py-2">Overdues</th>
+                                            </tr>
+                                        ) : (
+                                            <tr>
+                                                <th className="px-4 py-2">Date</th>
+                                                <th className="px-4 py-2">Robot ID</th>
+                                                <th className="px-4 py-2">Events Logged</th>
+                                                <th className="px-4 py-2">Avg Battery %</th>
+                                            </tr>
+                                        )}
+                                    </thead>
+                                    <tbody>
+                                        {/* BACKEND: Dummy Data. Fetch from API depending on report selected */}
+                                        {reportType === 'Library Managing Reports' && (
+                                            <>
+                                                <tr className="border-b">
+                                                    <td className="px-4 py-2">2023-10-01</td>
+                                                    <td className="px-4 py-2">120</td>
+                                                    <td className="px-4 py-2">45</td>
+                                                    <td className="px-4 py-2">3</td>
+                                                </tr>
+                                                <tr className="border-b">
+                                                    <td className="px-4 py-2">2023-10-02</td>
+                                                    <td className="px-4 py-2">132</td>
+                                                    <td className="px-4 py-2">50</td>
+                                                    <td className="px-4 py-2">1</td>
+                                                </tr>
+                                            </>
+                                        )}
+                                        {reportType === 'System Reports (Technical)' && (
+                                            <>
+                                                <tr className="border-b">
+                                                    <td className="px-4 py-2">2023-10-01</td>
+                                                    <td className="px-4 py-2">Alpha, Beta</td>
+                                                    <td className="px-4 py-2">4 Err, 12 Warn</td>
+                                                    <td className="px-4 py-2">82%</td>
+                                                </tr>
+                                                <tr className="border-b">
+                                                    <td className="px-4 py-2">2023-10-02</td>
+                                                    <td className="px-4 py-2">Alpha</td>
+                                                    <td className="px-4 py-2">1 Err, 5 Warn</td>
+                                                    <td className="px-4 py-2">89%</td>
+                                                </tr>
+                                            </>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <input type="date" className="p-2 border rounded-md" />
-                            <input type="date" className="p-2 border rounded-md" />
-                        </div>
-
+                        {/* Popular Items Card */}
                         {reportType === 'Library Managing Reports' && (
-                            <select className="p-2 border rounded-md">
-                                <option>All Categories</option>
-                                <option>Fiction</option>
-                                <option>Science</option>
-                            </select>
+                            <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+                                <h3 className="text-xl font-bold text-gray-800 mb-4">Popular Items (Top 10)</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full text-sm text-left text-gray-500">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th className="px-4 py-2">Title</th>
+                                                <th className="px-4 py-2">Author</th>
+                                                <th className="px-4 py-2">Checkouts</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr className="border-b">
+                                                <td className="px-4 py-2 font-medium text-gray-900">The Great Gatsby</td>
+                                                <td className="px-4 py-2">F. Scott Fitzgerald</td>
+                                                <td className="px-4 py-2">87</td>
+                                            </tr>
+                                            <tr className="border-b">
+                                                <td className="px-4 py-2 font-medium text-gray-900">1984</td>
+                                                <td className="px-4 py-2">George Orwell</td>
+                                                <td className="px-4 py-2">76</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         )}
-
-                        {reportType === 'System Reports (Technical)' && (
-                            <>
-                                <select className="p-2 border rounded-md">
-                                    <option>All Robots</option>
-                                    <option>Robot Alpha</option>
-                                </select>
-                                <select className="p-2 border rounded-md">
-                                    <option>Distance Traveled</option>
-                                    <option>Error Events</option>
-                                </select>
-                            </>
-                        )}
-
-                        <button className="w-full py-2 bg-blue-600 text-white rounded-md">
-                            Generate Report
-                        </button>
-                    </form>
+                    </div>
+                </div>
             </div>
-
-
-            {/* Preview Table Container */}
-<div className="lg:col-span-2 space-y-6">
-    
-    <div className="p-6 bg-white border rounded-lg shadow-sm">
-        <h3 className="text-xl font-bold">
-            Preview: {reportType}
-        </h3>
-
-        {/* Search */}
-        <input
-            type="text"
-            placeholder={`Search by ${searchField}`}
-            className="border p-2 rounded-md w-full"
-        />
-
-        {/* Table */}
-        <table className="min-w-full text-sm mt-4">
-            <thead>
-                {reportType === 'Library Managing Reports' ? (
-                    <tr>
-                        <th>Date</th>
-                        <th>Patrons</th>
-                        <th>Loans</th>
-                        <th>Overdues</th>
-                    </tr>
-                ) : (
-                    <tr>
-                        <th>Date</th>
-                        <th>Robot ID</th>
-                        <th>Events</th>
-                        <th>Battery</th>
-                    </tr>
-                )}
-            </thead>
-        </table>
-    </div>
-
-    {/* Popular Items */}
-    {reportType === 'Library Managing Reports' && (
-        <div className="p-6 bg-white border rounded-lg shadow-sm">
-            <h3 className="text-xl font-bold">Popular Items</h3>
-        </div>
-    )}
-</div>
-
-</div> {/* grid */}
-</div> {/* container */}
-</AdminLayout>
-);
+        </AdminLayout >
+    );
 };
-
+   
 export default Reports;
