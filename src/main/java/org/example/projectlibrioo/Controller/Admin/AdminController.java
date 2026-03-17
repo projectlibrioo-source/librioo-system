@@ -178,12 +178,19 @@ public class AdminController {
         return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
     }
 
-     // Kavindu
      // get all books for the book page
     @GetMapping("/books")
     public ResponseEntity<List<Book>> getAllBooks(){
         List<Book> books = adminService.getAllBooks();
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+
+    // get all users for users page
+    @GetMapping("/users")
+    public ResponseEntity<List<Member>> getAllMembers(){
+        List<Member> members = adminService.getAllMembers();
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
 
