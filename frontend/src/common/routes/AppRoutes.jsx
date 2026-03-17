@@ -13,6 +13,7 @@ import AdminDashboard from "../../admin/pages/AdminDashboard";
 import ManageUsers from "../../admin/pages/ManageUsers";
 import ManageBooks from "../../admin/pages/ManageBooks";
 import Settings from "../../admin/pages/Settings";
+import ManageTransactions from "../../admin/pages/ManageTransactions";
 
 import GuestLogin from "../../robot/pages/GuestLogin";
 
@@ -41,6 +42,7 @@ function AppRoutes() {
         <Route path="/admin/manage-users" element={<ManageUsers />} />
         <Route path="/admin/manage-books" element={<ManageBooks />} />
         <Route path="/admin/settings" element={<Settings />} />
+        <Route path="/admin/manage-transactions" element={<ManageTransactions/>} />
 
 
       </Routes>
