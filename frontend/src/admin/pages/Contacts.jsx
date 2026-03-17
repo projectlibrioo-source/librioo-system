@@ -31,3 +31,28 @@ const Contact = () => {
                         + Add New Admin
                     </a>
                 </div>
+
+
+                {/* Statistics */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="p-4 bg-white border rounded-lg shadow-sm flex items-center space-x-4">
+        <div>
+            <p className="text-sm text-gray-500 font-medium">Total Admins</p>
+            <p className="text-2xl font-bold text-gray-900">3</p>
+        </div>
+    </div>
+
+    <div className="p-4 bg-white border rounded-lg shadow-sm flex items-center space-x-4">
+        <div>
+            <p className="text-sm text-gray-500 font-medium">Active</p>
+            <p className="text-2xl font-bold text-gray-900">2</p>
+        </div>
+    </div>
+
+    <div className="p-4 bg-white border rounded-lg shadow-sm flex items-center space-x-4">
+        <div>
+            <p className="text-sm text-gray-500 font-medium">Blocked</p>
+            <p className="text-2xl font-bold text-gray-900">1</p>
+        </div>
+    </div>
+</div>
