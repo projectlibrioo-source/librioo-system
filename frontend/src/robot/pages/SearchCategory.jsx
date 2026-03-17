@@ -1,38 +1,28 @@
-import React, { useState, useEffect } from "react"; // 1. Added useEffect
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout";
-import BackgroundContainer from "../components/BackgroundContainer";
 import SearchBar from "../components/SearchBar";
 import BookCard from "../components/BookCard";
 import GuideButton from "../components/GuideButton";
 import CancelButton from "../components/CancelButton";
-// 2. Import the backend functions
-import { getCategories, navigateByCategory} from "../../BackendFunctions";
+import { getCategories, navigateByCategory } from "../../BackendFunctions";
 
 const SearchCategory = () => {
-  const navigate = useNavigate();// Hook for navigation
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  
-  // 3. New State Variables
-  const [categories, setCategories] = useState([]); // Stores the list of categories
-  
-  // Add this new state to track the active selection
+  const [categories, setCategories] = useState([]); 
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
   const [isLoading, setIsLoading] = useState(false);
-  const [isCheckingLocation, setIsCheckingLocation] = useState(false); // New loader for the "Guide Me" click
+  const [isCheckingLocation, setIsCheckingLocation] = useState(false);
 
-  // 4. Load Categories from Backend on Startup
   useEffect(() => {
     async function fetchCats() {
         setIsLoading(true);
         const data = await getCategories();
-        // If data is null/empty, we fall back to a default list or empty array
         if (data && data.length > 0) {
             setCategories(data);
         } else {
-            // Fallback if backend is empty/down
-            setCategories(["SCIENCE", "FICTION", "HISTORY", "TECNHOLOGY"]); 
+            setCategories(["SCIENCE", "FICTION", "HISTORY", "TECHNOLOGY"]); 
         }
         setIsLoading(false);
     }
@@ -41,62 +31,22 @@ const SearchCategory = () => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    // If user types, we deselect the current selection to avoid confusion
     setSelectedCategory(null);
   };
 
-  // 3. Simplified Submit: Just selects the first matching category if user hits Enter
   const handleManualSubmit = (e) => {
       e.preventDefault();
-      // Optional: Auto-select the first visible category if user hits enter
       if (visibleCategories.length > 0) {
           setSelectedCategory(visibleCategories[0]);
       }
   };
 
   const handleCategoryClick = (catName) => {
-      // Set the search bar text to match (optional, looks nice)
       setSearchQuery(catName);
-      // Highlight the card
       setSelectedCategory(catName); 
   };
 
-  // --- NEW: Handle the Guide Me Click Logic ---
-  /*const handleGuideClick = async () => {
-    if (!selectedCategory) return;
-
-    setIsCheckingLocation(true); // Start a small loading state
-    console.log("Checking location for:", selectedCategory);
-
-    try {
-      // 1. Ask the backend for data regarding this category
-      const data = await searchByCategory(selectedCategory);
-
-      // 2. Check if the backend returned valid data (Shelf Number/Location)
-      // We assume if the array is empty or data is null, the shelf doesn't exist.
-      if (data && data.length > 0) {
-        console.log("Location found:", data);
-        
-        // 3. SUCCESS: Navigate to the Follow Page
-        // We pass the shelf data or category info to the next page
-        navigate("/robot/follow", { state: { category: selectedCategory, locationData: data } });
-      } else {
-        // 4. FAILURE: Show error message
-        alert(`Sorry, no shelf location found for the category: ${selectedCategory}`);
-      }
-
-    } catch (error) {
-      console.error("Error finding shelf:", error);
-      alert("System Error: Could not retrieve shelf location.");
-    } finally {
-      setIsCheckingLocation(false);
-    }
-  };
-  */
-
-  // --- NEW: Handle the Guide Me Click Logic ---
   const handleGuideClick = async () => {
-    // 1. Safety check: ensure a category is selected
     if (!selectedCategory) {
         alert("Please select a category first!");
         return;
@@ -106,15 +56,10 @@ const SearchCategory = () => {
     console.log("Sending navigation command for:", selectedCategory);
 
     try {
-      // ▼▼▼ KEY CHANGE: Call the function that moves the robot ▼▼▼
-      // This sends the command to your http://localhost:8080/api/navigate/category endpoint
       const success = await navigateByCategory(selectedCategory);
-
       if (success) {
-        // 2. If the backend says "OK", go to the Follow page
         navigate("/robot/follow"); 
       } 
-
     } catch (error) {
       console.error("Error sending command:", error);
       alert("System Error: Could not connect to robot.");
@@ -122,23 +67,24 @@ const SearchCategory = () => {
       setIsCheckingLocation(false);
     }
   };
-  // ---------------------------------------------
- 
 
-  // 4. Live Filter Logic
   const visibleCategories = categories.filter(c => 
       c.toUpperCase().includes(searchQuery.toUpperCase())
   );
 
   return (
     <RobotLayout>
-      <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-[clamp(12px,2vh,24px)] overflow-hidden">
+      <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-[clamp(12px,2vh,24px)] overflow-hidden relative">
         
-        <h1 className="flex-shrink-0 ml-[80px] mb-[clamp(8px,1.5vh,16px)] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(20px,3.5vh,40px)] leading-tight">
-          Search Book By Category
+        {/* Holographic glowing background orb */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-400/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
+
+        <h1 className="z-10 flex-shrink-0 ml-[80px] mb-[clamp(8px,1.5vh,16px)] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(20px,3.5vh,40px)] leading-tight drop-shadow-lg">
+          Search Book By <span className="text-white">Category</span>
         </h1>
 
-        <BackgroundContainer className="relative flex flex-col flex-1 min-h-0 overflow-hidden">
+        {/* The Glassmorphic Container replacing BackgroundContainer */}
+        <div className="z-10 relative flex flex-col flex-1 min-h-0 overflow-hidden bg-black/10 backdrop-blur-md border border-white/20 rounded-[30px] shadow-2xl">
           <div className="w-full h-full overflow-y-auto custom-scrollbar pl-[40px] pr-6 pt-[clamp(15px,2.5vh,30px)]">
             
             {/* Search and buttons */}
@@ -147,38 +93,33 @@ const SearchCategory = () => {
                 <SearchBar
                   query={searchQuery}
                   onChange={handleSearchChange}
-                  onSubmit={handleManualSubmit} // Connected Submit
+                  onSubmit={handleManualSubmit}
+                  placeholder="Search categories..."
                   className="w-full"
                 />
               </div>
 
-              <div className="mr-[40px] w-[clamp(180px,20vw,240px)] flex-shrink-0 flex flex-col gap-[clamp(2px,0.5vh,6px)]">
-                
-                {/* Updated Guide Button */}
+              <div className="mr-[40px] w-[clamp(180px,20vw,240px)] flex-shrink-0 flex flex-col gap-4 mt-2">
+                <CancelButton className="w-full" />
                 <GuideButton 
-                    // Disable if nothing selected OR while we are checking the database
                     disabled={!selectedCategory || isCheckingLocation} 
                     onClick={handleGuideClick}
-                    className={`w-full text-[clamp(12px,1.6vh,18px)] transition-all
-                      ${(!selectedCategory || isCheckingLocation) ? 'opacity-50 cursor-not-allowed' : ''}
-                    `} 
+                    className="w-full" 
                 />
                 
-                {/* Optional: Visual Indicator that we are checking */}
-                {isCheckingLocation && <p className="text-xs text-[#caf9ff] text-center animate-pulse">Checking Shelf...</p>}
-
-                <CancelButton className="w-full text-[clamp(12px,1.6vh,18px)]" />
+                {isCheckingLocation && <p className="text-sm font-bold tracking-wide text-[#ff7421] text-center animate-pulse" style={{ fontFamily: "'Aldrich', sans-serif" }}>Checking Shelf...</p>}
               </div>
             </div>
 
             {/* Grid section */}
-            <section className="mt-[clamp(20px,3vh,60px)] mr-[60px] mb-[20px] grid grid-cols-4 gap-x-[20px] gap-y-[clamp(20px,3vh,60px)] pr-4">
+            <section className="mt-[clamp(30px,4vh,80px)] mr-[60px] mb-[40px] grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-[30px] gap-y-[clamp(30px,4vh,80px)] pr-4 pb-10">
               
               {/* LOADING STATE */}
               {isLoading && (
-                  <div className="col-span-4 text-center text-[#caf9ff] text-xl animate-pulse">
-                    Loading Categories...
-                  </div>
+                <div className="col-span-full flex flex-col items-center justify-center text-[#caf9ff] opacity-80 animate-pulse gap-4 pt-10">
+                  <div className="w-10 h-10 border-4 border-[#ff7421] border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-xl" style={{ fontFamily: "'Aldrich', sans-serif" }}>Loading Categories...</span>
+                </div>
               )}
 
               {/* CATEGORY CARDS */}
@@ -189,9 +130,8 @@ const SearchCategory = () => {
                     image={null}
                     coverText={category} 
                     author=""
-                    // Dynamic Styling: Highlight if selected
-                    className={`transition-transform cursor-pointer hover:scale-105 
-                      ${selectedCategory === category ? 'ring-4 ring-[#ff7421] scale-105 shadow-[0_0_20px_#ff7421]' : ''}
+                    className={`
+                      ${selectedCategory === category ? 'ring-4 ring-[#ff7421] scale-105 shadow-[0_0_25px_rgba(255,116,33,0.5)]' : ''}
                     `}                  
                   />
                 </div>
@@ -199,15 +139,14 @@ const SearchCategory = () => {
 
               {/* No Results Message */}
               {!isLoading && visibleCategories.length === 0 && (
-                   <div className="col-span-4 text-center text-[#caf9ff] opacity-60">
-                     No categories found.
-                   </div>
+                <div className="pt-10 text-xl text-center col-span-full text-white/60" style={{ fontFamily: "'Aldrich', sans-serif" }}>
+                  No categories found matching "{searchQuery}".
+                </div>
               )}
 
             </section>
-
           </div>
-        </BackgroundContainer>
+        </div>
       </div>
     </RobotLayout>
   );
