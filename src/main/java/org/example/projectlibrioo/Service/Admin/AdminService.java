@@ -71,7 +71,10 @@ public class AdminService {
         return bookRepo.findAll();
     }
 
-
+    // get all users for the users page
+    public List<Member> getAllMembers(){
+        return memberRepo.findAll();
+    }
 
 
 
