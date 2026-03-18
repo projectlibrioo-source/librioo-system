@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import AdminLayout from '../layouts/AdminLayout';
@@ -6,18 +7,54 @@ import AdminLayout from '../layouts/AdminLayout';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Transactions = () => {
-    const transactions = [
-        { id: '000587', username: 'Sandun', userId: '87541245', bookId: '00257', bookTitle: 'Harry Potter', type: 'Borrow', date: '2025.11.30', returnDate: '2025.11.30', status: 'Completed', borrowedThrough: 'Robot (R-001)' },
-        { id: '000587', username: 'Sandun', userId: '87541245', bookId: '00257', bookTitle: 'Harry Potter', type: 'Return', date: '2025.11.30', returnDate: '2025.11.30', status: 'Pending', borrowedThrough: 'Admin (Kaveesha)' },
-        { id: '000687', username: 'Sandun', userId: '87541245', bookId: '00257', bookTitle: 'Harry Potter', type: 'Return', date: '2025.11.30', returnDate: '2025.11.30', status: 'Completed', borrowedThrough: 'Robot (R-002)' },
-        { id: '000587', username: 'Sandun', userId: '87541245', bookId: '00257', bookTitle: 'Harry Potter', type: 'Borrow', date: '2025.11.30', returnDate: '2025.11.30', status: 'Pending', borrowedThrough: 'Admin (Dinuka)' },
-    ];
+    const [transactions, setTransactions] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/transactions');
+                const data = response.data;
+                const formatted = data.map(tx => ({
+                    id: tx.transactionId || tx.id || 'N/A',
+                    username: tx.member?.fullName || tx.guest?.fullName || 'Unknown',
+                    userId: tx.member?.libraryID || tx.guest?.guestID || 'N/A',
+                    bookId: tx.book?.bookID || 'N/A',
+                    bookTitle: tx.book?.bookTitle || 'Unknown',
+                    type: tx.returnedDate ? 'Return' : 'Borrow', // Simplistic mapping, adapt if you have transaction type
+                    date: tx.transactionDate || 'N/A',
+                    returnDate: tx.returnedDate || tx.dueDate || 'N/A',
+                    status: tx.status || (tx.returnedDate ? 'Completed' : 'Pending'),
+                    borrowedThrough: tx.borrowedThrough || 'Robot (R-001)' // Mock or real data
+                }));
+                setTransactions(formatted);
+            } catch (error) {
+                console.error("Error fetching transactions:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTransactions();
+    }, []);
+
+    const chartCounts = useMemo(() => {
+        let borrowed = 0, returned = 0, overdue = 0, active = 0;
+        transactions.forEach(tx => {
+            if (tx.status === 'Completed' || tx.type === 'Return') returned++;
+            else if (tx.status === 'Overdue') overdue++;
+            else if (tx.status === 'Active' || tx.status === 'Pending') active++;
+            borrowed++; // Total borrowed since this is what the transaction mostly is
+        });
+        // Avoid all zeros in pie chart layout
+        return [borrowed, returned, overdue, active];
+    }, [transactions]);
 
     const chartData = {
         labels: ['Borrowed', 'Returned', 'Over Due', 'Active'],
         datasets: [
             {
-                data: [60, 45, 15, 20],
+                data: chartCounts.some(v => v > 0) ? chartCounts : [1, 1, 1, 1], // fallback if empty
                 backgroundColor: [
                     '#3B82F6', // Blue
                     '#F97316', // Orange
@@ -73,7 +110,16 @@ const Transactions = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {transactions.map((transaction, idx) => (
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan="10" className="px-4 py-4 text-sm font-medium text-center text-gray-500">Loading transactions...</td>
+                                        </tr>
+                                    ) : transactions.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="10" className="px-4 py-4 text-sm font-medium text-center text-gray-500">No transactions found.</td>
+                                        </tr>
+                                    ) : (
+                                        transactions.map((transaction, idx) => (
                                         <tr key={idx} className="transition-colors hover:bg-gray-50">
                                             <td className="px-4 py-4 text-sm font-bold text-center text-gray-900 border border-gray-300 whitespace-nowrap">{transaction.id}</td>
                                             <td className="px-4 py-4 text-sm font-bold text-center text-gray-900 border border-gray-300 whitespace-nowrap">{transaction.username}</td>
@@ -86,7 +132,7 @@ const Transactions = () => {
                                             <td className="px-4 py-4 text-sm font-bold text-center text-gray-900 border border-gray-300 whitespace-nowrap">{transaction.returnDate}</td>
                                             <td className="px-4 py-4 text-sm font-bold text-center text-gray-900 border border-gray-300 whitespace-nowrap">{transaction.status}</td>
                                         </tr>
-                                    ))}
+                                    )))}
                                 </tbody>
                             </table>
                         </div>

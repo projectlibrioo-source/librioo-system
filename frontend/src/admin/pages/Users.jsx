@@ -1,19 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Search } from 'lucide-react';
 import AdminLayout from '../layouts/AdminLayout';
 
 const Users = () => {
-    const users = [
-        { id: '87548765', username: 'Sandun', email: 'sandun@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Student', booksBorrowed: 24 },
-        { id: '87548765', username: 'Sulaksha', email: 'sulaksha@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Student', booksBorrowed: 20 },
-        { id: '87548765', username: 'Nimuthu', email: 'nimuthu@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Staff', booksBorrowed: 12 },
-        { id: '87548765', username: 'Withara', email: 'withara@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Student', booksBorrowed: 10 },
-        { id: '87548765', username: 'Tharana', email: 'tharana@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Student', booksBorrowed: 15 },
-        { id: '87548765', username: 'Hasintha', email: 'hasintha@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Lecturer', booksBorrowed: 30 },
-        { id: '87548765', username: 'Dinuka', email: 'dinuka@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Student', booksBorrowed: 24 },
-        { id: '87548765', username: 'Daksitha', email: 'daksitha@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Lecturer', booksBorrowed: 11 },
-        { id: '87548765', username: 'Pasindu', email: 'pasindu@gmail.com', joined: '2024.05.06', lastLogin: '2024.05.06', type: 'Student', booksBorrowed: 10 },
-    ];
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                // Fetch from a general users endpoint
+                const response = await axios.get('http://localhost:8080/api/users');
+                
+                const formattedUsers = response.data.map(user => ({
+                    id: user.libraryID || user.guestID || user.id || 'N/A',
+                    username: user.fullName || user.username || 'Unknown',
+                    email: user.email || 'N/A',
+                    joined: user.joinedDate || 'N/A',
+                    lastLogin: user.lastLogin || 'N/A',
+                    type: user.userType || user.role || (user.libraryID ? 'Member' : 'Guest'),
+                    booksBorrowed: user.booksBorrowed || 0
+                }));
+                
+                setUsers(formattedUsers);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     return (
         <AdminLayout>
@@ -55,7 +74,16 @@ const Users = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {users.map((user, idx) => (
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="7" className="px-6 py-4 text-sm font-medium text-center text-gray-500">Loading users...</td>
+                                    </tr>
+                                ) : users.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="px-6 py-4 text-sm font-medium text-center text-gray-500">No users found.</td>
+                                    </tr>
+                                ) : (
+                                    users.map((user, idx) => (
                                     <tr key={idx} className="transition-colors hover:bg-gray-50">
                                         <td className="px-6 py-4 text-sm font-bold text-gray-900 border-r border-gray-200 whitespace-nowrap">
                                             {user.id}
@@ -79,7 +107,7 @@ const Users = () => {
                                             {user.booksBorrowed}
                                         </td>
                                     </tr>
-                                ))}
+                                )))}
                             </tbody>
                         </table>
                     </div>

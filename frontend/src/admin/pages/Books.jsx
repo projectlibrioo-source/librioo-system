@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Search } from 'lucide-react';
 import AdminLayout from '../layouts/AdminLayout';
 
 const Books = () => {
-    // Mock Data
-    const books = [
-        { name: 'Harry Potter', author: 'Sandun', isbn: '9785542215150', status: 'Available', location: 'Shelf B3' },
-        { name: 'Six Tales', author: 'Sulaksha', isbn: '9785542215150', status: 'Available', location: 'Shelf B4' },
-        { name: '1984', author: 'Nimuthu', isbn: '9785542215150', status: 'Available', location: 'Shelf A3' },
-        { name: 'Jane Eyre', author: 'Withara', isbn: '9785542215150', status: 'Available', location: 'Shelf C4' },
-        { name: 'The Road', author: 'Tharana', isbn: '9785542215150', status: 'Available', location: 'Shelf D1' },
-        { name: 'Ender\'s Game', author: 'Hasintha', isbn: '9785542215150', status: 'Available', location: 'Shelf B3' },
-        { name: 'Educated', author: 'Dinuka', isbn: '9785542215150', status: 'Available', location: 'Shelf A5' },
-        { name: 'Becoming', author: 'Daksitha', isbn: '9785542215150', status: 'Available', location: 'Shelf B2' },
-    ];
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                // Default endpoint for books over REST
+                const response = await axios.get('http://localhost:8080/api/books');
+                
+                const formattedBooks = response.data.map(book => ({
+                    name: book.bookTitle || book.title || book.name || 'Unknown',
+                    author: book.author || book.authorName || 'Unknown',
+                    isbn: book.isbn || 'Unknown',
+                    status: book.status || (book.available === false ? 'Unavailable' : 'Available'),
+                    location: book.shelfNumber ? `Shelf ${book.shelfNumber}` : 'Unknown'
+                }));
+                
+                setBooks(formattedBooks);
+            } catch (error) {
+                console.error("Error fetching books:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBooks();
+    }, []);
 
     return (
         <AdminLayout>
@@ -57,7 +74,16 @@ const Books = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {books.map((book, idx) => (
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-4 text-sm font-medium text-center text-gray-500">Loading books...</td>
+                                    </tr>
+                                ) : books.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-4 text-sm font-medium text-center text-gray-500">No books found.</td>
+                                    </tr>
+                                ) : (
+                                    books.map((book, idx) => (
                                     <tr key={idx} className="transition-colors hover:bg-gray-50">
                                         <td className="px-6 py-4 text-sm font-medium text-gray-900 border-r border-gray-200 whitespace-nowrap">
                                             {book.name}
@@ -75,7 +101,7 @@ const Books = () => {
                                             {book.location}
                                         </td>
                                     </tr>
-                                ))}
+                                )))}
                             </tbody>
                         </table>
                     </div>
