@@ -19,6 +19,10 @@ public interface TransactionRepo extends JpaRepository<Transactions,Integer> {
     Transactions findByIds(int libraryId, int bookId);
 
 
+    long countByStatus(String status); // BORROWED
+
+    long countByReturnDateBeforeAndStatus(LocalDate date, String status); // overdue
+
 
     Transactions findByBookId(int bookId);
 
