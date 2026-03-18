@@ -22,4 +22,5 @@ public class Robot {
     private String partReplaced;
     private String technicianNotes;
     private String status; // ACTIVE, MAINTENANCE, RETIRED
+    private LocalDate serviceDate;
 }

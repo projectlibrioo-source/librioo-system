@@ -1,6 +1,7 @@
 package org.example.projectlibrioo.Service.RobotService;
 
 import org.example.projectlibrioo.Model.Robot;
+import org.example.projectlibrioo.Model.RobotOverviewDTO;
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.navigation.ShelfPathMap;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RobotService {
@@ -22,6 +24,65 @@ public class RobotService {
         this.shelfPathMap = shelfPathMap;
         this.robotRepo = robotRepo;
     }
+
+    public List<RobotOverviewDTO> getRobotOverview() {
+
+        List<Robot> robots = robotRepo.findAll();
+
+        return robots.stream().map(robot -> {
+
+            LocalDate nextServiceDate = robot.getServiceDate().plusMonths(3);
+
+            String alert = "OK";
+
+            if (nextServiceDate.isBefore(LocalDate.now())) {
+                alert = "SERVICE OVERDUE";
+            }
+            else if (nextServiceDate.isBefore(LocalDate.now().plusDays(7))) {
+                alert = "SERVICE DUE SOON";
+            }
+
+            return new RobotOverviewDTO(
+                    robot.getRobotID(),
+                    robot.getRobotName(),
+                    robot.getStatus(),
+                    robot.getPartReplaced(),
+                    nextServiceDate,
+                    alert
+            );
+
+        }).collect(Collectors.toList());
+    }
+
+    public List<RobotOverviewDTO> getRobotsByStatus(String status) {
+
+        List<Robot> robots = robotRepo.findByStatus(status);
+
+        return robots.stream().map(robot -> {
+
+            LocalDate nextServiceDate = robot.getServiceDate().plusMonths(3);
+
+            String alert = "OK";
+
+            if (nextServiceDate.isBefore(LocalDate.now())) {
+                alert = "SERVICE OVERDUE";
+            }
+            else if (nextServiceDate.isBefore(LocalDate.now().plusDays(7))) {
+                alert = "SERVICE DUE SOON";
+            }
+
+            return new RobotOverviewDTO(
+                    robot.getRobotID(),
+                    robot.getRobotName(),
+                    robot.getStatus(),
+                    robot.getPartReplaced(),
+                    nextServiceDate,
+                    alert
+            );
+
+        }).collect(Collectors.toList());
+    }
+
 
     /*public void navigateToShelf(int shelfNumber) {
 

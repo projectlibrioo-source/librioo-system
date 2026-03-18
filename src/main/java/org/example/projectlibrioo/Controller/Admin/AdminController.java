@@ -178,7 +178,7 @@ public class AdminController {
 //        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
 //    }
 //
-   @PutMapping("/confirmreturn")
+   @PutMapping("/returnbook")
    public ResponseEntity<Boolean> returnBook(@RequestBody ReturnDTO returnDTO){
         boolean bookReturned = transactionService.markAsReturned(returnDTO);
       return new ResponseEntity<>(bookReturned, HttpStatus.OK);
