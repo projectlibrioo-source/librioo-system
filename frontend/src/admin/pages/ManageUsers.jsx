@@ -1,9 +1,213 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout';
 
 const ManageUsers = () => {
     const [activeTab, setActiveTab] = useState('ADD');
     const [userRole, setUserRole] = useState('MEMBER');
+
+    const [addForm, setAddForm] = useState({
+        id: '',
+        fullname: '',
+        address: '',
+        occupation: '',
+        workSchoolAddress: '',
+        email: '',
+        phoneNumber: '',
+        age: '',
+        nicNumber: '',
+        userType: 'Student'
+    });
+
+    const [searchId, setSearchId] = useState('');
+    const [updateForm, setUpdateForm] = useState({
+        role: 'Member',
+        fullname: '',
+        address: '',
+        email: '',
+        phoneNumber: ''
+    });
+
+    const [deleteSearchId, setDeleteSearchId] = useState('');
+    const [deleteUser, setDeleteUser] = useState(null);
+
+    const handleAddChange = (field, value) => {
+        setAddForm(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    const handleUpdateChange = (field, value) => {
+        setUpdateForm(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    const handleAddUser = async (e) => {
+        e.preventDefault();
+
+        try {
+            const endpoint =
+                userRole === 'MEMBER'
+                    ? 'http://localhost:8080/api/addmember'
+                    : 'http://localhost:8080/api/addguest';
+
+            const payload =
+                userRole === 'MEMBER'
+                    ? {
+                        libraryID: parseInt(addForm.id),
+                        fullName: addForm.fullname,
+                        address: addForm.address,
+                        occupation: addForm.occupation,
+                        workOrSchoolAddress: addForm.workSchoolAddress,
+                        email: addForm.email,
+                        phoneNumber: addForm.phoneNumber,
+                        age: parseInt(addForm.age),
+                        NICNumber: addForm.nicNumber,
+                        status: 'ACTIVE'
+                    }
+                    : {
+                        guestID: parseInt(addForm.id),
+                        fullName: addForm.fullname,
+                        address: addForm.address,
+                        email: addForm.email,
+                        phoneNumber: addForm.phoneNumber,
+                        age: parseInt(addForm.age),
+                        NICNumber: addForm.nicNumber
+                    };
+
+            await axios.post(endpoint, payload);
+            alert(`${userRole === 'MEMBER' ? 'Member' : 'Guest'} added successfully`);
+
+            setAddForm({
+                id: '',
+                fullname: '',
+                address: '',
+                occupation: '',
+                workSchoolAddress: '',
+                email: '',
+                phoneNumber: '',
+                age: '',
+                nicNumber: '',
+                userType: 'Student'
+            });
+        } catch (err) {
+            console.error('Add user error:', err.response?.data || err.message);
+            alert('Failed to add user');
+        }
+    };
+
+    const handleFindUser = async () => {
+        try {
+            const endpoint =
+                updateForm.role === 'Member'
+                    ? 'http://localhost:8080/api/getallmembers'
+                    : 'http://localhost:8080/api/getallguests';
+
+            const params =
+                updateForm.role === 'Member'
+                    ? { memberid: searchId }
+                    : { guestid: searchId };
+
+            const res = await axios.get(endpoint, { params });
+            const data = res.data;
+
+            setUpdateForm(prev => ({
+                ...prev,
+                fullname: data.fullName || '',
+                address: data.address || '',
+                email: data.email || '',
+                phoneNumber: data.phoneNumber || ''
+            }));
+        } catch (err) {
+            console.error('Find user error:', err.response?.data || err.message);
+            alert('User not found');
+        }
+    };
+
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+
+        try {
+            const endpoint =
+                updateForm.role === 'Member'
+                    ? 'http://localhost:8080/api/updatemember'
+                    : 'http://localhost:8080/api/updateguest';
+
+            const payload =
+                updateForm.role === 'Member'
+                    ? {
+                        libraryID: parseInt(searchId),
+                        fullName: updateForm.fullname,
+                        address: updateForm.address,
+                        email: updateForm.email,
+                        phoneNumber: updateForm.phoneNumber
+                    }
+                    : {
+                        guestID: parseInt(searchId),
+                        fullName: updateForm.fullname,
+                        address: updateForm.address,
+                        email: updateForm.email,
+                        phoneNumber: updateForm.phoneNumber
+                    };
+
+            await axios.put(endpoint, payload);
+            alert('User updated successfully');
+        } catch (err) {
+            console.error('Update user error:', err.response?.data || err.message);
+            alert('Failed to update user');
+        }
+    };
+
+    const handleFindDeleteUser = async () => {
+        try {
+            let endpoint = 'http://localhost:8080/api/getallmembers';
+            let params = { memberid: deleteSearchId };
+
+            if (deleteUser?.role === 'Guest') {
+                endpoint = 'http://localhost:8080/api/getallguests';
+                params = { guestid: deleteSearchId };
+            }
+
+            const res = await axios.get(endpoint, { params });
+            const data = res.data;
+
+            setDeleteUser({
+                ...data,
+                role: endpoint.includes('members') ? 'Member' : 'Guest'
+            });
+        } catch (err) {
+            console.error('Find delete user error:', err.response?.data || err.message);
+            alert('User not found');
+        }
+    };
+
+    const handleDeleteUser = async (e) => {
+        e.preventDefault();
+
+        try {
+            const isGuest = deleteUser?.role === 'Guest';
+
+            const endpoint = isGuest
+                ? 'http://localhost:8080/api/deleteguest'
+                : 'http://localhost:8080/api/deletemember';
+
+            const params = isGuest
+                ? { guestid: deleteSearchId }
+                : { memberid: deleteSearchId };
+
+            await axios.delete(endpoint, { params });
+            alert('User deleted successfully');
+
+            setDeleteUser(null);
+            setDeleteSearchId('');
+        } catch (err) {
+            console.error('Delete user error:', err.response?.data || err.message);
+            alert('Failed to delete user');
+        }
+    };
 
     return (
         <AdminLayout>
@@ -54,69 +258,134 @@ const ManageUsers = () => {
                                     </button>
                                 </div>
                             </div>
-                            {/* BACKEND: POST /api/users */}
-                            <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+
+                            <form className="space-y-4" onSubmit={handleAddUser}>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">{userRole === 'MEMBER' ? 'Library ID' : 'Guest ID'}</label>
-                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="text"
+                                        value={addForm.id}
+                                        onChange={(e) => handleAddChange('id', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Full Name</label>
-                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="text"
+                                        value={addForm.fullname}
+                                        onChange={(e) => handleAddChange('fullname', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Address</label>
-                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="text"
+                                        value={addForm.address}
+                                        onChange={(e) => handleAddChange('address', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 {userRole === 'MEMBER' && (
                                     <>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Occupation</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                            <input
+                                                type="text"
+                                                value={addForm.occupation}
+                                                onChange={(e) => handleAddChange('occupation', e.target.value)}
+                                                className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                            />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Work/School Address</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                            <input
+                                                type="text"
+                                                value={addForm.workSchoolAddress}
+                                                onChange={(e) => handleAddChange('workSchoolAddress', e.target.value)}
+                                                className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                            />
                                         </div>
                                     </>
                                 )}
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Email</label>
-                                    <input type="email" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="email"
+                                        value={addForm.email}
+                                        onChange={(e) => handleAddChange('email', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Phone Number</label>
-                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="text"
+                                        value={addForm.phoneNumber}
+                                        onChange={(e) => handleAddChange('phoneNumber', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Age</label>
-                                    <input type="number" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="number"
+                                        value={addForm.age}
+                                        onChange={(e) => handleAddChange('age', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">NIC Number</label>
-                                    <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                    <input
+                                        type="text"
+                                        value={addForm.nicNumber}
+                                        onChange={(e) => handleAddChange('nicNumber', e.target.value)}
+                                        className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                    />
                                 </div>
                                 {userRole === 'MEMBER' && (
                                     <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                         <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">User Type</label>
                                         <div className="flex space-x-6 sm:col-span-2">
                                             <label className="flex items-center space-x-2">
-                                                <input type="radio" name="userType" className="text-blue-600 border-gray-300 focus:ring-blue-500" defaultChecked />
+                                                <input
+                                                    type="radio"
+                                                    name="userType"
+                                                    className="text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                    checked={addForm.userType === 'Student'}
+                                                    onChange={() => handleAddChange('userType', 'Student')}
+                                                />
                                                 <span className="text-sm text-gray-700">Student</span>
                                             </label>
                                             <label className="flex items-center space-x-2">
-                                                <input type="radio" name="userType" className="text-blue-600 border-gray-300 focus:ring-blue-500" />
+                                                <input
+                                                    type="radio"
+                                                    name="userType"
+                                                    className="text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                    checked={addForm.userType === 'Lecturer'}
+                                                    onChange={() => handleAddChange('userType', 'Lecturer')}
+                                                />
                                                 <span className="text-sm text-gray-700">Lecturer</span>
                                             </label>
                                             <label className="flex items-center space-x-2">
-                                                <input type="radio" name="userType" className="text-blue-600 border-gray-300 focus:ring-blue-500" />
+                                                <input
+                                                    type="radio"
+                                                    name="userType"
+                                                    className="text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                    checked={addForm.userType === 'Staff'}
+                                                    onChange={() => handleAddChange('userType', 'Staff')}
+                                                />
                                                 <span className="text-sm text-gray-700">Staff</span>
                                             </label>
                                         </div>
                                     </div>
                                 )}
                                 <div className="flex justify-end pt-4 border-t">
-                                    <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">Save User</button>
+                                    <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">
+                                        Save User
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -126,16 +395,27 @@ const ManageUsers = () => {
                     {activeTab === 'UPDATE' && (
                         <div>
                             <h3 className="mb-6 text-xl font-bold text-gray-900">Update User</h3>
-                            {/* BACKEND: PUT /api/users/{id} */}
-                            <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                            <form className="space-y-4" onSubmit={handleUpdateUser}>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Find User By</label>
                                     <div className="flex gap-2 sm:col-span-2">
                                         <div className="flex flex-1 bg-gray-100 border-none rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden px-3 py-2 items-center">
                                             <span className="text-gray-500 text-sm font-medium mr-2">User ID:</span>
-                                            <input type="text" placeholder="Enter User ID..." className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm" />
+                                            <input
+                                                type="text"
+                                                placeholder="Enter User ID..."
+                                                value={searchId}
+                                                onChange={(e) => setSearchId(e.target.value)}
+                                                className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm"
+                                            />
                                         </div>
-                                        <button type="button" className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm font-medium whitespace-nowrap">Find User</button>
+                                        <button
+                                            type="button"
+                                            onClick={handleFindUser}
+                                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm font-medium whitespace-nowrap"
+                                        >
+                                            Find User
+                                        </button>
                                     </div>
                                 </div>
 
@@ -145,7 +425,11 @@ const ManageUsers = () => {
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Role</label>
                                             <div className="flex flex-1 bg-gray-100 border-none rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden sm:col-span-2">
-                                                <select className="bg-transparent text-gray-700 border-none focus:ring-0 text-sm py-2 pl-3 pr-7 cursor-pointer w-full">
+                                                <select
+                                                    value={updateForm.role}
+                                                    onChange={(e) => setUpdateForm(prev => ({ ...prev, role: e.target.value }))}
+                                                    className="bg-transparent text-gray-700 border-none focus:ring-0 text-sm py-2 pl-3 pr-7 cursor-pointer w-full"
+                                                >
                                                     <option>Member</option>
                                                     <option>Guest</option>
                                                 </select>
@@ -153,24 +437,46 @@ const ManageUsers = () => {
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Full Name</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                            <input
+                                                type="text"
+                                                value={updateForm.fullname}
+                                                onChange={(e) => handleUpdateChange('fullname', e.target.value)}
+                                                className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                            />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Address</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                            <input
+                                                type="text"
+                                                value={updateForm.address}
+                                                onChange={(e) => handleUpdateChange('address', e.target.value)}
+                                                className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                            />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Email</label>
-                                            <input type="email" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                            <input
+                                                type="email"
+                                                value={updateForm.email}
+                                                onChange={(e) => handleUpdateChange('email', e.target.value)}
+                                                className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                            />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Phone Number</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500" />
+                                            <input
+                                                type="text"
+                                                value={updateForm.phoneNumber}
+                                                onChange={(e) => handleUpdateChange('phoneNumber', e.target.value)}
+                                                className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-4 border-t">
-                                    <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">Update User</button>
+                                    <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">
+                                        Update User
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -180,39 +486,68 @@ const ManageUsers = () => {
                     {activeTab === 'DELETE' && (
                         <div>
                             <h3 className="mb-6 text-xl font-bold text-gray-900">Delete User</h3>
-                            {/* BACKEND: DELETE /api/users/{id} */}
-                            <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                            <form className="space-y-4" onSubmit={handleDeleteUser}>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                     <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Find User By</label>
                                     <div className="flex gap-2 sm:col-span-2">
                                         <div className="flex flex-1 bg-gray-100 border-none rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden px-3 py-2 items-center">
                                             <span className="text-gray-500 text-sm font-medium mr-2">User ID:</span>
-                                            <input type="text" placeholder="Enter User ID..." className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm" />
+                                            <input
+                                                type="text"
+                                                placeholder="Enter User ID..."
+                                                value={deleteSearchId}
+                                                onChange={(e) => setDeleteSearchId(e.target.value)}
+                                                className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm"
+                                            />
                                         </div>
-                                        <button type="button" className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm font-medium whitespace-nowrap">Find User</button>
+                                        <button
+                                            type="button"
+                                            onClick={handleFindDeleteUser}
+                                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm font-medium whitespace-nowrap"
+                                        >
+                                            Find User
+                                        </button>
                                     </div>
                                 </div>
 
                                 <div className="border-t pt-4 mt-6">
-                                    <h4 className="text-sm font-bold text-gray-700 mb-4 bg-red-50 p-3 rounded border border-red-200 text-red-800">Review Data Below Before Deletion</h4>
+                                    <h4 className="text-sm font-bold text-gray-700 mb-4 bg-red-50 p-3 rounded border border-red-200 text-red-800">
+                                        Review Data Below Before Deletion
+                                    </h4>
                                     <div className="space-y-4">
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Role</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2" disabled value="Member" />
+                                            <input
+                                                type="text"
+                                                className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2"
+                                                disabled
+                                                value={deleteUser?.role || ''}
+                                            />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Full Name</label>
-                                            <input type="text" className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2" disabled value="John Doe" />
+                                            <input
+                                                type="text"
+                                                className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2"
+                                                disabled
+                                                value={deleteUser?.fullName || ''}
+                                            />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Email</label>
-                                            <input type="email" className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2" disabled value="johndoe@example.com" />
+                                            <input
+                                                type="email"
+                                                className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md sm:col-span-2"
+                                                disabled
+                                                value={deleteUser?.email || ''}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-4 border-t">
-                                    {/* Usually you'd want a confirmation before real deletion */}
-                                    <button className="px-6 py-2 bg-red-600 text-white rounded font-medium hover:bg-red-700 transition">Delete User</button>
+                                    <button className="px-6 py-2 bg-red-600 text-white rounded font-medium hover:bg-red-700 transition">
+                                        Delete User
+                                    </button>
                                 </div>
                             </form>
                         </div>
