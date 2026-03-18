@@ -50,16 +50,28 @@ const ManageRobot = () => {
                                         <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Robo-Helper" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Robot Model</label>
+                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. robotX" />
+                                    </div>
+                                    <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Start Date</label>
                                         <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
-                                        <label className="block text-sm font-medium text-gray-700">Service Date</label>
+                                        <label className="block text-sm font-medium text-gray-700">Last Service Date</label>
+                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Next Service Date</label>
                                         <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Part Replaced</label>
                                         <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Battery" />
+                                    </div>
+                                    <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Technician Notes</label>
+                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Status</label>
