@@ -1,9 +1,83 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout';
 
 const ManageBooks = () => {
     const [activeTab, setActiveTab] = useState('ADD');
-    const tabs = ['ADD', 'DELETE', 'UPDATE'];
+
+    // States
+    const [addForm, setAddForm] = useState({ bookID: '', title: '', isbn: '', author: '', category: '', shelfNumber: '', available: true, image: null });
+    
+    const [updateSearchId, setUpdateSearchId] = useState('');
+    const [updateForm, setUpdateForm] = useState({ bookID: '', title: '', isbn: '', author: '', category: '', shelfNumber: '', available: true, image: null });
+    
+    const [deleteSearchId, setDeleteSearchId] = useState('');
+    const [deleteBookInfo, setDeleteBookInfo] = useState(null);
+
+    // Handlers
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            if (addForm.image) formData.append("bookImage", addForm.image);
+            else formData.append("bookImage", new Blob([], { type: 'application/json' }), "empty.json"); // fallback if backend requires multipart file
+
+            const bookJson = JSON.stringify({
+                bookID: parseInt(addForm.bookID), bookTitle: addForm.title, isbn: addForm.isbn, authorName: addForm.author, category: addForm.category, shelfNumber: parseInt(addForm.shelfNumber), availabilityStatus: addForm.available ? "Available" : "Unavailable"
+            });
+            formData.append("book", bookJson);
+            
+            await axios.post('http://localhost:8080/api/addbook', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            alert('Book added successfully');
+            setAddForm({ bookID: '', title: '', isbn: '', author: '', category: '', shelfNumber: '', available: true, image: null });
+        } catch (err) {
+            console.error(err); alert('Failed to add book');
+        }
+    };
+
+    const handleUpdateSearch = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8080/api/getallbooks?bookid=${updateSearchId}`);
+            const data = res.data;
+            setUpdateForm({ bookID: data.bookID, title: data.bookTitle, isbn: data.isbn, author: data.authorName, category: data.category, shelfNumber: data.shelfNumber, available: data.availabilityStatus !== 'Unavailable', image: null });
+        } catch (err) {
+            console.error(err); alert('Book not found');
+        }
+    };
+
+    const handleUpdateSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const payload = {
+                bookID: parseInt(updateForm.bookID), bookTitle: updateForm.title, isbn: updateForm.isbn, authorName: updateForm.author, category: updateForm.category, shelfNumber: parseInt(updateForm.shelfNumber), availabilityStatus: updateForm.available ? "Available" : "Unavailable"
+            };
+            await axios.put('http://localhost:8080/api/updatebook', payload);
+            alert('Book updated successfully');
+        } catch (err) {
+            console.error(err); alert('Failed to update book');
+        }
+    };
+
+    const handleDeleteSearch = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8080/api/getallbooks?bookid=${deleteSearchId}`);
+            setDeleteBookInfo(res.data);
+        } catch (err) {
+            console.error(err); alert('Book not found');
+        }
+    };
+
+    const handleDeleteSubmit = async (e) => {
+        e.preventDefault();
+        if (!deleteBookInfo) return;
+        try {
+            await axios.delete(`http://localhost:8080/api/deletebook?bookid=${deleteSearchId}`);
+            alert('Book deleted successfully');
+            setDeleteBookInfo(null); setDeleteSearchId('');
+        } catch (err) {
+            console.error(err); alert('Failed to delete book');
+        }
+    };
 
         return (
         <AdminLayout>
@@ -37,38 +111,38 @@ const ManageBooks = () => {
                     <div>
                         {/* Add Book Section */}
                         {activeTab === 'ADD' && (
-                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={(e) => { e.preventDefault(); /* BACKEND: Handle Submit */ }}>
+                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={handleAddSubmit}>
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Book ID</label>
-                                        <input type="number" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 101" />
+                                        <input type="number" value={addForm.bookID} onChange={(e) => setAddForm({...addForm, bookID: e.target.value})} className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 101" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Book Title</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. The Great Gatsby" />
+                                        <input type="text" value={addForm.title} onChange={(e) => setAddForm({...addForm, title: e.target.value})} className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. The Great Gatsby" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">ISBN</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 978-3-16-148410-0" />
+                                        <input type="text" value={addForm.isbn} onChange={(e) => setAddForm({...addForm, isbn: e.target.value})} className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 978-3-16-148410-0" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Author</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. F. Scott Fitzgerald" />
+                                        <input type="text" value={addForm.author} onChange={(e) => setAddForm({...addForm, author: e.target.value})} className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. F. Scott Fitzgerald" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Category</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Fiction" />
+                                        <input type="text" value={addForm.category} onChange={(e) => setAddForm({...addForm, category: e.target.value})} className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Fiction" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Cover Image</label>
-                                        <input type="file" accept="image/*" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white" />
+                                        <input type="file" onChange={(e) => setAddForm({...addForm, image: e.target.files[0]})} accept="image/*" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white" />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Shelf Number</label>
-                                        <input type="number" className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 5" />
+                                        <input type="number" value={addForm.shelfNumber} onChange={(e) => setAddForm({...addForm, shelfNumber: e.target.value})} className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 5" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2 flex items-center mt-2">
-                                        <input type="checkbox" id="availability" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
+                                        <input type="checkbox" id="availability" checked={addForm.available} onChange={(e) => setAddForm({...addForm, available: e.target.checked})} className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
                                         <label htmlFor="availability" className="ml-2 block text-sm font-medium text-gray-700">Available for Borrowing</label>
                                     </div>
                                 </div>
@@ -83,13 +157,13 @@ const ManageBooks = () => {
                         
                         {/* Update Book Section */}
                         {activeTab === 'UPDATE' && (
-                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={(e) => { e.preventDefault(); /* BACKEND: Handle Submit */ }}>
+                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={handleUpdateSubmit}>
                                 <div className="col-span-1 sm:col-span-2 mb-6">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Find Book By</label>
                                     <div className="flex rounded-md shadow-sm border border-gray-300 overflow-hidden focus-within:ring-1 focus-within:ring-blue-500 bg-gray-50 px-3 py-2 items-center">
                                         <span className="text-gray-500 text-sm font-medium mr-2">Book ID:</span>
-                                        <input type="text" className="flex-1 block w-full bg-transparent border-none focus:ring-0 p-0 text-sm" placeholder="Enter Book ID to edit..." />
-                                        <button type="button" className="ml-2 inline-flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100">
+                                        <input type="text" value={updateSearchId} onChange={(e) => setUpdateSearchId(e.target.value)} className="flex-1 block w-full bg-transparent border-none focus:ring-0 p-0 text-sm" placeholder="Enter Book ID to edit..." />
+                                        <button type="button" onClick={handleUpdateSearch} className="ml-2 inline-flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100">
                                             Search
                                         </button>
                                     </div>
@@ -101,30 +175,26 @@ const ManageBooks = () => {
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Book Title</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="text" value={updateForm.title} onChange={(e) => setUpdateForm({...updateForm, title: e.target.value})} className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">ISBN</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="text" value={updateForm.isbn} onChange={(e) => setUpdateForm({...updateForm, isbn: e.target.value})} className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Author</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="text" value={updateForm.author} onChange={(e) => setUpdateForm({...updateForm, author: e.target.value})} className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Category</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-                                    </div>
-                                    <div className="col-span-1 sm:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700">Cover Image (Update if needed)</label>
-                                        <input type="file" accept="image/*" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="text" value={updateForm.category} onChange={(e) => setUpdateForm({...updateForm, category: e.target.value})} className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Shelf Number</label>
-                                        <input type="number" className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="number" value={updateForm.shelfNumber} onChange={(e) => setUpdateForm({...updateForm, shelfNumber: e.target.value})} className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2 flex items-center mt-2">
-                                        <input type="checkbox" id="availabilityUpdate" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
+                                        <input type="checkbox" id="availabilityUpdate" checked={updateForm.available} onChange={(e) => setUpdateForm({...updateForm, available: e.target.checked})} className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
                                         <label htmlFor="availabilityUpdate" className="ml-2 block text-sm font-medium text-gray-700">Available for Borrowing</label>
                                     </div>
                                 </div>
@@ -139,13 +209,13 @@ const ManageBooks = () => {
                         
                         {/* Delete Book Section */}
                         {activeTab === 'DELETE' && (
-                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={(e) => { e.preventDefault(); /* BACKEND: Handle Submit */ }}>
+                            <form className="max-w-2xl mx-auto space-y-6" onSubmit={handleDeleteSubmit}>
                                 <div className="col-span-1 sm:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Find Book By</label>
                                     <div className="flex rounded-md shadow-sm border border-gray-300 overflow-hidden focus-within:ring-1 focus-within:ring-blue-500 bg-gray-50 px-3 py-2 items-center">
                                         <span className="text-gray-500 text-sm font-medium mr-2">Book ID:</span>
-                                        <input type="text" className="flex-1 block w-full bg-transparent border-none focus:ring-0 p-0 text-sm" placeholder="Enter Book ID to delete..." />
-                                        <button type="button" className="ml-2 inline-flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100">
+                                        <input type="text" value={deleteSearchId} onChange={(e) => setDeleteSearchId(e.target.value)} className="flex-1 block w-full bg-transparent border-none focus:ring-0 p-0 text-sm" placeholder="Enter Book ID to delete..." />
+                                        <button type="button" onClick={handleDeleteSearch} className="ml-2 inline-flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100">
                                             Search
                                         </button>
                                     </div>
@@ -169,11 +239,11 @@ const ManageBooks = () => {
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-4 space-y-4">
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">Book Title</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value="The Great Gatsby" />
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value={deleteBookInfo?.bookTitle || ''} />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">ISBN</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value="978-3-16-148410-0" />
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value={deleteBookInfo?.isbn || ''} />
                                     </div>
                                 </div>
                                 <div className="pt-4 mt-6">
