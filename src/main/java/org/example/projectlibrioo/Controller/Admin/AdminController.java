@@ -171,18 +171,18 @@ public class AdminController {
         return new ResponseEntity<>(fine,HttpStatus.OK);
     }
 
-    @PutMapping("/confirmreturn")
-    public ResponseEntity<Transactions> confirmTheReturn(@RequestBody ReturnDTO returnDTO){
-        Transactions bookReturned = transactionService.confirmReturn(returnDTO);
+//    @PutMapping("/confirmreturn")
+//    public ResponseEntity<Transactions> confirmTheReturn(@RequestBody ReturnDTO returnDTO){
+//        Transactions bookReturned = transactionService.confirmReturn(returnDTO);
+//
+//        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
-    }
-
-    @PutMapping("/returnbook")
-    public ResponseEntity<Boolean> returnBook(@RequestBody ReturnDTO returnDTO){
+   @PutMapping("/confirmreturn")
+   public ResponseEntity<Boolean> returnBook(@RequestBody ReturnDTO returnDTO){
         boolean bookReturned = transactionService.markAsReturned(returnDTO);
-        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
-    }
+      return new ResponseEntity<>(bookReturned, HttpStatus.OK);
+   }
 
 
 

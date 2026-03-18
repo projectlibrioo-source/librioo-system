@@ -76,13 +76,22 @@ public class TransactionService {
         return fine;
     }
 
-    public Transactions confirmReturn(ReturnDTO bookToReturn){
-        Transactions returnedData = transactionRepo.findByIds(bookToReturn.getLibraryId(),bookToReturn.getBookId());
+//    public Transactions confirmReturn(ReturnDTO bookToReturn){
+//        Transactions returnedData = transactionRepo.findByIds(bookToReturn.getLibraryId(),bookToReturn.getBookId());
+//        returnedData.setStatus("Returned");
+//
+//        return transactionRepo.save(returnedData);
+//
+//
+//
+//    }
+
+    public boolean markAsReturned(ReturnDTO returnDTO) {
+        Transactions returnedData = transactionRepo.findByIds(returnDTO.getLibraryId(),returnDTO.getBookId());
         returnedData.setStatus("Returned");
 
-        return transactionRepo.save(returnedData);
-
-
+        transactionRepo.save(returnedData);
+        return true;
 
     }
 
@@ -99,4 +108,9 @@ public class TransactionService {
     public Transactions getAllUSers(int bookId) {
         return transactionRepo.findByBookId(bookId);
     }
+
+
+
 }
+
+
