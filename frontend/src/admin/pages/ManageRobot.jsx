@@ -5,6 +5,44 @@ import AdminLayout from '../layouts/AdminLayout';
 const ManageRobot = () => {
     const [activeTab, setActiveTab] = useState('ADD');
 
+    const [robot, setRobot] = useState({
+        robotId: '',
+        robotName: '',
+        robotModel: '',
+        startDate: '',
+        lastServiceDate: '',
+        nextServiceDate: '',
+        partReplaced: '',
+        technicianNotes: '',
+        status: ''
+});
+
+const addRobot = async (robot) => {
+  try {
+    const res = await axios.post(
+      "http://localhost:8080/api/robots/add",
+      robot, // send as JSON directly
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("Robot added:", res.data);
+    alert("Robot added successfully!");
+
+  } catch (err) {
+    if (err.response) {
+      // backend sent error response (like 409 conflict)
+      alert(err.response.data);
+    } else {
+      console.error(err);
+      alert("Something went wrong");
+    }
+  }
+};
+
     return (
         <AdminLayout>
 
@@ -38,7 +76,7 @@ const ManageRobot = () => {
                             <div className="flex items-center mb-6">
                                 <h3 className="text-xl font-bold text-gray-900">Add Robot</h3>
                             </div>
-                            <form className="space-y-4 max-w-2xl mb-8" onSubmit={e => e.preventDefault()}>
+                            <form className="space-y-4 max-w-2xl mb-8" onSubmit={addRobot}>
                                 {/* BACKEND: POST /api/robots */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="col-span-2 sm:col-span-1">
