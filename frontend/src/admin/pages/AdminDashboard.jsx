@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   // ---------------- LOAD ROBOTS (SPRING BOOT API) ----------------
   useEffect(() => {
 
-    axios.get("http://localhost:8080/api/robots/overview")
+    axios.get("http://localhost:8080/api/robot/overview")
       .then(res => {
 
         // Map backend data → UI format
