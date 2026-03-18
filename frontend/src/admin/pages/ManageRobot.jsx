@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Trash2, Wrench } from 'lucide-react';
 import AdminLayout from '../layouts/AdminLayout';
+import axios from 'axios';
 
 const ManageRobot = () => {
     const [activeTab, setActiveTab] = useState('ADD');
@@ -76,44 +77,74 @@ const addRobot = async (robot) => {
                             <div className="flex items-center mb-6">
                                 <h3 className="text-xl font-bold text-gray-900">Add Robot</h3>
                             </div>
-                            <form className="space-y-4 max-w-2xl mb-8" onSubmit={addRobot}>
+                            <form className="space-y-4 max-w-2xl mb-8" onSubmit={(e) => {
+                                                                                e.preventDefault();   // stop page refresh
+                                                                                addRobot(robot);      // send state data
+                                                                            }}>
                                 {/* BACKEND: POST /api/robots */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Robot ID</label>
-                                        <input type="number" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. 1" />
+                                        <input type="number" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                                        value={robot.robotId} 
+                                        onChange={(e) => setRobot({...robot, robotId: Number(e.target.value)})}
+                                        placeholder="e.g. 1" 
+                                        />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Robot Name</label>
-                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Robo-Helper" />
+                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.robotName}
+                                        onChange={(e) => setRobot({...robot, robotName: e.target.value})}
+                                        placeholder="e.g. Robo-Helper" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Robot Model</label>
-                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. robotX" />
+                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.robotModel}
+                                        onChange={(e) => setRobot({...robot, robotModel: e.target.value})}
+                                        placeholder="e.g. robotX" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Start Date</label>
-                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.startDate}
+                                        onChange={(e) => setRobot({...robot, startDate: e.target.value})}
+                                        />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Last Service Date</label>
-                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.lastServiceDate}
+                                        onChange={(e) => setRobot({...robot, lastServiceDate: e.target.value})}
+                                        />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Next Service Date</label>
-                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                        <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.nextServiceDate}
+                                        onChange={(e) => setRobot({...robot, nextServiceDate: e.target.value})}
+                                        />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Part Replaced</label>
-                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Battery" />
+                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.partReplaced}
+                                        onChange={(e) => setRobot({...robot, partReplaced: e.target.value})}
+                                        placeholder="e.g. Battery" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Technician Notes</label>
-                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="" />
+                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
+                                        value={robot.technicianNotes}
+                                        onChange={(e) => setRobot({...robot, technicianNotes: e.target.value})}
+                                        placeholder="" />
                                     </div>
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Status</label>
-                                        <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                        <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                        
+                                        >
                                             <option>Active</option>
                                             <option>In Maintenance</option>
                                             <option>Retired</option>
