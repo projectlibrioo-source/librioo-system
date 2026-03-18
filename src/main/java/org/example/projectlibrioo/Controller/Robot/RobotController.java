@@ -192,7 +192,7 @@ public class RobotController {
         return "Robot API is working!";
     }
 
-    @GetMapping("/overview")
+    @GetMapping("/robot/overview")
     public List<Robot> getAllRobotOverview() {
         return robotRepository.findAll();
     }
