@@ -13,6 +13,7 @@ public class Robot {
     private int robotID;
     private String robotName;
     private String model;
+    private LocalDate startDate;
     private String status; // ACTIVE, MAINTENANCE, RETIRED
 
     public int getRobotID() {
@@ -37,6 +38,14 @@ public class Robot {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public String getStatus() {
