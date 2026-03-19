@@ -12,17 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminController {
     @Autowired
     private AdminService adminService;
-
     @Autowired
     private TransactionService transactionService;
 
@@ -172,11 +172,10 @@ public class AdminController {
     @PostMapping("/addguest")
     public ResponseEntity<?> addGuest(@RequestBody Guest guest) {
         try {
-
             Guest guestSaved = adminService.saveGuestData(guest);
 
             if (guestSaved != null) {
-                return new ResponseEntity<>(guestSaved,HttpStatus.OK);
+                return new ResponseEntity<>(guestSaved, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
@@ -189,14 +188,13 @@ public class AdminController {
     }
 
     @GetMapping("/getallmembers")
-    public ResponseEntity<Member> getAllMembers(@RequestParam("memberid") int memberId){
+    public ResponseEntity<Member> getAllMembers(@RequestParam("memberid") int memberId) {
         Member returnedMember = adminService.getAllMembers(memberId);
-        if (returnedMember == null){
+        if (returnedMember == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else {
-            return new ResponseEntity<>(returnedMember, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(returnedMember, HttpStatus.OK); // Changed from FOUND to OK
         }
-
     }
 
     @PutMapping("/updatemember")
@@ -211,46 +209,45 @@ public class AdminController {
     }
 
     @GetMapping("/getallguests")
-    public ResponseEntity<Guest> getAllGuests(@RequestParam("guestid") int guestId){
+    public ResponseEntity<Guest> getAllGuests(@RequestParam("guestid") int guestId) {
         Guest returnedGuest = adminService.getAllGuests(guestId);
-        if (returnedGuest == null){
+        if (returnedGuest == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else {
-            return new ResponseEntity<>(returnedGuest, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(returnedGuest, HttpStatus.OK); // Changed from FOUND to OK
         }
-
     }
 
     @PutMapping("/updateguest")
-    public ResponseEntity<Guest> updateGuests(@RequestBody Guest guest){
+    public ResponseEntity<Guest> updateGuests(@RequestBody Guest guest) {
         Guest updatedGuest = adminService.updateGuest(guest);
 
-        if (updatedGuest != null){
+        if (updatedGuest != null) {
             return new ResponseEntity<>(updatedGuest, HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/deletemember")
-    public ResponseEntity<String> deleteMembers(@RequestParam("memberid") int memberId){
+    public ResponseEntity<String> deleteMembers(@RequestParam("memberid") int memberId) {
         Boolean memberDeleted = adminService.deleteMember(memberId);
 
-        if (memberDeleted){
-            return new ResponseEntity<>("Book deleted successfully",HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        if (memberDeleted) {
+            return new ResponseEntity<>("Member deleted successfully", HttpStatus.OK); // Fixed message
+        } else {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND); // Better error message
         }
     }
 
     @DeleteMapping("/deleteguest")
-    public ResponseEntity<String> deleteGuests(@RequestParam("guestid") int guestId){
+    public ResponseEntity<String> deleteGuests(@RequestParam("guestid") int guestId) {
         Boolean guestDeleted = adminService.deleteGuest(guestId);
 
-        if (guestDeleted){
-            return new ResponseEntity<>("Book deleted successfully",HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        if (guestDeleted) {
+            return new ResponseEntity<>("Guest deleted successfully", HttpStatus.OK); // Fixed message
+        } else {
+            return new ResponseEntity<>("Guest not found", HttpStatus.NOT_FOUND); // Better error message
         }
     }
 
@@ -258,30 +255,15 @@ public class AdminController {
     public String test() {
         return "API is working!";
     }
+
     public String test2(){
         return "test2";
     }
 
-    @PostMapping("/borrowbook")
-    public ResponseEntity<Transactions> borrowBook(@RequestBody Transactions transactionBook){
-        Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
-
-        if (bookBorrowed){
-            transactionBook.setStatus("Borrowed");
-            return new ResponseEntity<>(transactionService.saveTransaction(transactionBook),HttpStatus.OK);
-
-        }
-        else {
-            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @PostMapping("/getfines")
-    public ResponseEntity<Double> calculateFines(@RequestBody
-    ReturnDTO returnBook){
-        double fine = transactionService.getFines(returnBook);
-
-        return new ResponseEntity<>(fine,HttpStatus.OK);
+    //Get all transactions
+    @GetMapping("/transactions")
+    public List<Transactions> getAllTransactions(){
+        return transactionService.getAllTransactions();
     }
 
     @PutMapping("/confirmreturn")
@@ -297,16 +279,16 @@ public class AdminController {
                                                   @RequestParam(required = false) Long isbn){
 
         List<Book> listOfBooks = adminService.getAllBooksByKeyword(title,author,isbn);
-         if (listOfBooks!=null){
-             return new ResponseEntity<>(listOfBooks, HttpStatus.OK);
-         }else {
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-         }
+        if (listOfBooks!=null){
+            return new ResponseEntity<>(listOfBooks, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/searchmember")
     public ResponseEntity<List<Member>> getAllUsers(@RequestParam(required = false) String fullname,
-                                                  @RequestParam(required = false) Integer libraryid){
+                                                    @RequestParam(required = false) Integer libraryid){
 
         List<Member> listOfMembers = adminService.getAllMembersByKeyword(fullname,libraryid);
         if (listOfMembers!=null){
@@ -330,12 +312,12 @@ public class AdminController {
 
     // Get transaction by specific date
     @GetMapping("/transactions/{date}")
-    public List<Transactions> getTransactionsByDate(@PathVariable String date){
+    public List<Transactions> getTransactionsByDate(@PathVariable String date) {
         return transactionService.getTransactionsByDate(LocalDate.parse(date));
     }
 
     @GetMapping("/transactions/search")
-    public List<Transactions> searchBetweenDates(@RequestParam String start, @RequestParam String end){
+    public List<Transactions> searchBetweenDates(@RequestParam String start, @RequestParam String end) {
         return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
     }
 
