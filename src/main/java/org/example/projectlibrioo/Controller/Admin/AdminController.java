@@ -1,8 +1,8 @@
 package org.example.projectlibrioo.Controller.Admin;
-
 import org.example.projectlibrioo.Model.Book;
 import org.example.projectlibrioo.Model.Guest;
 import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.ReturnDTO;
 import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.Transactions.TransactionService;
@@ -56,6 +56,7 @@ public class AdminController {
         }
     }*/
 
+    //Manage books
     @PostMapping("/addbook")
     public ResponseEntity<?> addBook(
             @RequestPart("book") String bookJson,  // ✅ Accept as String
@@ -71,6 +72,83 @@ public class AdminController {
                 return ResponseEntity.ok(bookSaved);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("ERROR: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getallbooks")
+    public ResponseEntity<Book> getAllBooks(@RequestParam("bookid") int bookId){
+        Book returnedBook = adminService.getAllBooks(bookId);
+        if (returnedBook == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(returnedBook, HttpStatus.FOUND);
+        }
+
+    }
+
+    @PutMapping("/updatebook")
+    public ResponseEntity<Book> updateBooks(@RequestBody Book book){
+        Book updatedBook = adminService.updateBooks(book);
+
+        if (updatedBook != null){
+            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/deletebook")
+    public ResponseEntity<String> deleteBooks(@RequestParam("bookid") int bookId){
+        Boolean bookDeleted = adminService.deleteBooks(bookId);
+
+        if (bookDeleted){
+            return new ResponseEntity<>("Book deleted successfully",HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+
+
+    @PostMapping("/borrowbook")
+    public ResponseEntity<Transactions> borrowBook(@RequestBody Transactions transactionBook){
+        Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
+
+        if (bookBorrowed){
+            return new ResponseEntity<>
+                    (transactionService.saveTransaction(transactionBook),HttpStatus.OK);
+
+        }
+        else {
+            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/getfines")
+    public ResponseEntity<Double> calculateFines(@RequestBody
+    ReturnDTO returnBook){
+        double fine = transactionService.getFines(returnBook);
+
+        return new ResponseEntity<>(fine,HttpStatus.OK);
+    }
+
+    //Manage Users
+    @PostMapping("/addmember")
+    public ResponseEntity<?> addMember(@RequestBody Member member) {
+        try {
+
+            Member memberSaved = adminService.saveMemberData(member);
+
+            if (memberSaved != null) {
+                return new ResponseEntity<>(memberSaved,HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
         } catch (Exception e) {
@@ -169,7 +247,6 @@ public class AdminController {
     public String test() {
         return "API is working!";
     }
-
     public String test2(){
         return "test2";
     }
@@ -189,6 +266,21 @@ public class AdminController {
     @GetMapping("/transactions/search")
     public List<Transactions> searchBetweenDates(@RequestParam String start, @RequestParam String end){
         return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
+    }
+
+     // get all books for the book page
+    @GetMapping("/books")
+    public ResponseEntity<List<Book>> getAllBooks(){
+        List<Book> books = adminService.getAllBooks();
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+
+    // get all users for users page
+    @GetMapping("/users")
+    public ResponseEntity<List<Member>> getAllMembers(){
+        List<Member> members = adminService.getAllMembers();
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
 

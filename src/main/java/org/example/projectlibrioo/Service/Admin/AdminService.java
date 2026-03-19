@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 public class AdminService {
 
@@ -20,9 +22,42 @@ public class AdminService {
     @Autowired
     private MemberRepo memberRepo;
 
+    // save book
     public Book saveBookData(Book book, MultipartFile bookImage) throws Exception {
         book.setImage(bookImage.getBytes());
         return bookRepo.save(book);
+    }
+
+    public Book getAllBooks(int bookId) {
+        Book book = bookRepo.findById(bookId);
+
+        if (book != null){
+            return book;
+        }else {
+            return null;
+        }
+    }
+
+    // update book
+    public Book updateBooks(Book book) {
+        return bookRepo.save(book);
+    }
+
+    // delete book
+    public Boolean deleteBooks(int bookId) {
+        Book bookToDelete = bookRepo.findById(bookId);
+        if (bookToDelete!=null){
+            try{
+                bookRepo.delete(bookToDelete);
+                return true;
+
+            }catch (Exception e){
+                return false;
+            }
+
+        }else {
+            return false;
+        }
     }
 
     public Guest saveGuestData(Guest guest) {
@@ -85,9 +120,29 @@ public class AdminService {
         }
     }
 
+    public Member saveMemberData(Member member) {
+        return memberRepo.save(member);
+    }
+
     public Guest updateGuest(Guest guest) {
         return guestRepo.save(guest);
     }
+
+//    public Book getAllBooks(int bookId) {
+//        return bookRepo.findById(bookId);
+//    }
+
+
+    // get all books for the book page
+    public List<Book> getAllBooks(){
+        return bookRepo.findAll();
+    }
+
+    // get all users for the users page
+    public List<Member> getAllMembers(){
+        return memberRepo.findAll();
+    }
+
 
 
 }
