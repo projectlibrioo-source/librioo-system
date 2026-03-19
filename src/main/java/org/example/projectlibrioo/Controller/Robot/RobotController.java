@@ -1,6 +1,8 @@
 package org.example.projectlibrioo.Controller.Robot;
 
 import org.example.projectlibrioo.Model.Robot;
+import org.example.projectlibrioo.Model.RobotMaintenance;
+import org.example.projectlibrioo.Repository.RobotMaintainRepo;
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.Service.RobotService.RobotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class RobotController {
     private RobotService robotService;
     @Autowired
     private RobotRepo robotRepository;
+    @Autowired
+    private RobotMaintenance robotMaintenance;
 
     // Add new robot (POST /api/robots/add)
     @PostMapping("/robots/add")
@@ -176,10 +180,10 @@ public class RobotController {
         Robot robot = robotService.getRobotById(id);
         if (robot != null) {
             Map<String, Object> history = new HashMap<>();
-            history.put("lastServiceDate", robot.getLastServiceDate());
-            history.put("nextServiceDate", robot.getNextServiceDate());
-            history.put("partReplaced", robot.getPartReplaced());
-            history.put("technicianNotes", robot.getTechnicianNotes());
+            history.put("lastServiceDate", robotMaintenance.getLastServiceDate());
+            history.put("nextServiceDate", robotMaintenance.getNextServiceDate());
+            history.put("partReplaced", robotMaintenance.getPartReplaced());
+            history.put("technicianNotes", robotMaintenance.getTechnicianNotes());
             history.put("status", robot.getStatus());
             return new ResponseEntity<>(history, HttpStatus.OK);
         } else {

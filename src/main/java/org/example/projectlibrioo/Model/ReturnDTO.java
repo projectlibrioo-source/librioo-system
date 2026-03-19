@@ -1,10 +1,32 @@
 package org.example.projectlibrioo.Model;
 
-import lombok.Data;
 
-@Data
 public class ReturnDTO {
     private int libraryId;
     private int bookId;
     private String category;
+
+    public int getLibraryId() {
+        return libraryId;
+    }
+
+    public void setLibraryId(int libraryId) {
+        this.libraryId = libraryId;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

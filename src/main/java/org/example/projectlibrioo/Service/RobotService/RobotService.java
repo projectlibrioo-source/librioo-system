@@ -1,8 +1,10 @@
 package org.example.projectlibrioo.Service.RobotService;
 
 import org.example.projectlibrioo.Model.Robot;
+import org.example.projectlibrioo.Model.RobotMaintenance;
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.navigation.ShelfPathMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +19,8 @@ public class RobotService {
     private final ShelfPathMap shelfPathMap;
     private final RestTemplate restTemplate = new RestTemplate();
     private final RobotRepo robotRepo;
+    @Autowired
+    private RobotMaintenance robotMaintenance;
 
     public RobotService(ShelfPathMap shelfPathMap, RobotRepo robotRepo) {
         this.shelfPathMap = shelfPathMap;
@@ -52,8 +56,8 @@ public class RobotService {
         if (robot.getStatus() == null) {
             robot.setStatus("ACTIVE");
         }
-        if (robot.getStartDate() == null) {
-            robot.setStartDate(LocalDate.now());
+        if (robotMaintenance.getStartDate() == null) {
+            robotMaintenance.setStartDate(LocalDate.now());
         }
         return robotRepo.save(robot);
     }
@@ -105,10 +109,10 @@ public class RobotService {
                                         String technicianNotes) {
         Robot robot = getRobotById(robotId);
         if (robot != null) {
-            robot.setLastServiceDate(lastServiceDate);
-            robot.setNextServiceDate(nextServiceDate);
-            robot.setPartReplaced(partReplaced);
-            robot.setTechnicianNotes(technicianNotes);
+            robotMaintenance.setLastServiceDate(lastServiceDate);
+            robotMaintenance.setNextServiceDate(nextServiceDate);
+            robotMaintenance.setPartReplaced(partReplaced);
+            robotMaintenance.setTechnicianNotes(technicianNotes);
             robot.setStatus("MAINTENANCE");
             return robotRepo.save(robot);
         }
