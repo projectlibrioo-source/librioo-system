@@ -1,12 +1,12 @@
 package org.example.projectlibrioo.Controller.User;
 
-import org.example.projectlibrioo.Model.Book;
-import org.example.projectlibrioo.Model.Guest;
-import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.*;
 import org.example.projectlibrioo.Repository.BookRepo;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.RobotService.RobotService;
+import org.example.projectlibrioo.Service.Transactions.TransactionService;
 import org.example.projectlibrioo.Service.User.UserService;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,11 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AdminService adminService;
-
     @Autowired
     private RobotService robotService;
+    @Autowired
+    private TransactionService transactionService;
+
 
     @PostMapping("/loginmember")
     public ResponseEntity<Member> loginAsMember(@RequestParam("libraryid") int libraryId){
@@ -105,6 +107,18 @@ public class UserController {
         robotService.navigateToShelf(shelfNumber);
 
         return ResponseEntity.ok("Robot navigating to shelf " + shelfNumber);
+    }
+
+    @PostMapping("/borrowrobot")
+    public ResponseEntity<Transactions> borrowBookWithRobot(@RequestBody Transactions borrowRequest){
+        Boolean bookBorrowed = transactionService.checkEligibility(borrowRequest);
+
+        if (bookBorrowed){
+            return new ResponseEntity<>(transactionService.saveTransaction(borrowRequest), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
     }
 
 

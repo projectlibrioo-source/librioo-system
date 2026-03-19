@@ -138,6 +138,17 @@ public class AdminController {
         return new ResponseEntity<>(fine,HttpStatus.OK);
     }
 
+    @GetMapping("/getusers")
+    public ResponseEntity<Transactions> getAllUsers(@RequestParam("bookid") int bookId){
+        Transactions foundUser = transactionService.getAllUSers(bookId);
+
+        if (foundUser == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        }
+    }
+
     //Manage Users
     @PostMapping("/addmember")
     public ResponseEntity<?> addMember(@RequestBody Member member) {
@@ -251,10 +262,70 @@ public class AdminController {
         return "test2";
     }
 
-    //Get all transactions
-    @GetMapping("/transactions")
-    public List<Transactions> getAllTransactions(){
-        return transactionService.getAllTransactions();
+    @PostMapping("/borrowbook")
+    public ResponseEntity<Transactions> borrowBook(@RequestBody Transactions transactionBook){
+        Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
+
+        if (bookBorrowed){
+            transactionBook.setStatus("Borrowed");
+            return new ResponseEntity<>(transactionService.saveTransaction(transactionBook),HttpStatus.OK);
+
+        }
+        else {
+            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/getfines")
+    public ResponseEntity<Double> calculateFines(@RequestBody
+    ReturnDTO returnBook){
+        double fine = transactionService.getFines(returnBook);
+
+        return new ResponseEntity<>(fine,HttpStatus.OK);
+    }
+
+    @PutMapping("/confirmreturn")
+    public ResponseEntity<Transactions> confirmTheReturn(@RequestBody ReturnDTO returnDTO){
+        Transactions bookReturned = transactionService.confirmReturn(returnDTO);
+
+        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
+    }
+
+    @GetMapping("/searchbook")
+    public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title,
+                                                  @RequestParam(required = false) String author,
+                                                  @RequestParam(required = false) Long isbn){
+
+        List<Book> listOfBooks = adminService.getAllBooksByKeyword(title,author,isbn);
+         if (listOfBooks!=null){
+             return new ResponseEntity<>(listOfBooks, HttpStatus.OK);
+         }else {
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         }
+    }
+
+    @GetMapping("/searchmember")
+    public ResponseEntity<List<Member>> getAllUsers(@RequestParam(required = false) String fullname,
+                                                  @RequestParam(required = false) Integer libraryid){
+
+        List<Member> listOfMembers = adminService.getAllMembersByKeyword(fullname,libraryid);
+        if (listOfMembers!=null){
+            return new ResponseEntity<>(listOfMembers, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/searchrobot")
+    public ResponseEntity<Robot> getAllRobotDetails(@RequestParam(required = false) Integer robotid,
+                                                    @RequestParam(required = false) String robotname){
+
+        Robot RobotDetails = adminService.getAllRobotDetailsByKeyword(robotid,robotname);
+        if (RobotDetails!=null){
+            return new ResponseEntity<>(RobotDetails, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     // Get transaction by specific date
@@ -268,7 +339,7 @@ public class AdminController {
         return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
     }
 
-     // get all books for the book page
+    // get all books for the book page
     @GetMapping("/books")
     public ResponseEntity<List<Book>> getAllBooks(){
         List<Book> books = adminService.getAllBooks();
@@ -283,5 +354,10 @@ public class AdminController {
         return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
+    //Get all transactions
+    @GetMapping("/transactions")
+    public List<Transactions> getAllTransactions(){
+        return transactionService.getAllTransactions();
+    }
 
 }
