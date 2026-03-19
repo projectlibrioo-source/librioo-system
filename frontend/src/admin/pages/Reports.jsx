@@ -1,9 +1,102 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout';
 
 const Reports = () => {
     const [reportType, setReportType] = useState('Library Managing Reports');
     const [searchField, setSearchField] = useState('Date');
+
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    const [bookCategory, setBookCategory] = useState('All Categories');
+    const [robotUnit, setRobotUnit] = useState('All Robots');
+    const [metricType, setMetricType] = useState('Distance Traveled');
+    const [searchText, setSearchText] = useState('');
+
+    const [dashboardStats, setDashboardStats] = useState({
+        totalLoans: 0,
+        systemUptime: '0%',
+        revenue: 'LKR 0'
+    });
+
+    const [generatedReport, setGeneratedReport] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/admin/reports/dashboard')
+            .then((res) => {
+                const data = res.data;
+
+                setDashboardStats({
+                    totalLoans: data.totalLoans ?? 0,
+                    systemUptime: data.systemUptime ?? '0%',
+                    revenue: data.revenue ? `LKR ${data.revenue}` : 'LKR 0'
+                });
+            })
+            .catch((err) => {
+                console.error('Dashboard stats error:', err);
+            });
+    }, []);
+
+    const handleGenerateReport = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const payload = {
+                reportType:
+                    reportType === 'Library Managing Reports'
+                        ? 'LIBRARY'
+                        : 'SYSTEM',
+                fromDate,
+                toDate,
+                bookCategory:
+                    reportType === 'Library Managing Reports' ? bookCategory : null,
+                robotUnit:
+                    reportType === 'System Reports (Technical)' ? robotUnit : null,
+                metricType:
+                    reportType === 'System Reports (Technical)' ? metricType : null
+            };
+
+            const res = await axios.post(
+                'http://localhost:8080/api/admin/reports/generate',
+                payload
+            );
+
+            setGeneratedReport(res.data);
+        } catch (err) {
+            console.error('Generate report error:', err);
+            alert('Failed to generate report');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const previewRows =
+        generatedReport?.reportRows ||
+        generatedReport?.rows ||
+        generatedReport?.data ||
+        [];
+
+    const popularItems =
+        generatedReport?.popularItems ||
+        generatedReport?.topItems ||
+        [];
+
+    const filteredRows = previewRows.filter((row) => {
+        if (!searchText.trim()) return true;
+
+        const value =
+            searchField === 'Date'
+                ? row.date
+                : reportType === 'Library Managing Reports'
+                    ? row.loans || row.patrons || row.overdues
+                    : row.robotId || row.robot || row.eventsLogged || row.avgBattery;
+
+        return String(value ?? '')
+            .toLowerCase()
+            .includes(searchText.toLowerCase());
+    });
 
     return (
         <AdminLayout>
@@ -17,17 +110,17 @@ const Reports = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
                         <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">Total Loans</p>
-                        <p className="text-3xl font-bold text-blue-600 mt-2">1,234</p>
+                        <p className="text-3xl font-bold text-blue-600 mt-2">{dashboardStats.totalLoans}</p>
                     </div>
 
                     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
                         <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">System Uptime</p>
-                        <p className="text-3xl font-bold text-green-500 mt-2">99.9%</p>
+                        <p className="text-3xl font-bold text-green-500 mt-2">{dashboardStats.systemUptime}</p>
                     </div>
 
                     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-center items-center">
                         <p className="text-sm text-gray-500 uppercase font-bold tracking-wide">Revenue</p>
-                        <p className="text-3xl font-bold text-green-600 mt-2">LKR 2,500</p>
+                        <p className="text-3xl font-bold text-green-600 mt-2">{dashboardStats.revenue}</p>
                     </div>
                 </div>
 
@@ -35,8 +128,8 @@ const Reports = () => {
                     {/* Report Builder */}
                     <div className="lg:col-span-1 border border-gray-200 rounded-lg shadow-sm bg-white p-6 h-fit">
                         <h3 className="text-xl font-bold text-gray-800 mb-4">Report Builder</h3>
-                        <form className="space-y-4" onSubmit={e => e.preventDefault()}>
-                            
+                        <form className="space-y-4" onSubmit={handleGenerateReport}>
+
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Report Focus</label>
                                 <select
@@ -52,18 +145,32 @@ const Reports = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">From</label>
-                                    <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                    <input
+                                        type="date"
+                                        value={fromDate}
+                                        onChange={(e) => setFromDate(e.target.value)}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                                    />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">To</label>
-                                    <input type="date" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" />
+                                    <input
+                                        type="date"
+                                        value={toDate}
+                                        onChange={(e) => setToDate(e.target.value)}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                                    />
                                 </div>
-                            </div>                  {reportType === 'Library Managing Reports' && (
+                            </div>
 
-                       
+                            {reportType === 'Library Managing Reports' && (
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">Book Category</label>
-                                    <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                                    <select
+                                        value={bookCategory}
+                                        onChange={(e) => setBookCategory(e.target.value)}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                                    >
                                         <option>All Categories</option>
                                         <option>Fiction</option>
                                         <option>Science</option>
@@ -72,10 +179,14 @@ const Reports = () => {
                             )}
 
                             {reportType === 'System Reports (Technical)' && (
-                              <>
+                                <>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Robot Unit</label>
-                                        <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                                        <select
+                                            value={robotUnit}
+                                            onChange={(e) => setRobotUnit(e.target.value)}
+                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                                        >
                                             <option>All Robots</option>
                                             <option>Robot Alpha</option>
                                             <option>Robot Beta</option>
@@ -83,7 +194,11 @@ const Reports = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Metric Type</label>
-                                        <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                                        <select
+                                            value={metricType}
+                                            onChange={(e) => setMetricType(e.target.value)}
+                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                                        >
                                             <option>Distance Traveled</option>
                                             <option>Error Events</option>
                                             <option>Service History</option>
@@ -92,10 +207,11 @@ const Reports = () => {
                                 </>
                             )}
 
-                            <button className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium mt-4">Generate Report</button>
+                            <button className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium mt-4">
+                                {loading ? 'Generating...' : 'Generate Report'}
+                            </button>
                         </form>
                     </div>
-
 
                     {/* Preview Table Container */}
                     <div className="lg:col-span-2 space-y-6">
@@ -119,7 +235,13 @@ const Reports = () => {
                                         {reportType === 'Library Managing Reports' ? <option value="Loans">Loans</option> : <option value="Robot">Robot</option>}
                                     </select>
                                     <div className="h-6 w-px bg-gray-300"></div>
-                                    <input type="text" placeholder={`Search by ${searchField}...`} className="w-full pl-3 pr-4 py-2 text-sm border-none focus:ring-0" />
+                                    <input
+                                        type="text"
+                                        value={searchText}
+                                        onChange={(e) => setSearchText(e.target.value)}
+                                        placeholder={`Search by ${searchField}...`}
+                                        className="w-full pl-3 pr-4 py-2 text-sm border-none focus:ring-0"
+                                    />
                                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                         <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                     </div>
@@ -145,38 +267,35 @@ const Reports = () => {
                                         )}
                                     </thead>
                                     <tbody>
-                                        {/* BACKEND: Dummy Data. Fetch from API depending on report selected */}
-                                        {reportType === 'Library Managing Reports' && (
-                                            <>
-                                                <tr className="border-b">
-                                                    <td className="px-4 py-2">2023-10-01</td>
-                                                    <td className="px-4 py-2">120</td>
-                                                    <td className="px-4 py-2">45</td>
-                                                    <td className="px-4 py-2">3</td>
-                                                </tr>
-                                                <tr className="border-b">
-                                                    <td className="px-4 py-2">2023-10-02</td>
-                                                    <td className="px-4 py-2">132</td>
-                                                    <td className="px-4 py-2">50</td>
-                                                    <td className="px-4 py-2">1</td>
-                                                </tr>
-                                            </>
-                                        )}
-                                        {reportType === 'System Reports (Technical)' && (
-                                            <>
-                                                <tr className="border-b">
-                                                    <td className="px-4 py-2">2023-10-01</td>
-                                                    <td className="px-4 py-2">Alpha, Beta</td>
-                                                    <td className="px-4 py-2">4 Err, 12 Warn</td>
-                                                    <td className="px-4 py-2">82%</td>
-                                                </tr>
-                                                <tr className="border-b">
-                                                    <td className="px-4 py-2">2023-10-02</td>
-                                                    <td className="px-4 py-2">Alpha</td>
-                                                    <td className="px-4 py-2">1 Err, 5 Warn</td>
-                                                    <td className="px-4 py-2">89%</td>
-                                                </tr>
-                                            </>
+                                        {filteredRows.length > 0 ? (
+                                            reportType === 'Library Managing Reports' ? (
+                                                filteredRows.map((row, index) => (
+                                                    <tr className="border-b" key={index}>
+                                                        <td className="px-4 py-2">{row.date}</td>
+                                                        <td className="px-4 py-2">{row.patrons}</td>
+                                                        <td className="px-4 py-2">{row.loans}</td>
+                                                        <td className="px-4 py-2">{row.overdues}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                filteredRows.map((row, index) => (
+                                                    <tr className="border-b" key={index}>
+                                                        <td className="px-4 py-2">{row.date}</td>
+                                                        <td className="px-4 py-2">{row.robotId}</td>
+                                                        <td className="px-4 py-2">{row.eventsLogged}</td>
+                                                        <td className="px-4 py-2">{row.avgBattery}</td>
+                                                    </tr>
+                                                ))
+                                            )
+                                        ) : (
+                                            <tr>
+                                                <td
+                                                    colSpan={4}
+                                                    className="px-4 py-6 text-center text-gray-400"
+                                                >
+                                                    No report data available
+                                                </td>
+                                            </tr>
                                         )}
                                     </tbody>
                                 </table>
@@ -197,16 +316,21 @@ const Reports = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr className="border-b">
-                                                <td className="px-4 py-2 font-medium text-gray-900">The Great Gatsby</td>
-                                                <td className="px-4 py-2">F. Scott Fitzgerald</td>
-                                                <td className="px-4 py-2">87</td>
-                                            </tr>
-                                            <tr className="border-b">
-                                                <td className="px-4 py-2 font-medium text-gray-900">1984</td>
-                                                <td className="px-4 py-2">George Orwell</td>
-                                                <td className="px-4 py-2">76</td>
-                                            </tr>
+                                            {popularItems.length > 0 ? (
+                                                popularItems.map((item, index) => (
+                                                    <tr className="border-b" key={index}>
+                                                        <td className="px-4 py-2 font-medium text-gray-900">{item.title}</td>
+                                                        <td className="px-4 py-2">{item.author}</td>
+                                                        <td className="px-4 py-2">{item.checkouts}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={3} className="px-4 py-6 text-center text-gray-400">
+                                                        No popular items available
+                                                    </td>
+                                                </tr>
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>
@@ -215,8 +339,8 @@ const Reports = () => {
                     </div>
                 </div>
             </div>
-        </AdminLayout >
+        </AdminLayout>
     );
 };
-   
+
 export default Reports;
