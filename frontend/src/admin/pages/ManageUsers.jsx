@@ -21,12 +21,14 @@ const ManageUsers = () => {
 
     const [searchId, setSearchId] = useState('');
     const [updateForm, setUpdateForm] = useState({
+        id: '',
         role: 'Member',
         fullname: '',
         address: '',
         email: '',
         phoneNumber: ''
     });
+    const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
 
     const [deleteSearchId, setDeleteSearchId] = useState('');
     const [deleteUser, setDeleteUser] = useState(null);
@@ -48,6 +50,11 @@ const ManageUsers = () => {
     const handleAddUser = async (e) => {
         e.preventDefault();
 
+        if (!addForm.id || !addForm.fullname || !addForm.age) {
+            alert('Please fill in the required fields');
+            return;
+        }
+
         try {
             const endpoint =
                 userRole === 'MEMBER'
@@ -57,30 +64,32 @@ const ManageUsers = () => {
             const payload =
                 userRole === 'MEMBER'
                     ? {
-                        libraryID: parseInt(addForm.id),
+                        libraryID: parseInt(addForm.id, 10),
                         fullName: addForm.fullname,
                         address: addForm.address,
                         occupation: addForm.occupation,
                         workOrSchoolAddress: addForm.workSchoolAddress,
                         email: addForm.email,
                         phoneNumber: addForm.phoneNumber,
-                        age: parseInt(addForm.age),
+                        age: parseInt(addForm.age, 10),
                         NICNumber: addForm.nicNumber,
-                        status: 'ACTIVE'
+                        status: addForm.userType
                     }
                     : {
-                        guestID: parseInt(addForm.id),
+                        guestID: parseInt(addForm.id, 10),
                         fullName: addForm.fullname,
                         address: addForm.address,
                         email: addForm.email,
                         phoneNumber: addForm.phoneNumber,
-                        age: parseInt(addForm.age),
+                        age: parseInt(addForm.age, 10),
                         NICNumber: addForm.nicNumber
                     };
 
-            await axios.post(endpoint, payload);
+            const response = await axios.post(endpoint, payload);
+            console.log('Response:', response.data);
             alert(`${userRole === 'MEMBER' ? 'Member' : 'Guest'} added successfully`);
 
+            // Reset form
             setAddForm({
                 id: '',
                 fullname: '',
@@ -94,41 +103,82 @@ const ManageUsers = () => {
                 userType: 'Student'
             });
         } catch (err) {
-            console.error('Add user error:', err.response?.data || err.message);
-            alert('Failed to add user');
+            console.error('Add user error:', err);
+            alert(err.response?.data || 'Failed to add user');
         }
     };
 
     const handleFindUser = async () => {
-        try {
-            const endpoint =
-                updateForm.role === 'Member'
-                    ? 'http://localhost:8080/api/getallmembers'
-                    : 'http://localhost:8080/api/getallguests';
-
-            const params =
-                updateForm.role === 'Member'
-                    ? { memberid: searchId }
-                    : { guestid: searchId };
-
-            const res = await axios.get(endpoint, { params });
-            const data = res.data;
-
-            setUpdateForm(prev => ({
-                ...prev,
-                fullname: data.fullName || '',
-                address: data.address || '',
-                email: data.email || '',
-                phoneNumber: data.phoneNumber || ''
-            }));
-        } catch (err) {
-            console.error('Find user error:', err.response?.data || err.message);
-            alert('User not found');
+        if (!searchId || searchId.trim() === '') {
+            alert('Please enter a User ID');
+            return;
         }
+
+        const parsedId = parseInt(searchId, 10);
+
+        if (Number.isNaN(parsedId)) {
+            alert('User ID must be a number');
+            return;
+        }
+
+        setShowUpdateConfirm(false);
+
+        // Try Member first
+        try {
+            const memberRes = await axios.get('http://localhost:8080/api/getallmembers', {
+                params: { memberid: parsedId }
+            });
+
+            if (memberRes.data) {
+                const data = memberRes.data;
+                setUpdateForm({
+                    id: parsedId,
+                    role: 'Member',
+                    fullname: data.fullName || '',
+                    address: data.address || '',
+                    email: data.email || '',
+                    phoneNumber: data.phoneNumber || ''
+                });
+                setShowUpdateConfirm(true);
+                return;
+            }
+        } catch (memberErr) {
+            // If not found as member, try guest
+        }
+
+        // Try Guest
+        try {
+            const guestRes = await axios.get('http://localhost:8080/api/getallguests', {
+                params: { guestid: parsedId }
+            });
+
+            if (guestRes.data) {
+                const data = guestRes.data;
+                setUpdateForm({
+                    id: parsedId,
+                    role: 'Guest',
+                    fullname: data.fullName || '',
+                    address: data.address || '',
+                    email: data.email || '',
+                    phoneNumber: data.phoneNumber || ''
+                });
+                setShowUpdateConfirm(true);
+                return;
+            }
+        } catch (guestErr) {
+            console.error('Find user error:', guestErr);
+        }
+
+        alert('User not found');
     };
 
     const handleUpdateUser = async (e) => {
         e.preventDefault();
+
+        if (!updateForm.id) {
+            alert('Please find a user first');
+            return;
+        }
 
         try {
             const endpoint =
@@ -139,73 +189,115 @@ const ManageUsers = () => {
             const payload =
                 updateForm.role === 'Member'
                     ? {
-                        libraryID: parseInt(searchId),
+                        libraryID: updateForm.id,
                         fullName: updateForm.fullname,
                         address: updateForm.address,
                         email: updateForm.email,
                         phoneNumber: updateForm.phoneNumber
                     }
                     : {
-                        guestID: parseInt(searchId),
+                        guestID: updateForm.id,
                         fullName: updateForm.fullname,
                         address: updateForm.address,
                         email: updateForm.email,
                         phoneNumber: updateForm.phoneNumber
                     };
 
-            await axios.put(endpoint, payload);
+            const response = await axios.put(endpoint, payload);
+            console.log('Update response:', response.data);
             alert('User updated successfully');
         } catch (err) {
-            console.error('Update user error:', err.response?.data || err.message);
-            alert('Failed to update user');
+            console.error('Update user error:', err);
+            alert(err.response?.data || 'Failed to update user');
         }
     };
 
     const handleFindDeleteUser = async () => {
-        try {
-            let endpoint = 'http://localhost:8080/api/getallmembers';
-            let params = { memberid: deleteSearchId };
-
-            if (deleteUser?.role === 'Guest') {
-                endpoint = 'http://localhost:8080/api/getallguests';
-                params = { guestid: deleteSearchId };
-            }
-
-            const res = await axios.get(endpoint, { params });
-            const data = res.data;
-
-            setDeleteUser({
-                ...data,
-                role: endpoint.includes('members') ? 'Member' : 'Guest'
-            });
-        } catch (err) {
-            console.error('Find delete user error:', err.response?.data || err.message);
-            alert('User not found');
+        if (!deleteSearchId || deleteSearchId.trim() === '') {
+            alert('Please enter a User ID');
+            return;
         }
+
+        const parsedId = parseInt(deleteSearchId, 10);
+
+        if (Number.isNaN(parsedId)) {
+            alert('User ID must be a number');
+            return;
+        }
+
+        // Try Member first
+        try {
+            const memberRes = await axios.get('http://localhost:8080/api/getallmembers', {
+                params: { memberid: parsedId }
+            });
+
+            if (memberRes.data) {
+                setDeleteUser({
+                    ...memberRes.data,
+                    id: parsedId,
+                    role: 'Member'
+                });
+                return;
+            }
+        } catch (memberErr) {
+            // Try guest next
+        }
+
+        // Try Guest
+        try {
+            const guestRes = await axios.get('http://localhost:8080/api/getallguests', {
+                params: { guestid: parsedId }
+            });
+
+            if (guestRes.data) {
+                setDeleteUser({
+                    ...guestRes.data,
+                    id: parsedId,
+                    role: 'Guest'
+                });
+                return;
+            }
+        } catch (guestErr) {
+            console.error('Find delete user error:', guestErr);
+        }
+
+        setDeleteUser(null);
+        alert('User not found');
     };
 
     const handleDeleteUser = async (e) => {
         e.preventDefault();
 
+        if (!deleteUser) {
+            alert('Please find a user first');
+            return;
+        }
+
+        if (!window.confirm(`Are you sure you want to delete ${deleteUser.fullName}?`)) {
+            return;
+        }
+
         try {
-            const isGuest = deleteUser?.role === 'Guest';
+            const isGuest = deleteUser.role === 'Guest';
 
             const endpoint = isGuest
                 ? 'http://localhost:8080/api/deleteguest'
                 : 'http://localhost:8080/api/deletemember';
 
             const params = isGuest
-                ? { guestid: deleteSearchId }
-                : { memberid: deleteSearchId };
+                ? { guestid: deleteUser.id }
+                : { memberid: deleteUser.id };
 
-            await axios.delete(endpoint, { params });
-            alert('User deleted successfully');
+            const response = await axios.delete(endpoint, { params });
+            console.log('Delete response:', response.data);
+            alert(response.data || 'User deleted successfully');
 
+            // Reset state
             setDeleteUser(null);
             setDeleteSearchId('');
         } catch (err) {
-            console.error('Delete user error:', err.response?.data || err.message);
-            alert('Failed to delete user');
+            console.error('Delete user error:', err);
+            alert(err.response?.data || 'Failed to delete user');
         }
     };
 
@@ -267,6 +359,7 @@ const ManageUsers = () => {
                                         value={addForm.id}
                                         onChange={(e) => handleAddChange('id', e.target.value)}
                                         className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                        required
                                     />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -276,6 +369,7 @@ const ManageUsers = () => {
                                         value={addForm.fullname}
                                         onChange={(e) => handleAddChange('fullname', e.target.value)}
                                         className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                        required
                                     />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -334,6 +428,7 @@ const ManageUsers = () => {
                                         value={addForm.age}
                                         onChange={(e) => handleAddChange('age', e.target.value)}
                                         className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                        required
                                     />
                                 </div>
                                 <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -383,7 +478,7 @@ const ManageUsers = () => {
                                     </div>
                                 )}
                                 <div className="flex justify-end pt-4 border-t">
-                                    <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">
+                                    <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">
                                         Save User
                                     </button>
                                 </div>
@@ -405,7 +500,10 @@ const ManageUsers = () => {
                                                 type="text"
                                                 placeholder="Enter User ID..."
                                                 value={searchId}
-                                                onChange={(e) => setSearchId(e.target.value)}
+                                                onChange={(e) => {
+                                                    setSearchId(e.target.value);
+                                                    setShowUpdateConfirm(false);
+                                                }}
                                                 className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm"
                                             />
                                         </div>
@@ -419,20 +517,37 @@ const ManageUsers = () => {
                                     </div>
                                 </div>
 
+                                {/* Confirmation Popup */}
+                                {showUpdateConfirm && (
+                                    <div className="p-4 bg-green-50 border-l-4 border-green-500 rounded">
+                                        <div className="flex items-center">
+                                            <svg className="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                            </svg>
+                                            <div>
+                                                <p className="text-sm font-medium text-green-800">
+                                                    User found: <span className="font-bold">{updateForm.fullname}</span>
+                                                </p>
+                                                <p className="text-xs text-green-700 mt-1">
+                                                    You can now update the user details below
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="border-t pt-4 mt-6">
                                     <h4 className="text-sm font-bold text-gray-700 mb-4">User Details</h4>
                                     <div className="space-y-4">
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                             <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">Role</label>
-                                            <div className="flex flex-1 bg-gray-100 border-none rounded-md focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden sm:col-span-2">
-                                                <select
+                                            <div className="flex flex-1 bg-gray-100 border-none rounded-md sm:col-span-2">
+                                                <input
+                                                    type="text"
                                                     value={updateForm.role}
-                                                    onChange={(e) => setUpdateForm(prev => ({ ...prev, role: e.target.value }))}
-                                                    className="bg-transparent text-gray-700 border-none focus:ring-0 text-sm py-2 pl-3 pr-7 cursor-pointer w-full"
-                                                >
-                                                    <option>Member</option>
-                                                    <option>Guest</option>
-                                                </select>
+                                                    disabled
+                                                    className="block w-full px-3 py-2 bg-gray-100 text-gray-500 border-none rounded-md"
+                                                />
                                             </div>
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -442,6 +557,7 @@ const ManageUsers = () => {
                                                 value={updateForm.fullname}
                                                 onChange={(e) => handleUpdateChange('fullname', e.target.value)}
                                                 className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                                disabled={!showUpdateConfirm}
                                             />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -451,6 +567,7 @@ const ManageUsers = () => {
                                                 value={updateForm.address}
                                                 onChange={(e) => handleUpdateChange('address', e.target.value)}
                                                 className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                                disabled={!showUpdateConfirm}
                                             />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -460,6 +577,7 @@ const ManageUsers = () => {
                                                 value={updateForm.email}
                                                 onChange={(e) => handleUpdateChange('email', e.target.value)}
                                                 className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                                disabled={!showUpdateConfirm}
                                             />
                                         </div>
                                         <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
@@ -469,12 +587,21 @@ const ManageUsers = () => {
                                                 value={updateForm.phoneNumber}
                                                 onChange={(e) => handleUpdateChange('phoneNumber', e.target.value)}
                                                 className="block w-full px-3 py-2 bg-gray-100 border-none rounded-md sm:col-span-2 focus:ring-1 focus:ring-blue-500"
+                                                disabled={!showUpdateConfirm}
                                             />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-4 border-t">
-                                    <button className="px-6 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition">
+                                    <button 
+                                        type="submit"
+                                        className={`px-6 py-2 text-white rounded font-medium transition ${
+                                            showUpdateConfirm 
+                                                ? 'bg-blue-600 hover:bg-blue-700' 
+                                                : 'bg-gray-400 cursor-not-allowed'
+                                        }`}
+                                        disabled={!showUpdateConfirm}
+                                    >
                                         Update User
                                     </button>
                                 </div>
@@ -545,7 +672,15 @@ const ManageUsers = () => {
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-4 border-t">
-                                    <button className="px-6 py-2 bg-red-600 text-white rounded font-medium hover:bg-red-700 transition">
+                                    <button 
+                                        type="submit"
+                                        className={`px-6 py-2 text-white rounded font-medium transition ${
+                                            deleteUser 
+                                                ? 'bg-red-600 hover:bg-red-700' 
+                                                : 'bg-gray-400 cursor-not-allowed'
+                                        }`}
+                                        disabled={!deleteUser}
+                                    >
                                         Delete User
                                     </button>
                                 </div>
