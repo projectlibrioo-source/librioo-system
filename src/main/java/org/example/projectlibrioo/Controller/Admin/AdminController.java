@@ -138,6 +138,28 @@ public class AdminController {
         return "API is working!";
     }
 
+    @GetMapping("/getuserbyid/{userid}")
+    public ResponseEntity<String> getUserById(@PathVariable int userid){
+        String userName = adminService.getMemberByIdToBorrow(userid);
+
+        if (userName!=null){
+            return new ResponseEntity<>(userName,HttpStatus.FOUND);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getbookbyid/{bookid}")
+    public ResponseEntity<String> getBookById(@PathVariable int bookid){
+        String title = adminService.getBookById(bookid);
+
+        if (title!=null){
+            return new ResponseEntity<>(title,HttpStatus.FOUND);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @PostMapping("/borrowbook")
     public ResponseEntity<Transactions> borrowBook(@RequestBody Transactions transactionBook){
