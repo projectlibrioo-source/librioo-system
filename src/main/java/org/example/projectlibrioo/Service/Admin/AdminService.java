@@ -22,6 +22,7 @@ public class AdminService {
     @Autowired
     private RobotRepo robotRepo;
 
+    // save book
     public Book saveBookData(Book book, MultipartFile bookImage) throws Exception {
         book.setImage(bookImage.getBytes());
         return bookRepo.save(book);
@@ -37,10 +38,12 @@ public class AdminService {
         }
     }
 
+    // update book
     public Book updateBooks(Book book) {
         return bookRepo.save(book);
     }
 
+    // delete book
     public Boolean deleteBooks(int bookId) {
         Book bookToDelete = bookRepo.findById(bookId);
         if (bookToDelete!=null){
@@ -78,4 +81,18 @@ public class AdminService {
 //    public Book getAllBooks(int bookId) {
 //        return bookRepo.findById(bookId);
 //    }
+
+
+    // get all books for the book page
+    public List<Book> getAllBooks(){
+        return bookRepo.findAll();
+    }
+
+    // get all users for the users page
+    public List<Member> getAllMembers(){
+        return memberRepo.findAll();
+    }
+
+
+
 }

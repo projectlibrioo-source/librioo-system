@@ -153,17 +153,6 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/getusers")
-    public ResponseEntity<Transactions> getAllUsers(@RequestParam("bookid") int bookId){
-        Transactions foundUser = transactionService.getAllUSers(bookId);
-
-        if (foundUser == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else {
-            return new ResponseEntity<>(foundUser, HttpStatus.OK);
-        }
-    }
-
     @PostMapping("/getfines")
     public ResponseEntity<Double> calculateFines(@RequestBody
     ReturnDTO returnBook){
@@ -189,41 +178,20 @@ public class AdminController {
         return transactionService.getTransactionsBetweenDates(LocalDate.parse(start), LocalDate.parse(end));
     }
 
-    @GetMapping("/searchbook")
-    public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title,
-                                                  @RequestParam(required = false) String author,
-                                                  @RequestParam(required = false) Long isbn){
-
-        List<Book> listOfBooks = adminService.getAllBooksByKeyword(title,author,isbn);
-         if (listOfBooks!=null){
-             return new ResponseEntity<>(listOfBooks, HttpStatus.OK);
-         }else {
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-         }
+     // get all books for the book page
+    @GetMapping("/books")
+    public ResponseEntity<List<Book>> getAllBooks(){
+        List<Book> books = adminService.getAllBooks();
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/searchmember")
-    public ResponseEntity<List<Member>> getAllUsers(@RequestParam(required = false) String fullname,
-                                                  @RequestParam(required = false) Integer libraryid){
 
-        List<Member> listOfMembers = adminService.getAllMembersByKeyword(fullname,libraryid);
-        if (listOfMembers!=null){
-            return new ResponseEntity<>(listOfMembers, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    // get all users for users page
+    @GetMapping("/users")
+    public ResponseEntity<List<Member>> getAllMembers(){
+        List<Member> members = adminService.getAllMembers();
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
-    @GetMapping("/searchrobot")
-    public ResponseEntity<Robot> getAllRobotDetails(@RequestParam(required = false) Integer robotid,
-                                                    @RequestParam(required = false) String robotname){
-
-        Robot RobotDetails = adminService.getAllRobotDetailsByKeyword(robotid,robotname);
-        if (RobotDetails!=null){
-            return new ResponseEntity<>(RobotDetails, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
 }
