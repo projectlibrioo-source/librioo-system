@@ -1,19 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout';
 
 const Notifications = () => {
     const [dailyOverdues, setDailyOverdues] = useState(true);
     const [robotAlerts, setRobotAlerts] = useState(true);
     const [filterType, setFilterType] = useState('All');
+    
+    const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // BACKEND: Dummy Notification Data. Fetch from your Spring Boot API (e.g., GET /api/notifications)
-    // You should filter or categorize them on the backend, or return a type property.
-    const notifications = [
-        { id: 1, type: 'robot', title: 'Service Upcoming', text: 'Robot Alpha needs routine maintenance in 7 days.', date: 'Oct 24, 10:00AM', read: false },
-        { id: 2, type: 'error', title: 'Pathing Error', text: 'Robot Beta encountered an obstacle near Section C.', date: 'Oct 24, 09:15AM', read: false },
-        { id: 3, type: 'book', title: 'Book Overdue', text: 'User ID: 1042 has kept "The Great Gatsby" overdue by 3 days.', date: 'Oct 23, 04:30PM', read: true },
-        { id: 4, type: 'system', title: 'System Update', text: 'Library Management System will undergo maintenance tonight at 11:00 PM.', date: 'Oct 22, 11:00AM', read: true },
-    ];
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
+
+    const fetchNotifications = async () => {
+        try {
+            setLoading(true);
+            const res = await axios.get('http://localhost:8080/api/notifications');
+            // Sort by ID descending so newest are on top
+            const sorted = (res.data || []).sort((a,b) => b.id - a.id);
+            setNotifications(sorted);
+        } catch (error) {
+            console.error('Failed to fetch notifications', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const markAllAsRead = async () => {
+        try {
+            await axios.put('http://localhost:8080/api/notifications/read-all');
+            setNotifications(notifications.map(n => ({...n, read: true})));
+        } catch (error) {
+            console.error('Failed to mark all as read', error);
+        }
+    };
+
+    const sendTestAlert = async () => {
+        try {
+            await axios.post('http://localhost:8080/api/notifications/test');
+            fetchNotifications();
+        } catch (error) {
+            console.error('Failed to send test alert', error);
+        }
+    };
 
     const getIconForType = (type) => {
         switch (type) {
@@ -41,15 +72,17 @@ const Notifications = () => {
                         <h2 className="text-3xl font-bold text-gray-900">Notifications</h2>
                         <p className="text-sm text-gray-500 mt-1">Admin / Notifications</p>
                     </div>
-                    {/* BACKEND: When connecting, clicking this could trigger a PUT request to mark all as read */}
-                    <button className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                    <button 
+                        onClick={markAllAsRead}
+                        className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                    >
                         Mark all as read
                     </button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Detailed Notifications List */}
-                    <div className="lg:col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow-sm h-fit">
+                    <div className="lg:col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow-sm h-fit min-h-[400px]">
                         <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
                             <h3 className="text-xl font-bold text-gray-800">All Alerts</h3>
 
@@ -66,27 +99,39 @@ const Notifications = () => {
                             </select>
                         </div>
 
-                        <div className="space-y-4">
-                            {filteredNotifications.map(notif => (
-                                <div key={notif.id} className={`flex items-start gap-4 p-4 rounded-lg border ${!notif.read ? 'bg-blue-50/50 border-blue-100' : 'bg-white border-gray-100 hover:bg-gray-50'}`}>
-                                    <div className="flex-shrink-0 mt-1">
-                                        {getIconForType(notif.type)}
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-start">
-                                            <h4 className={`text-md ${!notif.read ? 'font-bold text-gray-900' : 'font-medium text-gray-800'}`}>
-                                                {notif.title}
-                                            </h4>
-                                            <span className="text-xs text-gray-500 whitespace-nowrap ml-4">{notif.date}</span>
+                        {loading ? (
+                            <div className="flex justify-center items-center py-12">
+                                <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                            </div>
+                        ) : filteredNotifications.length === 0 ? (
+                            <div className="flex justify-center items-center py-12 text-gray-500">
+                                No notifications available.
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {filteredNotifications.map(notif => (
+                                    <div key={notif.id} className={`flex items-start gap-4 p-4 rounded-lg border ${!notif.read ? 'bg-blue-50/50 border-blue-100' : 'bg-white border-gray-100 hover:bg-gray-50 transition'}`}>
+                                        <div className="flex-shrink-0 mt-1">
+                                            {getIconForType(notif.type)}
                                         </div>
-                                        <p className="text-sm text-gray-600 mt-1 leading-relaxed">{notif.text}</p>
+                                        <div className="flex-1 w-full flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 max-w-full">
+                                            <div className="flex-1 min-w-0 pr-4 break-words">
+                                                <h4 className={`text-md break-words ${!notif.read ? 'font-bold text-gray-900' : 'font-medium text-gray-800'}`}>
+                                                    {notif.title}
+                                                </h4>
+                                                <p className="text-sm text-gray-600 mt-1 break-words whitespace-normal">{notif.text}</p>
+                                            </div>
+                                            <div className="flex items-center flex-shrink-0">
+                                                <span className="text-xs text-gray-500 whitespace-nowrap">{notif.dateStr}</span>
+                                                {!notif.read && (
+                                                    <div className="w-2 h-2 ml-2 bg-blue-500 rounded-full hidden sm:block"></div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                    {!notif.read && (
-                                        <div className="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full"></div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="space-y-6">
@@ -95,7 +140,7 @@ const Notifications = () => {
                             <h3 className="text-xl font-bold text-gray-800 mb-4">Alert Preferences</h3>
                             <div className="flex flex-col space-y-4">
 
-                                {/* BACKEND: These toggles should send a PATCH/PUT to user preferences endpoint */}
+                                {/* Toggles are currently visual only */}
                                 <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                                     <span className="text-sm font-medium text-gray-700">Daily Book Overdues</span>
                                     <button
@@ -115,7 +160,10 @@ const Notifications = () => {
                                     </button>
                                 </div>
 
-                                <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition text-sm font-medium mt-2">
+                                <button 
+                                    onClick={sendTestAlert}
+                                    className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition text-sm font-medium mt-2"
+                                >
                                     Send Test Alert
                                 </button>
                             </div>

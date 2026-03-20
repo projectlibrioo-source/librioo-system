@@ -12,14 +12,14 @@ const ManageRobot = () => {
 
     const [robot, setRobot] = useState({
         robotName: '',
-        robotModel: '',
+        model: '',
         startDate: ''
     });
 
     const [updateRobot, setUpdateRobot] = useState({
         robotId: '',
         robotName: '',
-        robotModel: '',
+        model: '',
         status: 'Active'
     });
 
@@ -50,8 +50,10 @@ const ManageRobot = () => {
         e.preventDefault();
         try {
             const robotData = {
-                ...robot,
-                status: 'Active' // Always set as Active when adding
+                robotName: robot.robotName,
+                model: robot.model,
+                startDate: robot.startDate,
+                status: 'ACTIVE'
             };
             const res = await axios.post(
                 "http://localhost:8080/api/robots/add",
@@ -68,7 +70,7 @@ const ManageRobot = () => {
             // Reset form
             setRobot({
                 robotName: '',
-                robotModel: '',
+                model: '',
                 startDate: ''
             });
         } catch (err) {
@@ -92,7 +94,7 @@ const ManageRobot = () => {
             setUpdateRobot({
                 robotId: res.data.robotID,
                 robotName: res.data.robotName,
-                robotModel: res.data.robotModel,
+                model: res.data.model,
                 status: res.data.status
             });
         } catch (err) {
@@ -110,7 +112,7 @@ const ManageRobot = () => {
                 {
                     robotID: updateRobot.robotId,
                     robotName: updateRobot.robotName,
-                    robotModel: updateRobot.robotModel,
+                    model: updateRobot.model,
                     status: updateRobot.status
                 },
                 {
@@ -127,20 +129,32 @@ const ManageRobot = () => {
         }
     };
 
-    // Search Robot for Maintenance
+    // Search Robot for Maintenance — load latest log entry from new table
     const searchRobotForMaintenance = async () => {
         if (!maintenanceSearchId) {
             alert("Please enter Robot ID");
             return;
         }
         try {
-            const res = await axios.get(`http://localhost:8080/api/robots/${maintenanceSearchId}`);
+            // First verify robot exists
+            await axios.get(`http://localhost:8080/api/robots/${maintenanceSearchId}`);
+
+            // Then load maintenance history (newest first)
+            const histRes = await axios.get(
+                `http://localhost:8080/api/robots/${maintenanceSearchId}/maintenance`,
+                { validateStatus: () => true }
+            );
+
+            const latest = (histRes.status === 200 && histRes.data.length > 0)
+                ? histRes.data[0]
+                : null;
+
             setMaintenanceData({
-                robotId: res.data.robotID,
-                lastServiceDate: res.data.lastServiceDate || '',
-                nextServiceDate: res.data.nextServiceDate || '',
-                partReplaced: res.data.partReplaced || '',
-                technicianNotes: res.data.technicianNotes || ''
+                robotId: parseInt(maintenanceSearchId),
+                lastServiceDate:  latest?.lastServiceDate  || '',
+                nextServiceDate:  latest?.nextServiceDate  || '',
+                partReplaced:     latest?.partReplaced     || '',
+                technicianNotes:  latest?.technicianNotes  || ''
             });
         } catch (err) {
             alert("Robot not found");
@@ -148,7 +162,7 @@ const ManageRobot = () => {
         }
     };
 
-    // Update Maintenance
+    // Log Maintenance — saves a new row to robot_maintenance table
     const handleUpdateMaintenance = async (e) => {
         e.preventDefault();
         try {
@@ -160,16 +174,12 @@ const ManageRobot = () => {
                     partReplaced: maintenanceData.partReplaced,
                     technicianNotes: maintenanceData.technicianNotes
                 },
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
+                { headers: { "Content-Type": "application/json" } }
             );
-            alert("Maintenance log updated successfully!");
+            alert("Maintenance log saved successfully!");
             fetchAllRobots();
         } catch (err) {
-            alert("Failed to update maintenance");
+            alert("Failed to save maintenance log");
             console.error(err);
         }
     };
@@ -268,8 +278,8 @@ const ManageRobot = () => {
                                     <div className="col-span-2 sm:col-span-1">
                                         <label className="block text-sm font-medium text-gray-700">Robot Model</label>
                                         <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" 
-                                            value={robot.robotModel}
-                                            onChange={(e) => setRobot({...robot, robotModel: e.target.value})}
+                                            value={robot.model}
+                                            onChange={(e) => setRobot({...robot, model: e.target.value})}
                                             placeholder="e.g. MK-III" 
                                             required
                                         />
@@ -360,8 +370,8 @@ const ManageRobot = () => {
                                             <input 
                                                 type="text" 
                                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500 bg-white" 
-                                                value={updateRobot.robotModel}
-                                                onChange={(e) => setUpdateRobot({...updateRobot, robotModel: e.target.value})}
+                                                value={updateRobot.model}
+                                                onChange={(e) => setUpdateRobot({...updateRobot, model: e.target.value})}
                                             />
                                         </div>
                                         <div className="col-span-2 sm:col-span-1">

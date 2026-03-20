@@ -17,15 +17,15 @@ const Transactions = () => {
                 const data = response.data;
                 const formatted = data.map(tx => ({
                     id: tx.transactionId || tx.id || 'N/A',
-                    username: tx.member?.fullName || tx.guest?.fullName || 'Unknown',
-                    userId: tx.member?.libraryID || tx.guest?.guestID || 'N/A',
-                    bookId: tx.book?.bookID || 'N/A',
-                    bookTitle: tx.book?.bookTitle || 'Unknown',
-                    type: tx.returnedDate ? 'Return' : 'Borrow', // Simplistic mapping, adapt if you have transaction type
-                    date: tx.transactionDate || 'N/A',
-                    returnDate: tx.returnedDate || tx.dueDate || 'N/A',
-                    status: tx.status || (tx.returnedDate ? 'Completed' : 'Pending'),
-                    borrowedThrough: tx.borrowedThrough || 'Robot (R-001)' // Mock or real data
+                    username: tx.member?.fullName || tx.guest?.fullName || `User ${tx.libraryId || tx.guestID}`,
+                    userId: tx.libraryId || tx.guestId || 'N/A',
+                    bookId: tx.bookId || tx.book?.bookID || 'N/A',
+                    bookTitle: tx.book?.bookTitle || `Book ${tx.bookId}`,
+                    type: tx.returnDate ? 'Return' : 'Borrow',
+                    date: tx.borrowDate || 'N/A',
+                    returnDate: tx.returnDate || 'N/A',
+                    status: tx.status || (tx.returnDate ? 'Completed' : 'Pending'),
+                    borrowedThrough: tx.borrowedThrough || 'Robot (R-001)'
                 }));
                 setTransactions(formatted);
             } catch (error) {

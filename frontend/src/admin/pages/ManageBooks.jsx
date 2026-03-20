@@ -23,7 +23,7 @@ const ManageBooks = () => {
             else formData.append("bookImage", new Blob([], { type: 'application/json' }), "empty.json"); // fallback if backend requires multipart file
 
             const bookJson = JSON.stringify({
-                bookID: parseInt(addForm.bookID), bookTitle: addForm.title, isbn: addForm.isbn, authorName: addForm.author, category: addForm.category, shelfNumber: parseInt(addForm.shelfNumber), availabilityStatus: addForm.available ? "Available" : "Unavailable"
+                bookId: parseInt(addForm.bookID), title: addForm.title, ISBN: parseInt(addForm.isbn), author: addForm.author, category: addForm.category, shelfNumber: parseInt(addForm.shelfNumber), availability: addForm.available
             });
             formData.append("book", bookJson);
             
@@ -39,7 +39,7 @@ const ManageBooks = () => {
         try {
             const res = await axios.get(`http://localhost:8080/api/getallbooks?bookid=${updateSearchId}`);
             const data = res.data;
-            setUpdateForm({ bookID: data.bookID, title: data.bookTitle, isbn: data.isbn, author: data.authorName, category: data.category, shelfNumber: data.shelfNumber, available: data.availabilityStatus !== 'Unavailable', image: null });
+            setUpdateForm({ bookID: data.bookId, title: data.title, isbn: data.ISBN, author: data.author, category: data.category, shelfNumber: data.shelfNumber, available: data.availability, image: null });
         } catch (err) {
             console.error(err); alert('Book not found');
         }
@@ -49,7 +49,7 @@ const ManageBooks = () => {
         e.preventDefault();
         try {
             const payload = {
-                bookID: parseInt(updateForm.bookID), bookTitle: updateForm.title, isbn: updateForm.isbn, authorName: updateForm.author, category: updateForm.category, shelfNumber: parseInt(updateForm.shelfNumber), availabilityStatus: updateForm.available ? "Available" : "Unavailable"
+                bookId: parseInt(updateForm.bookID), title: updateForm.title, ISBN: parseInt(updateForm.isbn), author: updateForm.author, category: updateForm.category, shelfNumber: parseInt(updateForm.shelfNumber), availability: updateForm.available
             };
             await axios.put('http://localhost:8080/api/updatebook', payload);
             alert('Book updated successfully');
@@ -238,12 +238,11 @@ const ManageBooks = () => {
                                 </div>
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-4 space-y-4">
                                     <div className="col-span-1 sm:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700">Book Title</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value={deleteBookInfo?.bookTitle || ''} />
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value={deleteBookInfo?.title || ''} />
                                     </div>
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700">ISBN</label>
-                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value={deleteBookInfo?.isbn || ''} />
+                                        <input type="text" className="block w-full px-3 py-2 mt-1 bg-gray-100 text-gray-500 border-none rounded-md" disabled value={deleteBookInfo?.ISBN || ''} />
                                     </div>
                                 </div>
                                 <div className="pt-4 mt-6">

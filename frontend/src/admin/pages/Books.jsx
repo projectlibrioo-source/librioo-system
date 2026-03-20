@@ -14,13 +14,14 @@ const Books = () => {
                 const response = await axios.get('http://localhost:8080/api/books');
                 
                 const formattedBooks = response.data.map(book => ({
-                    name: book.bookTitle || book.title || book.name || 'Unknown',
-                    author: book.author || book.authorName || 'Unknown',
-                    isbn: book.isbn || 'Unknown',
-                    status: book.status || (book.available === false ? 'Unavailable' : 'Available'),
+                    id: book.bookId,
+                    title: book.title || 'Unknown',
+                    author: book.author || 'Unknown',
+                    category: book.category || 'Unknown',
+                    isbn: book.ISBN || book.isbn || 'Unknown',
+                    status: book.availability ? 'Available' : 'Unavailable',
                     location: book.shelfNumber ? `Shelf ${book.shelfNumber}` : 'Unknown'
                 }));
-                
                 setBooks(formattedBooks);
             } catch (error) {
                 console.error("Error fetching books:", error);
@@ -62,7 +63,7 @@ const Books = () => {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-blue-50/50">
                                 <tr>
-                                    {['Book Name', 'Author', 'ISBN', 'Status', 'Location'].map((header) => (
+                                    {['ID', 'Title', 'Author', 'Category', 'ISBN', 'Status', 'Location'].map((header) => (
                                         <th
                                             key={header}
                                             scope="col"
@@ -86,10 +87,16 @@ const Books = () => {
                                     books.map((book, idx) => (
                                     <tr key={idx} className="transition-colors hover:bg-gray-50">
                                         <td className="px-6 py-4 text-sm font-medium text-gray-900 border-r border-gray-200 whitespace-nowrap">
-                                            {book.name}
+                                            {book.id}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 border-r border-gray-200 whitespace-nowrap">
+                                            {book.title}
                                         </td>
                                         <td className="px-6 py-4 text-sm font-bold text-gray-900 border-r border-gray-200 whitespace-nowrap">
                                             {book.author}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm font-bold text-gray-900 border-r border-gray-200 whitespace-nowrap">
+                                            {book.category}
                                         </td>
                                         <td className="px-6 py-4 text-sm font-bold text-gray-900 border-r border-gray-200 whitespace-nowrap">
                                             {book.isbn}
