@@ -88,9 +88,9 @@ public class RobotController {
         }
     }
 
-    // Update robot maintenance (PUT /api/robots/{id}/maintenance)
+    // Log new maintenance entry (PUT /api/robots/{id}/maintenance)
     @PutMapping("/robots/{id}/maintenance")
-    public ResponseEntity<?> updateRobotMaintenance(
+    public ResponseEntity<?> logRobotMaintenance(
             @PathVariable int id,
             @RequestBody Map<String, String> maintenanceData) {
         try {
@@ -99,12 +99,12 @@ public class RobotController {
             String partReplaced = maintenanceData.get("partReplaced");
             String technicianNotes = maintenanceData.get("technicianNotes");
 
-            Robot updatedRobot = robotService.updateRobotMaintenance(
+            RobotMaintenance savedLog = robotService.logMaintenance(
                     id, lastServiceDate, nextServiceDate, partReplaced, technicianNotes
             );
 
-            if (updatedRobot != null) {
-                return new ResponseEntity<>(updatedRobot, HttpStatus.OK);
+            if (savedLog != null) {
+                return new ResponseEntity<>(savedLog, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
