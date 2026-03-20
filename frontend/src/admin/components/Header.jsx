@@ -1,14 +1,32 @@
 // src/admin/components/Header.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Bell, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logActivity from '../utils/logActivity';
+import axios from 'axios';
 
 const Header = () => {
     const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState([]);
     const { logout, currentUser } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchNotifications();
+        // Poll for notifications every 30 seconds
+        const interval = setInterval(fetchNotifications, 30000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const fetchNotifications = async () => {
+        try {
+            const res = await axios.get('http://localhost:8080/api/notifications');
+            setNotifications(res.data);
+        } catch (error) {
+            console.error('Failed to fetch notifications in Header:', error);
+        }
+    };
 
     const handleLogout = async () => {
         try {
@@ -21,13 +39,14 @@ const Header = () => {
         }
     };
 
-    // BACKEND: Replace with fetch from GET /api/notifications/recent
-    const unreadCount = 3;
-    const latestNotifications = [
-        { id: 1, text: 'Robot Alpha service due in 7 days', time: '10m ago' },
-        { id: 2, text: 'Robot Beta encountered pathing error', time: '1h ago' },
-        { id: 3, text: 'Book ISBN 1234 is overdue by John', time: '2h ago' }
-    ];
+    const unreadCount = notifications.filter(n => !n.isRead).length;
+
+    // Helper to format timestamps if needed, or we just rely on what the API sends
+    const formatTime = (ts) => {
+        if (!ts) return '';
+        const date = new Date(ts);
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    };
 
     return (
         <header className="relative z-40 flex items-center justify-between h-16 px-8 bg-white border-b border-gray-100 shadow-sm">
@@ -42,7 +61,7 @@ const Header = () => {
             <div className="flex items-center space-x-6">
                 <div className="relative">
                     <button onClick={() => setShowNotifications(!showNotifications)}
-                        className="relative p-1 mt-1 text-gray-600 hover:text-blue-600">
+                        className="relative p-1 mt-1 text-gray-600 hover:text-blue-600 transition-colors">
                         <Bell className="w-5 h-5" />
                         {unreadCount > 0 && (
                             <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-[0.4rem] py-[0.1rem] text-[10px] font-bold text-white bg-red-500 rounded-full border-2 border-white">
@@ -57,15 +76,25 @@ const Header = () => {
                                 <span className="px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded-full">{unreadCount} New</span>
                             </div>
                             <div className="overflow-y-auto max-h-64">
-                                {latestNotifications.map(notif => (
-                                    <div key={notif.id} className="px-4 py-3 border-b cursor-pointer hover:bg-gray-50 border-gray-50">
-                                        <p className="text-sm text-gray-800">{notif.text}</p>
-                                        <p className="mt-1 text-xs text-gray-500">{notif.time}</p>
+                                {notifications.length === 0 ? (
+                                    <div className="px-4 py-6 text-center text-sm text-gray-500">
+                                        No recent notifications
                                     </div>
-                                ))}
+                                ) : (
+                                    notifications.map(notif => (
+                                        <div key={notif.id} className={`px-4 py-3 border-b cursor-pointer hover:bg-gray-50 border-gray-50 ${!notif.isRead ? 'bg-blue-50/30' : ''}`}>
+                                            <p className={`text-sm ${!notif.isRead ? 'font-semibold text-gray-900' : 'text-gray-800'}`}>
+                                                {notif.message || notif.title}
+                                            </p>
+                                            <p className="mt-1 text-xs text-gray-500">{formatTime(notif.createdAt)}</p>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                             <div className="px-4 py-2 text-center border-t border-gray-50">
-                                <a href="/admin/notifications" className="text-sm font-bold text-blue-600 hover:text-blue-800">View full list</a>
+                                <a href="/admin/notifications" className="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                                    View full list
+                                </a>
                             </div>
                         </div>
                     )}
