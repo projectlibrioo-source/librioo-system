@@ -91,9 +91,7 @@ public class TransactionService {
     }
 
 
-    public TransactionService(TransactionRepo transactionRepo) {
-        this.transactionRepo = transactionRepo;
-    }
+
 
     public List<Transactions> getTransactionsByDate(LocalDate Date){
         return transactionRepo.findByBorrowDate(Date);
