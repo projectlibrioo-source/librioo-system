@@ -1,6 +1,7 @@
 package org.example.projectlibrioo.Service.RobotService;
 
 import org.example.projectlibrioo.Model.Robot;
+import org.example.projectlibrioo.Model.RobotMaintenance;
 import org.example.projectlibrioo.Repository.RobotMaintenanceRepo;
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.navigation.ShelfPathMap;
