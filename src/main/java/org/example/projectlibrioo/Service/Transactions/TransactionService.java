@@ -25,9 +25,10 @@ public class TransactionService {
         String userCategory = transactionBook.getCategory();
 
         List<Transactions> bookDetails = transactionRepo.getBorrowedData(libraryId);
-        int bookCount = bookDetails.toArray().length;
+        int bookCount = bookDetails.size();
 
-        int loans = fineRepo.findMaxLoanByCategory(userCategory);
+        org.example.projectlibrioo.Model.Fines fineConfig = fineRepo.findByCategory(userCategory);
+        int loans = (fineConfig != null) ? fineConfig.getMax_loans() : 5;
 
         if(bookCount >= loans){
             return false;
@@ -64,7 +65,10 @@ public class TransactionService {
                     LocalDate.now()
             );
 
-            fine = fineRepo.findFineByCategory(userCategory) * overdueDays;
+            org.example.projectlibrioo.Model.Fines fineConfig = fineRepo.findByCategory(userCategory);
+            double dailyRate = (fineConfig != null) ? fineConfig.getRate() : 0.0;
+
+            fine = dailyRate * overdueDays;
 
 
         }
