@@ -3,6 +3,7 @@ package org.example.projectlibrioo.Repository;
 import org.example.projectlibrioo.Model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -25,4 +26,13 @@ public interface BookRepo extends JpaRepository<Book, Integer> {
     List<Integer> findShelfNumberByCategory(String category);
 
     List<Book> findByCategoryIgnoreCase(String category);
+
+    @Query("SELECT b FROM Book b WHERE b.bookId = :bookId")
+    //Book findBook(@Param("bookId") int bookId);
+    Book findById(int bookId);
+
+    @Query("SELECT b FROM Book b WHERE b.title = :title OR b.author = :author OR b.ISBN = :isbn ")
+    List<Book> findAllBooksByKeyword( @Param("title") String title,
+                                      @Param("author") String author,
+                                      @Param("isbn") Long isbn);
 }

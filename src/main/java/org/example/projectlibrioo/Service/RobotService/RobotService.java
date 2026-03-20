@@ -1,6 +1,8 @@
 package org.example.projectlibrioo.Service.RobotService;
 
 import org.example.projectlibrioo.Model.Robot;
+import org.example.projectlibrioo.Model.RobotMaintenance;
+import org.example.projectlibrioo.Repository.RobotMaintenanceRepo;
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.navigation.ShelfPathMap;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ public class RobotService {
     private final ShelfPathMap shelfPathMap;
     private final RestTemplate restTemplate = new RestTemplate();
     private final RobotRepo robotRepo;
+    private final RobotMaintenanceRepo robotMaintenanceRepo;
 
-    public RobotService(ShelfPathMap shelfPathMap, RobotRepo robotRepo) {
+    public RobotService(ShelfPathMap shelfPathMap, RobotRepo robotRepo, RobotMaintenanceRepo robotMaintenanceRepo) {
         this.shelfPathMap = shelfPathMap;
         this.robotRepo = robotRepo;
+        this.robotMaintenanceRepo = robotMaintenanceRepo;
     }
 
     /*public void navigateToShelf(int shelfNumber) {
@@ -97,22 +101,35 @@ public class RobotService {
         return robotRepo.existsByRobotName(robotName);
     }
 
-    // Update robot maintenance
-    public Robot updateRobotMaintenance(int robotId,
-                                        LocalDate lastServiceDate,
-                                        LocalDate nextServiceDate,
-                                        String partReplaced,
-                                        String technicianNotes) {
+    // ---------- MAINTENANCE (separate table) ----------
+
+    // Log a new maintenance entry into robot_maintenance table
+    public RobotMaintenance logMaintenance(int robotId,
+                                           LocalDate lastServiceDate,
+                                           LocalDate nextServiceDate,
+                                           String partReplaced,
+                                           String technicianNotes) {
         Robot robot = getRobotById(robotId);
-        if (robot != null) {
-            robot.setLastServiceDate(lastServiceDate);
-            robot.setNextServiceDate(nextServiceDate);
-            robot.setPartReplaced(partReplaced);
-            robot.setTechnicianNotes(technicianNotes);
-            robot.setStatus("MAINTENANCE");
-            return robotRepo.save(robot);
-        }
-        return null;
+        if (robot == null) return null;
+
+        RobotMaintenance log = new RobotMaintenance();
+        log.setRobot(robot);
+        log.setLastServiceDate(lastServiceDate);
+        log.setNextServiceDate(nextServiceDate);
+        log.setPartReplaced(partReplaced);
+        log.setTechnicianNotes(technicianNotes);
+        // loggedAt is auto-set via @PrePersist in RobotMaintenance
+
+        // Also flip robot status to MAINTENANCE
+        robot.setStatus("MAINTENANCE");
+        robotRepo.save(robot);
+
+        return robotMaintenanceRepo.save(log);
+    }
+
+    // Get full maintenance history for a robot (newest first)
+    public List<RobotMaintenance> getMaintenanceHistory(int robotId) {
+        return robotMaintenanceRepo.findByRobot_RobotIDOrderByLoggedAtDesc(robotId);
     }
 
 }
