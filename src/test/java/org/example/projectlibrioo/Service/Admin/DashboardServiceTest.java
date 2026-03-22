@@ -57,4 +57,19 @@ public class DashboardServiceTest {
         assertEquals(5L, result.getOverdueBooks());
         assertEquals(3L, result.getActiveRobots());
     }
+
+    // Code Snippet: DashboardServiceTest.java
+    @Test
+    void testGetDashboardData_ZeroState() {
+        when(bookRepository.count()).thenReturn(0L);
+        when(memberRepository.count()).thenReturn(0L);
+        when(guestRepository.count()).thenReturn(0L);
+        when(memberRepository.countByStatus("ACTIVE")).thenReturn(0L);
+        when(transactionsRepository.countByStatus("BORROWED")).thenReturn(0L);
+        when(transactionsRepository.countByReturnDateBeforeAndStatus(LocalDate.now(), "BORROWED")).thenReturn(0L);
+        when(robotRepository.countByStatus("ACTIVE")).thenReturn(0L);
+        DashboardDTO result = dashboardService.getDashboardData();
+        assertEquals(0L, result.getTotalBooks());
+        assertEquals(0L, result.getTotalUsers());
+    }
 }
