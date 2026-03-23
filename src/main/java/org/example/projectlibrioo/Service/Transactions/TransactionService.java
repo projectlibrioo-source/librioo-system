@@ -80,28 +80,14 @@ public class TransactionService {
         return fine;
     }
 
-//    public Transactions confirmReturn(ReturnDTO bookToReturn){
-//        Transactions returnedData = transactionRepo.findByIds(bookToReturn.getLibraryId(),bookToReturn.getBookId());
-//        returnedData.setStatus("Returned");
-//
-//        return transactionRepo.save(returnedData);
-//
-//
-//
-//    }
-
-    public boolean markAsReturned(ReturnDTO returnDTO) {
-        Transactions returnedData = transactionRepo.findByIds(returnDTO.getLibraryId(),returnDTO.getBookId());
+    public Transactions confirmReturn(ReturnDTO bookToReturn){
+        Transactions returnedData = transactionRepo.findByIds(bookToReturn.getLibraryId(),bookToReturn.getBookId());
         returnedData.setStatus("Returned");
 
-        transactionRepo.save(returnedData);
-        return true;
-
-    }
+        return transactionRepo.save(returnedData);
 
 
-    public TransactionService(TransactionRepo transactionRepo) {
-        this.transactionRepo = transactionRepo;
+
     }
 
 
@@ -111,13 +97,16 @@ public class TransactionService {
         return transactionRepo.findByBorrowDate(Date);
     }
 
+    public List<Transactions> getTransactionsBetweenDates(LocalDate start, LocalDate end) {
+        return transactionRepo.findByBorrowDateBetween(start, end);
+    }
+
+    public List<Transactions> getAllTransactions() {
+        return transactionRepo.findAll();
+    }
+
 
     public Transactions getAllUSers(int bookId) {
         return transactionRepo.findByBookId(bookId);
     }
-
-
-
 }
-
-

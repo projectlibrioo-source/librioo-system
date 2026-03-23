@@ -11,23 +11,12 @@ import java.util.Optional;
 @Repository
 public interface RobotRepo extends JpaRepository<Robot, Integer> {
 
-<<<<<<< HEAD
-=======
-    @Query("SELECT r FROM Robot r WHERE r.robotID = :robotID OR r.robotName = :robotName")
-    Robot findRobotsByKeyword(@Param("robotID") Integer robotID, @Param("robotName") String robotName);
->>>>>>> origin/backend-sandun
     Optional<Robot> findByRobotName(String robotName);
     List<Robot> findByStatus(String status);
-
-
     boolean existsByRobotName(String robotName);
-
     long countByStatus(String status); // ACTIVE robots
 
-<<<<<<< HEAD
 
     @Query("SELECT r FROM Robot r WHERE r.robotID = :robotID OR r.robotName = :robotName")
     Robot findRobotsByKeyword(@Param("robotID") Integer robotID, @Param("robotName") String robotName);
-=======
->>>>>>> origin/backend-sandun
 }

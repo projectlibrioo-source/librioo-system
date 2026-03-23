@@ -2,11 +2,6 @@ package org.example.projectlibrioo.Controller.Robot;
 
 import org.example.projectlibrioo.Model.Robot;
 import org.example.projectlibrioo.Model.RobotMaintenance;
-<<<<<<< HEAD
-import org.example.projectlibrioo.Model.RobotOverviewDTO;
-=======
-import org.example.projectlibrioo.Repository.RobotMaintainRepo;
->>>>>>> origin/backend-sandun
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.Service.RobotService.RobotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +15,17 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/robots")
+@RequestMapping("/api")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RobotController {
 
     @Autowired
-    private final RobotService robotService;
+    private RobotService robotService;
     @Autowired
     private RobotRepo robotRepository;
-    @Autowired
-    private RobotMaintenance robotMaintenance;
 
     // Add new robot (POST /api/robots/add)
-    @PostMapping("/add")
+    @PostMapping("/robots/add")
     public ResponseEntity<?> addRobot(@RequestBody Robot robot) {
         try {
             // Check if robot with same name exists
@@ -55,7 +48,7 @@ public class RobotController {
     }
 
     // Get all robots (GET /api/robots/all)
-    @GetMapping("/all")
+    @GetMapping("/robots/all")
     public ResponseEntity<List<Robot>> getAllRobots() {
         List<Robot> robots = robotService.getAllRobots();
         if (robots.isEmpty()) {
@@ -65,7 +58,7 @@ public class RobotController {
     }
 
     // Get robot by ID or name (GET /api/robots/search)
-    @GetMapping("/search")
+    @GetMapping("/robots/search")
     public ResponseEntity<?> searchRobot(
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String name) {
@@ -85,7 +78,7 @@ public class RobotController {
     }
 
     // Get robot by ID (GET /api/robots/{id})
-    @GetMapping("/{id}")
+    @GetMapping("/robots/{id}")
     public ResponseEntity<Robot> getRobotById(@PathVariable int id) {
         Robot robot = robotService.getRobotById(id);
         if (robot != null) {
@@ -95,9 +88,9 @@ public class RobotController {
         }
     }
 
-    // Update robot maintenance (PUT /api/robots/{id}/maintenance)
-    @PutMapping("/{id}/maintenance")
-    public ResponseEntity<?> updateRobotMaintenance(
+    // Log new maintenance entry (PUT /api/robots/{id}/maintenance)
+    @PutMapping("/robots/{id}/maintenance")
+    public ResponseEntity<?> logRobotMaintenance(
             @PathVariable int id,
             @RequestBody Map<String, String> maintenanceData) {
         try {
@@ -123,7 +116,7 @@ public class RobotController {
     }
 
     // Update robot details (PUT /api/robots/{id})
-    @PutMapping("/{id}")
+    @PutMapping("/robots/{id}")
     public ResponseEntity<Robot> updateRobot(@PathVariable int id, @RequestBody Robot robot) {
         robot.setRobotID(id); // Ensure ID matches
         Robot updatedRobot = robotService.updateRobot(robot);
@@ -135,7 +128,7 @@ public class RobotController {
     }
 
     // Delete robot (DELETE /api/robots/{id})
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/robots/{id}")
     public ResponseEntity<Map<String, String>> deleteRobot(@PathVariable int id) {
         boolean deleted = robotService.deleteRobot(id);
         Map<String, String> response = new HashMap<>();
@@ -150,7 +143,7 @@ public class RobotController {
     }
 
     // Delete robot by search parameter (DELETE /api/robots/delete)
-    @DeleteMapping("/delete")
+    @DeleteMapping("/robots/delete")
     public ResponseEntity<Map<String, String>> deleteRobotByParam(
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String name) {
@@ -178,36 +171,17 @@ public class RobotController {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-<<<<<<< HEAD
     // Get full maintenance history for a robot (GET /api/robots/{id}/maintenance)
-    @GetMapping("/{id}/maintenance")
+    @GetMapping("/robots/{id}/maintenance")
     public ResponseEntity<List<RobotMaintenance>> getMaintenanceHistory(@PathVariable int id) {
         List<RobotMaintenance> history = robotService.getMaintenanceHistory(id);
         if (history == null || history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-=======
-    // Get service history (simplified - returns maintenance info for a robot)
-    @GetMapping("/robots/{id}/maintenance")
-    public ResponseEntity<?> getMaintenanceHistory(@PathVariable int id) {
-        Robot robot = robotService.getRobotById(id);
-        if (robot != null) {
-            Map<String, Object> history = new HashMap<>();
-            history.put("lastServiceDate", robotMaintenance.getLastServiceDate());
-            history.put("nextServiceDate", robotMaintenance.getNextServiceDate());
-            history.put("partReplaced", robotMaintenance.getPartReplaced());
-            history.put("technicianNotes", robotMaintenance.getTechnicianNotes());
-            history.put("status", robot.getStatus());
-            return new ResponseEntity<>(history, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
->>>>>>> origin/backend-sandun
         }
         return new ResponseEntity<>(history, HttpStatus.OK);
     }
 
-
-
-    @GetMapping("/test")
+    @GetMapping("/robot/test")
     public String test() {
         return "Robot API is working!";
     }
@@ -216,18 +190,6 @@ public class RobotController {
     public List<Robot> getAllRobotOverview() {
         return robotRepository.findAll();
     }
-
-    public RobotController(RobotService robotService) {
-        this.robotService = robotService;
-    }
-
-
-    // Filter robots by status
-    @GetMapping("/status/{status}")
-    public List<RobotOverviewDTO> getRobotsByStatus(@PathVariable String status) {
-        return robotService.getRobotsByStatus(status.toUpperCase());
-    }
-
 
 
 }

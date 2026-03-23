@@ -145,23 +145,6 @@ public class AdminService {
         return robotRepo.findRobotsByKeyword(robotid, robotname);
     }
 
-    public String getMemberByIdToBorrow(int userid) {
-        Member member = memberRepo.findUserByLibraryID(userid);
-         if (member!=null){
-             return member.getFullName();
-         }else {
-             return "";
-         }
-    }
-
-    public String getBookById(int bookid) {
-        Book member = bookRepo.findById(bookid);
-        if (member!=null){
-            return member.getTitle();
-        }else {
-            return "";
-        }
-    }
 
 //    public Book getAllBooks(int bookId) {
 //        return bookRepo.findById(bookId);

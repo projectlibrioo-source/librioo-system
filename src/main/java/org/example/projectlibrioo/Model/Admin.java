@@ -4,8 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
 import org.hibernate.annotations.AnyDiscriminatorImplicitValues;
 
+@Data
 @Entity
 public class Admin {
     @Id
@@ -13,44 +15,5 @@ public class Admin {
     private int adminId;
     private String adminUsername;
     private String password;
-<<<<<<< HEAD
-=======
     private String adminRole;
->>>>>>> origin/backend-sandun
-
-    public int getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(int adminId) {
-        this.adminId = adminId;
-    }
-
-    public String getAdminUsername() {
-        return adminUsername;
-    }
-
-    public void setAdminUsername(String adminUsername) {
-        this.adminUsername = adminUsername;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-<<<<<<< HEAD
-    private String adminRole;
-=======
-
-    public String getAdminRole() {
-        return adminRole;
-    }
-
-    public void setAdminRole(String adminRole) {
-        this.adminRole = adminRole;
-    }
->>>>>>> origin/backend-sandun
 }
