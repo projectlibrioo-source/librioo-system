@@ -18,5 +18,6 @@ public class Robot {
     private String model;
     private LocalDate startDate;
     private String status; // ACTIVE, MAINTENANCE, RETIRED
+    private LocalDate serviceDate;
 }
 

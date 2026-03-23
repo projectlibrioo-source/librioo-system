@@ -263,13 +263,6 @@ public class AdminController {
         return transactionService.getAllTransactions();
     }
 
-    @PutMapping("/confirmreturn")
-    public ResponseEntity<Transactions> confirmTheReturn(@RequestBody ReturnDTO returnDTO){
-        Transactions bookReturned = transactionService.confirmReturn(returnDTO);
-
-        return new ResponseEntity<>(bookReturned, HttpStatus.OK);
-    }
-
     @GetMapping("/searchbook")
     public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title,
                                                   @RequestParam(required = false) String author,
@@ -324,6 +317,67 @@ public class AdminController {
         List<Book> books = adminService.getAllBooks();
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
+
+    @GetMapping("/getuserbyid/{userid}")
+    public ResponseEntity<String> getUserById(@PathVariable int userid){
+        String userName = adminService.getMemberByIdToBorrow(userid);
+
+        if (userName!=null){
+            return new ResponseEntity<>(userName,HttpStatus.FOUND);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getbookbyid/{bookid}")
+    public ResponseEntity<String> getBookById(@PathVariable int bookid){
+        String title = adminService.getBookById(bookid);
+
+        if (title!=null){
+            return new ResponseEntity<>(title,HttpStatus.FOUND);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PostMapping("/borrowbook")
+    public ResponseEntity<Transactions> borrowBook(@RequestBody Transactions transactionBook){
+        Boolean bookBorrowed = transactionService.checkEligibility(transactionBook);
+
+        if (bookBorrowed){
+            transactionBook.setStatus("Borrowed");
+            return new ResponseEntity<>(transactionService.saveTransaction(transactionBook),HttpStatus.OK);
+
+        }
+        else {
+            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/getusers")
+    public ResponseEntity<Transactions> getAllUsers(@RequestParam("bookid") int bookId){
+        Transactions foundUser = transactionService.getAllUSers(bookId);
+
+        if (foundUser == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/getfines")
+    public ResponseEntity<Double> calculateFines(@RequestBody ReturnDTO returnBook){
+        double fine = transactionService.getFines(returnBook);
+
+        return new ResponseEntity<>(fine,HttpStatus.OK);
+    }
+
+   @PutMapping("/returnbook")
+   public ResponseEntity<Boolean> returnBook(@RequestBody ReturnDTO returnDTO){
+        boolean bookReturned = transactionService.markAsReturned(returnDTO);
+      return new ResponseEntity<>(bookReturned, HttpStatus.OK);
+   }
 
 
     // get all users for users page
