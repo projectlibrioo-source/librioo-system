@@ -1,6 +1,10 @@
 package org.example.projectlibrioo.Controller.User;
 
 import org.example.projectlibrioo.Model.*;
+import org.example.projectlibrioo.Model.Book;
+import org.example.projectlibrioo.Model.Guest;
+import org.example.projectlibrioo.Model.Member;
+import org.example.projectlibrioo.Model.Transactions;
 import org.example.projectlibrioo.Repository.BookRepo;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.RobotService.RobotService;

@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 public interface FineRepo extends JpaRepository<Fines, Integer> {
 
     Fines findByCategory(String category);
+
+    int findMaxLoanByCategory(String userCategory);
+
+    double findFineByCategory(String userCategory);
 }

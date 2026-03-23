@@ -20,4 +20,5 @@ public class ReturnDTO {
     public void setBookId(int bookId) {
         this.bookId = bookId;
     }
+    private String category;
 }

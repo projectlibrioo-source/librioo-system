@@ -1,4 +1,5 @@
 package org.example.projectlibrioo.Controller.Admin;
+
 import org.example.projectlibrioo.Model.*;
 import org.example.projectlibrioo.Service.Admin.AdminService;
 import org.example.projectlibrioo.Service.Transactions.TransactionService;
@@ -83,8 +84,9 @@ public class AdminController {
         if (returnedBook == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else {
-            return new ResponseEntity<>(returnedBook, HttpStatus.OK);
+            return new ResponseEntity<>(returnedBook, HttpStatus.FOUND);
         }
+
     }
 
     @PutMapping("/updatebook")
