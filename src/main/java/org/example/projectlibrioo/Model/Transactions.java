@@ -4,7 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/backend-sandun
 import java.time.LocalDate;
 
 @Entity
@@ -19,6 +22,10 @@ public class Transactions {
     private LocalDate returnDate;
     private String status;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/backend-sandun
     public int getTransactionId() {
         return transactionId;
     }
@@ -51,6 +58,17 @@ public class Transactions {
         this.borrowDate = borrowDate;
     }
 
+<<<<<<< HEAD
+=======
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+>>>>>>> origin/backend-sandun
     public LocalDate getReturnDate() {
         return returnDate;
     }

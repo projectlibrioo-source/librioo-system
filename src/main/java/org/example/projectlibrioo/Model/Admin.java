@@ -13,6 +13,10 @@ public class Admin {
     private int adminId;
     private String adminUsername;
     private String password;
+<<<<<<< HEAD
+=======
+    private String adminRole;
+>>>>>>> origin/backend-sandun
 
     public int getAdminId() {
         return adminId;
@@ -37,5 +41,16 @@ public class Admin {
     public void setPassword(String password) {
         this.password = password;
     }
+<<<<<<< HEAD
     private String adminRole;
+=======
+
+    public String getAdminRole() {
+        return adminRole;
+    }
+
+    public void setAdminRole(String adminRole) {
+        this.adminRole = adminRole;
+    }
+>>>>>>> origin/backend-sandun
 }

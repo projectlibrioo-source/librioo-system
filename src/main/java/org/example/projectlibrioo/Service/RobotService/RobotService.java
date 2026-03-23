@@ -6,6 +6,7 @@ import org.example.projectlibrioo.Repository.RobotMaintenanceRepo;
 import org.example.projectlibrioo.Model.RobotOverviewDTO;
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.navigation.ShelfPathMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -101,8 +102,8 @@ public class RobotService {
         if (robot.getStatus() == null) {
             robot.setStatus("ACTIVE");
         }
-        if (robot.getStartDate() == null) {
-            robot.setStartDate(LocalDate.now());
+        if (robotMaintenance.getStartDate() == null) {
+            robotMaintenance.setStartDate(LocalDate.now());
         }
         return robotRepo.save(robot);
     }

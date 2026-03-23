@@ -2,7 +2,11 @@ package org.example.projectlibrioo.Controller.Robot;
 
 import org.example.projectlibrioo.Model.Robot;
 import org.example.projectlibrioo.Model.RobotMaintenance;
+<<<<<<< HEAD
 import org.example.projectlibrioo.Model.RobotOverviewDTO;
+=======
+import org.example.projectlibrioo.Repository.RobotMaintainRepo;
+>>>>>>> origin/backend-sandun
 import org.example.projectlibrioo.Repository.RobotRepo;
 import org.example.projectlibrioo.Service.RobotService.RobotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,8 @@ public class RobotController {
     private final RobotService robotService;
     @Autowired
     private RobotRepo robotRepository;
+    @Autowired
+    private RobotMaintenance robotMaintenance;
 
     // Add new robot (POST /api/robots/add)
     @PostMapping("/add")
@@ -172,12 +178,29 @@ public class RobotController {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+<<<<<<< HEAD
     // Get full maintenance history for a robot (GET /api/robots/{id}/maintenance)
     @GetMapping("/{id}/maintenance")
     public ResponseEntity<List<RobotMaintenance>> getMaintenanceHistory(@PathVariable int id) {
         List<RobotMaintenance> history = robotService.getMaintenanceHistory(id);
         if (history == null || history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+=======
+    // Get service history (simplified - returns maintenance info for a robot)
+    @GetMapping("/robots/{id}/maintenance")
+    public ResponseEntity<?> getMaintenanceHistory(@PathVariable int id) {
+        Robot robot = robotService.getRobotById(id);
+        if (robot != null) {
+            Map<String, Object> history = new HashMap<>();
+            history.put("lastServiceDate", robotMaintenance.getLastServiceDate());
+            history.put("nextServiceDate", robotMaintenance.getNextServiceDate());
+            history.put("partReplaced", robotMaintenance.getPartReplaced());
+            history.put("technicianNotes", robotMaintenance.getTechnicianNotes());
+            history.put("status", robot.getStatus());
+            return new ResponseEntity<>(history, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+>>>>>>> origin/backend-sandun
         }
         return new ResponseEntity<>(history, HttpStatus.OK);
     }

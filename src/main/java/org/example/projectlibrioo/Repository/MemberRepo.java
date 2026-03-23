@@ -12,9 +12,16 @@ import java.util.List;
 public interface MemberRepo extends JpaRepository<Member, Integer> {
 
     Member findUserByLibraryID(int libraryID);
+<<<<<<< HEAD
     long countByStatus(String status); // ACTIVE users
+=======
+>>>>>>> origin/backend-sandun
 
     @Query("SELECT m FROM Member m WHERE m.fullName = :fullname OR m.libraryID = :libraryid")
     List<Member> findAllMembersByKeyword(@Param("fullname") String fullname,
                                          @Param("libraryid") Integer libraryid);
+<<<<<<< HEAD
+=======
+    long countByStatus(String status); // ACTIVE users
+>>>>>>> origin/backend-sandun
 }
