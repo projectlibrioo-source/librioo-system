@@ -1,74 +1,39 @@
 #include <WiFi.h>
-#include <WebServer.h>
+#include <FirebaseESP32.h>
 
-// ===== EXISTING WIFI DETAILS =====
-const char* wifi_ssid = "Sandun";
-const char* wifi_password = "anc12345";
+// ===== WIFI DETAILS =====
+const char* wifi_ssid     = "Nimuthu";
+const char* wifi_password = "12345678";
+
+// ===== FIREBASE DETAILS =====
+// Replace these with your actual Firebase project values
+#define FIREBASE_HOST "librioo-fb90e-default-rtdb.firebaseio.com"
+#define FIREBASE_AUTH "hnF7eZxiMeFtxmngnowVkEOsdRJLqKkkADmqEUAs"
 
 // ===== SERIAL TO UNO =====
 // ESP32 TX2(GPIO19) -> UNO D10 (SoftwareSerial RX)
 // ESP32 GND -> UNO GND
-// (Optional) UNO D11 (TX) -> ESP32 RX2(GPIO16) via level shift
 #define RX2 16
 #define TX2 19
 
-WebServer server(80);
+// ===== FIREBASE OBJECTS =====
+FirebaseData fbData;
+FirebaseConfig fbConfig;
+FirebaseAuth fbAuth;
 
-// ---------- HTML ----------
-String makePage() {
-  String page =
-    "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-    "<title>Librioo Robot</title></head><body>"
-    "<h2>Librioo Robot</h2>"
-    "<p>Send shelf:</p>"
-    "<a href='/send?num=1'>Shelf 1</a><br>"
-    "<a href='/send?num=2'>Shelf 2</a><br>"
-    "<a href='/send?num=3'>Shelf 3</a><br>"
-    "<a href='/send?num=4'>Shelf 4</a><br><br>"
-    "<a href='/send?num=STOP' style='color:red;'>STOP</a><br>"
-    "</body></html>";
-  return page;
-}
+// ===== STATE =====
+int  lastShelf    = -1;    // last shelf we sent to UNO (avoid re-sending)
+bool lastWasBack  = false; // tracks if last command was BACK
 
-void handleRoot() {
-  Serial.println("HTTP: /");
-  server.send(200, "text/html", makePage());
-}
+unsigned long lastPollTime = 0;
+const unsigned long POLL_INTERVAL = 1000; // poll Firebase every 1 second
 
-void handleSend() {
-  Serial.print("HTTP: /send  uri=");
-  Serial.println(server.uri());
-
-  if (!server.hasArg("num")) {
-    server.send(400, "text/plain", "Missing num");
-    return;
-  }
-
-  String cmd = server.arg("num");
-  cmd.trim();
-
-  //Send to UNO with newline
-  Serial2.println(cmd);
-
-  Serial.print("Sent to UNO: ");
-  Serial.println(cmd);
-
-  server.send(200, "text/plain", "Sent: " + cmd);
-
-}
-
-void handleNotFound() {
-  Serial.print("404: ");
-  Serial.println(server.uri());
-  server.send(404, "text/plain", "Not found");
-}
-
+// ===== SETUP =====
 void setup() {
   Serial.begin(115200);
-
-  // Serial2: RX=GPIO16, TX=GPIO19
   Serial2.begin(9600, SERIAL_8N1, RX2, TX2);
 
+  // ----- Connect WiFi -----
   WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);
   WiFi.begin(wifi_ssid, wifi_password);
@@ -78,32 +43,104 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-
-  Serial.println("\nConnected!");
-  Serial.print("ESP32 IP address: ");
+  Serial.println("\nWiFi connected!");
+  Serial.print("IP: ");
   Serial.println(WiFi.localIP());
 
-  server.on("/", handleRoot);
-  server.on("/send", handleSend);
-  server.onNotFound(handleNotFound);
-  server.begin();
+  // ----- Connect Firebase -----
+  fbConfig.host = FIREBASE_HOST;
+  fbConfig.signer.tokens.legacy_token = FIREBASE_AUTH;
 
-  Serial.println("Web server started");
-  Serial.print("Open: http://");
-  Serial.print(WiFi.localIP());
-  Serial.println("/");
+  Firebase.begin(&fbConfig, &fbAuth);
+  Firebase.reconnectWiFi(true);
+
+  Serial.println("Firebase connected.");
+  Serial.println("Listening for shelf commands...");
 }
 
+// ===== LOOP =====
 void loop() {
-  server.handleClient();
+  // Poll Firebase at set interval
+  if (millis() - lastPollTime >= POLL_INTERVAL) {
+    lastPollTime = millis();
+    pollFirebase();
+  }
 
-  // Optional: read replies from UNO (if UNO TX connected to ESP32 RX2)
+  // Read replies from UNO (ARRIVED / AT_START)
   if (Serial2.available()) {
     String msg = Serial2.readStringUntil('\n');
     msg.trim();
     if (msg.length() > 0) {
       Serial.print("UNO -> ESP32: ");
       Serial.println(msg);
+      handleUNOReply(msg);
     }
+  }
+}
+
+// ===== POLL FIREBASE =====
+void pollFirebase() {
+  // --- Read targetShelf ---
+  if (Firebase.getInt(fbData, "/robot/targetShelf")) {
+    int shelf = fbData.intData();
+
+    if (shelf > 0 && shelf != lastShelf) {
+      lastShelf   = shelf;
+      lastWasBack = false;
+
+      Serial2.println(shelf);  // send shelf number to UNO
+      Serial.print("Sent shelf to UNO: ");
+      Serial.println(shelf);
+
+      // Update status in Firebase
+      Firebase.setString(fbData, "/robot/status", "MOVING");
+    }
+  } else {
+    Serial.print("Firebase read error (targetShelf): ");
+    Serial.println(fbData.errorReason());
+  }
+
+  // --- Read currentCommand (for BACK / STOP) ---
+  if (Firebase.getString(fbData, "/robot/currentCommand")) {
+    String cmd = fbData.stringData();
+    cmd.trim();
+
+    if (cmd == "BACK" && !lastWasBack) {
+      lastWasBack = true;
+      Serial2.println("BACK");   // send BACK command to UNO
+      Serial.println("Sent BACK to UNO.");
+
+      // Clear the command in Firebase so it doesn't repeat
+      Firebase.setString(fbData, "/robot/currentCommand", "");
+      Firebase.setString(fbData, "/robot/status", "RETURNING");
+    }
+
+    if (cmd == "STOP") {
+      Serial2.println("STOP");
+      Serial.println("Sent STOP to UNO.");
+      Firebase.setString(fbData, "/robot/currentCommand", "");
+      Firebase.setString(fbData, "/robot/status", "STOPPED");
+    }
+  } else {
+    Serial.print("Firebase read error (currentCommand): ");
+    Serial.println(fbData.errorReason());
+  }
+}
+
+// ===== HANDLE UNO REPLIES =====
+void handleUNOReply(String msg) {
+  if (msg.startsWith("ARRIVED")) {
+    // UNO arrived at shelf — update Firebase status
+    Firebase.setString(fbData, "/robot/status", "ARRIVED");
+    Serial.println("Firebase status -> ARRIVED");
+
+  } else if (msg == "AT_START") {
+    // UNO returned to start — reset Firebase
+    Firebase.setString(fbData, "/robot/status", "IDLE");
+    Firebase.setInt(fbData,    "/robot/targetShelf", 0);
+    Firebase.setString(fbData, "/robot/currentCommand", "");
+    lastShelf   = -1;
+    lastWasBack = false;
+    Serial.println("Firebase status -> IDLE (robot back at start)");
   }
 }
