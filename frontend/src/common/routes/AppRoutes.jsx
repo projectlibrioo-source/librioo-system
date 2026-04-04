@@ -9,7 +9,7 @@ import SearchPage from "../../robot/pages/SearchPage";
 import SearchBook from "../../robot/pages/SearchBook";
 import FollowPage from "../../robot/pages/FolloPage";
 import SelectionPage from "../../robot/pages/SelectionPage";
-import BorrowPage from "../../robot/pages/BorrowPage";
+
 import EndingPage from "../../robot/pages/EndingPage";
 import GuestLogin from "../../robot/pages/GuestLogin";
 import SearchCategory from "../../robot/pages/SearchCategory";
@@ -52,7 +52,7 @@ function AppRoutes() {
           <Route path="/robot/search-book"      element={<SearchBook />} />
           <Route path="/robot/follow"           element={<FollowPage />} />
           <Route path="/robot/selection"        element={<SelectionPage />} />
-          <Route path="/robot/borrow"           element={<BorrowPage />} />
+
           <Route path="/robot/ending"           element={<EndingPage />} />
           <Route path="/robot/guest-login"      element={<GuestLogin />} />
           <Route path="/robot/search-category"  element={<SearchCategory />} />
