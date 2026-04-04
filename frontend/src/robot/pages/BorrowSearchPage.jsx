@@ -95,8 +95,8 @@ const BorrowSearchPage = () => {
           <div className="w-full h-full overflow-y-auto custom-scrollbar pl-[40px] pr-6 pt-[clamp(15px,2.5vh,30px)]">
 
             {/* Search and action buttons row */}
-            <div className="flex flex-row items-start w-full gap-[clamp(30px,5vw,60px)]">
-              <div className="ml-[40px] flex-1 max-w-[630px] min-w-0 mt-2">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start w-full gap-6 lg:gap-[clamp(30px,5vw,60px)] pr-4 lg:pr-0">
+              <div className="w-full ml-0 lg:ml-[40px] flex-1 max-w-[630px] min-w-0 lg:mt-2">
                 <SearchBar
                   query={searchQuery}
                   onChange={handleSearchChange}
@@ -107,7 +107,7 @@ const BorrowSearchPage = () => {
               </div>
 
               {/* Action buttons */}
-              <div className="mr-[40px] w-[clamp(180px,20vw,240px)] flex-shrink-0 flex flex-col gap-4 mt-2">
+              <div className="w-full lg:w-[clamp(180px,20vw,240px)] mr-0 lg:mr-[40px] flex-shrink-0 flex flex-row lg:flex-col gap-4 lg:mt-2">
 
                 {/* Cancel button */}
                 <button

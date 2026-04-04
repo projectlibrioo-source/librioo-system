@@ -90,7 +90,7 @@ const ConfirmSelectionPage = () => {
               id="confirm-yes-btn"
               onClick={handleYes}
               className="
-                flex-1 max-w-[240px] h-[70px]
+                flex-1 w-full max-w-full sm:max-w-[240px] h-[70px]
                 flex items-center justify-center
                 bg-cyan-500/20 backdrop-blur-md border border-cyan-400 rounded-[20px] shadow-lg
                 cursor-pointer transition-all duration-300
@@ -111,7 +111,7 @@ const ConfirmSelectionPage = () => {
               id="confirm-no-btn"
               onClick={handleNo}
               className="
-                flex-1 max-w-[240px] h-[70px]
+                flex-1 w-full max-w-full sm:max-w-[240px] h-[70px]
                 flex items-center justify-center
                 bg-[#ff7421]/20 backdrop-blur-md border border-[#ff7421] rounded-[20px] shadow-lg
                 cursor-pointer transition-all duration-300

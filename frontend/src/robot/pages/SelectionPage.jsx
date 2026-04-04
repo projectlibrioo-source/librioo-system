@@ -43,7 +43,7 @@ const SelectionPage = () => {
           {/* Left Side: Text and Buttons */}
           <div className="flex-1 flex flex-col w-full max-w-2xl justify-center h-full">
             
-            <h1 className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(32px,5vw,60px)] leading-tight drop-shadow-lg mb-8 md:mb-12 text-center md:text-left">
+            <h1 className="[font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(28px,6vw,60px)] leading-tight drop-shadow-lg mb-8 md:mb-12 text-center md:text-left">
               What would you <br className="hidden md:block" />
               like to <span className="text-white">do?</span>
             </h1>
