@@ -94,19 +94,19 @@ const UserDetails = () => {
             </h1>
 
             <form 
-              className="flex flex-col w-full gap-6"
+              className="flex flex-col w-full gap-4 sm:gap-6"
               onSubmit={(e) => { e.preventDefault(); handleProceed(); }}
             >
               
               {/* GLASSMORPHIC FORM CARD */}
-              <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-5 sm:p-6 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-3 sm:gap-4">
+              <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-4 sm:p-5 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-2 sm:gap-3">
                 {formFields.map((field) => (
                   <div 
                     key={field.id}
                     className="
                       w-full flex flex-col sm:flex-row items-start sm:items-center 
-                      gap-2 sm:gap-4 bg-white/5 border border-white/10 rounded-[20px] 
-                      p-2 sm:p-3 transition-all hover:bg-white/10 hover:border-cyan-400/30
+                      gap-1 sm:gap-3 bg-white/5 border border-white/10 rounded-[20px] 
+                      p-1 sm:p-2 transition-all hover:bg-white/10 hover:border-cyan-400/30
                     "
                   >
                     {/* Label */}
@@ -116,7 +116,7 @@ const UserDetails = () => {
                         w-[120px] sm:w-[150px] flex-shrink-0 
                         text-[#caf9ff] 
                         [font-family:'Aldrich',sans-serif] 
-                        text-[18px] sm:text-[22px]
+                        text-[clamp(14px,1.5vw,18px)]
                         whitespace-nowrap
                         pl-2
                       "
@@ -132,11 +132,11 @@ const UserDetails = () => {
                         value={field.value}
                         readOnly
                         className="
-                          w-full h-[40px] sm:h-[45px]
+                          w-full h-[30px] sm:h-[35px]
                           bg-transparent px-4
                           text-white
                           [font-family:'Aldrich',sans-serif] 
-                          text-[16px] sm:text-[18px]
+                          text-[clamp(12px,1.5vw,16px)]
                           focus:outline-none cursor-default
                         "
                       />
