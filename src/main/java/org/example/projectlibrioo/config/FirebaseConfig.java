@@ -3,39 +3,54 @@ package org.example.projectlibrioo.config;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Configuration
 public class FirebaseConfig {
-
 
     @PostConstruct
     public void initialize() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
 
-                String firebaseJson = System.getenv("FIREBASE_CONFIG");
+                // 🔐 Read Base64 from Railway ENV
+                String base64 = System.getenv("FIREBASE_CONFIG_BASE64");
 
-                if (firebaseJson == null || firebaseJson.isEmpty()) {
-                    throw new RuntimeException("❌ Firebase ENV not set");
+                if (base64 == null || base64.isEmpty()) {
+                    throw new RuntimeException("❌ FIREBASE_CONFIG_BASE64 not set");
                 }
 
-                ByteArrayInputStream serviceAccount =
-                        new ByteArrayInputStream(firebaseJson.getBytes(StandardCharsets.UTF_8));
+                // 🔥 Decode Base64 → original JSON
+                byte[] decoded = Base64.getDecoder().decode(base64);
+
+                InputStream serviceAccount =
+                        new ByteArrayInputStream(decoded);
 
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .setDatabaseUrl("https://librioo-fb90e-default-rtdb.firebaseio.com")
+                        .setDatabaseUrl("https://librioo-fb90e-default-rtdb.firebaseio.com/")
                         .build();
 
                 FirebaseApp.initializeApp(options);
 
-                System.out.println("🔥 Firebase initialized successfully (Railway)");
+
+                System.out.println("🔥 Firebase initialized successfully (Base64)");
+
+                FirebaseApp app = FirebaseApp.getInstance();
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("test");
+
+                ref.setValueAsync("hello")
+                .addListener(() -> System.out.println("✅ WRITE SUCCESS"), Runnable::run);
+                System.out.println(app.getName());
 
             }
         } catch (Exception e) {
