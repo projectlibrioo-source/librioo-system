@@ -1,131 +1,135 @@
+import { API_BASE_URL } from './config.js';
 export function testfun(libraryId){
     console.log(libraryId);
 
 
 }
 
-//Login for the members
-export async function memberLogin(libraryId) {
-    try{
-        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/loginmember?libraryid=${libraryId}`, {
-            method: "POST",
-        });
-
-        if(response.ok){
-            const memberData = await response.json();
-            //console.log(memberData);
-
-            return memberData;
-
-
-        }else{
-            return null;
-        }
-    }catch(e){
-        alert("Error occured "+e);
-    }
-}
-
-//Search by book name
-export async function searchBooksByName(keyword) {
-    if (!keyword || keyword.trim() === "") return [];
-
+//Login as Member
+export async function authenticateMember(libraryId) {
     try {
-        const response = await fetch(
-            `https://librioo-backend-production.up.railway.app/api/searchname?keyword=${encodeURIComponent(keyword)}`
-        );
-
-        // if (!response.ok) {
-        //   throw new Error("Failed to fetch books");
-        // }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Search API error:", error);
-        return [];
-    }
-}
-
-//Search by category
-export async function searchByCategory(category) {
-    if (!category || category.trim() === "") return [];
-
-    try{
-        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/searchcategory?category=${encodeURIComponent(category)}`);
-
-        return await response.json();
-
-    }catch(e){
-        return [];
-    }
-}
-
-//Login for the guests
-export async function guestLogin(guestid) {
-    try{
-        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/loginguest?guestid=${guestid}`, {
-            method: "POST",
+        const response = await fetch(`${API_BASE_URL}/api/loginmember?libraryid=${libraryId}`, {
+            method: "POST"
         });
+        
+        return await response.json(); 
+    } catch (e) {
+        console.error("error found");
+        return null;
+    }
+}
+
+
+//Search for the books by book name
+export async function searchBooksByName(keyword) {
+    try {
+        let apiUrl = keyword && keyword.trim() !== "" ?
+            `${API_BASE_URL}/api/searchname?keyword=${encodeURIComponent(keyword)}`
+            : `${API_BASE_URL}/api/getbook`;
+            
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+            return await response.json(); // Book List
+        } else {
+            return null; // Handle error
+        }
+    } catch (e) {
+        alert(e);
+        return null; // Return null on error
+    }
+}
+
+//Search for the books by category
+export async function searchBooksByCategory(category){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/searchcategory?category=${encodeURIComponent(category)}`);
 
         if(response.ok){
-            const guestData = await response.json();
-            return guestData;
-
-
+            return await response.json()
         }else{
-            return null;
+            return null; //Handle error
         }
-    }catch(e){
-        alert("Error occured "+e);
-    }
-}
-
-//Retrive categories from the database
-export async function getCategories() {
-    try{
-        const response = await fetch("https://librioo-backend-production.up.railway.app/api/getcategory", {
-            method:"GET"
-        });
-
-        if(response.ok){
-            const categoryArray = await response.json();
-            return categoryArray;
-
-        }else{
-            alert("Error fetching data");
-        }
-
     }catch(e){
         alert(e);
     }
 }
 
-//Navigate by book name
-export async function navigateByBookName(bookName) {
-    try{
-        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/navigate/book?name=${encodeURIComponent(bookName)}`, {
-            method:"GET"
-        });
-
-    }catch(e){
-        alert(e);
-    }
-}
-
-//Navigate by category
-export async function navigateByCategory(category) {
-    try{
-        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/navigate/category?category=${encodeURIComponent(category)}`, {
-            method:"GET"
+//Login as a Guest
+export async function authenticateGuest(guestid) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/loginguest?guestid=${guestid}`, {
+            method: "POST"
         });
 
         if (response.ok) {
-            console.log("Category navigation sent: " + category);
-            return true;
+            return await response.json(); 
         } else {
-            console.error("Failed to send category navigation");
-            return false;
+            return null; 
         }
+    } catch (e) {
+        alert("Enter correctly formatted NIC");
+        return null;
+    }
+}
+
+
+//Get distinct Categories
+export async function getAllCategory() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/getcategory`, {
+            method: "GET"
+        });
+
+        if (response.ok) {
+            return await response.json(); 
+        } else {
+            return null; 
+        }
+    } catch (e) {
+        alert("Error while bringing distinct categories");
+        return null;
+    }
+}
+
+//Guide to Books Section
+export async function navigateToBook(bookName) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/navigate/book?name=${encodeURIComponent(bookName)}`, {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            return await response.text(); 
+        } else {
+            return null; 
+        }
+    } catch (e) {
+        alert("Error during navigation to book:", e);
+        return null;
+    }
+}
+
+//Guide to Books Categories
+export async function navigateToCategory(category) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/navigate/category?category=${encodeURIComponent(category)}`, {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            return await response.text(); 
+        } else {
+            return null; 
+        }
+    } catch (e) {
+        alert("Error during navigation to category:", e);
+        return null;
+    }
+}
+
+//Read Here
+export async function readBookWithRobot() {
+    try{
 
     }catch(e){
         alert(e);
@@ -135,7 +139,7 @@ export async function navigateByCategory(category) {
 //Borrow a book with robot
 export async function borrowBookWithRobot(borrowRequest) {
     try {
-        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/borrowrobot`, {
+        const response = await fetch(`${API_BASE_URL}/api/borrowrobot`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,7 +1,9 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect } from 'react';
 import { Upload, Trash2, Wrench, Edit } from 'lucide-react';
 import AdminLayout from '../layouts/AdminLayout';
-import axios from 'axios';
+import axios from 'axios';import { API_BASE_URL } from '../../config.js';
+
 
 const ManageRobot = () => {
     const [activeTab, setActiveTab] = useState('ADD');
@@ -38,7 +40,7 @@ const ManageRobot = () => {
 
     const fetchAllRobots = async () => {
         try {
-            const res = await axios.get("https://librioo-backend-production.up.railway.app/api/robots/all");
+            const res = await axios.get(`${API_BASE_URL}/api/robots/all`);
             setRobots(res.data);
         } catch (err) {
             console.error("Error fetching robots:", err);
@@ -56,7 +58,7 @@ const ManageRobot = () => {
                 status: 'ACTIVE'
             };
             const res = await axios.post(
-                "https://librioo-backend-production.up.railway.app/api/robots/add",
+                `${API_BASE_URL}/api/robots/add`,
                 robotData,
                 {
                     headers: {
@@ -90,7 +92,7 @@ const ManageRobot = () => {
             return;
         }
         try {
-            const res = await axios.get(`https://librioo-backend-production.up.railway.app/api/robots/${searchId}`);
+            const res = await axios.get(`${API_BASE_URL}/api/robots/${searchId}`);
             setUpdateRobot({
                 robotId: res.data.robotID,
                 robotName: res.data.robotName,
@@ -108,7 +110,7 @@ const ManageRobot = () => {
         e.preventDefault();
         try {
             const res = await axios.put(
-                `https://librioo-backend-production.up.railway.app/api/robots/${updateRobot.robotId}`,
+                `${API_BASE_URL}/api/robots/${updateRobot.robotId}`,
                 {
                     robotID: updateRobot.robotId,
                     robotName: updateRobot.robotName,
@@ -137,11 +139,11 @@ const ManageRobot = () => {
         }
         try {
             // First verify robot exists
-            await axios.get(`https://librioo-backend-production.up.railway.app/api/robots/${maintenanceSearchId}`);
+            await axios.get(`${API_BASE_URL}/api/robots/${maintenanceSearchId}`);
 
             // Then load maintenance history (newest first)
             const histRes = await axios.get(
-                `https://librioo-backend-production.up.railway.app/api/robots/${maintenanceSearchId}/maintenance`,
+                `${API_BASE_URL}/api/robots/${maintenanceSearchId}/maintenance`,
                 { validateStatus: () => true }
             );
 
@@ -167,7 +169,7 @@ const ManageRobot = () => {
         e.preventDefault();
         try {
             const res = await axios.put(
-                `https://librioo-backend-production.up.railway.app/api/robots/${maintenanceData.robotId}/maintenance`,
+                `${API_BASE_URL}/api/robots/${maintenanceData.robotId}/maintenance`,
                 {
                     lastServiceDate: maintenanceData.lastServiceDate,
                     nextServiceDate: maintenanceData.nextServiceDate,
@@ -212,7 +214,7 @@ const ManageRobot = () => {
             return;
         }
         try {
-            const res = await axios.delete(`https://librioo-backend-production.up.railway.app/api/robots/${deleteSearchId}`);
+            const res = await axios.delete(`${API_BASE_URL}/api/robots/${deleteSearchId}`);
             alert(res.data.message);
             setDeleteSearchId('');
             fetchAllRobots();

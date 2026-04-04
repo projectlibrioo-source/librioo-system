@@ -1,10 +1,12 @@
+import { API_BASE_URL } from '../../config.js';
 // src/admin/components/Header.jsx
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logActivity from '../utils/logActivity';
-import axios from 'axios';
+import axios from 'axios';import { API_BASE_URL } from '../../config.js';
+
 
 const Header = () => {
     const [showNotifications, setShowNotifications] = useState(false);
@@ -21,7 +23,7 @@ const Header = () => {
 
     const fetchNotifications = async () => {
         try {
-            const res = await axios.get('https://librioo-backend-production.up.railway.app/api/notifications');
+            const res = await axios.get(`${API_BASE_URL}/api/notifications`);
             setNotifications(res.data);
         } catch (error) {
             console.error('Failed to fetch notifications in Header:', error);

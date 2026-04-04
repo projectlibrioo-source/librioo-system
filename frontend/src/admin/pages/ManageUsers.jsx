@@ -1,6 +1,8 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState } from 'react';
 import axios from 'axios';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const ManageUsers = () => {
     const [activeTab, setActiveTab] = useState('ADD');
@@ -58,8 +60,8 @@ const ManageUsers = () => {
         try {
             const endpoint =
                 userRole === 'MEMBER'
-                    ? 'https://librioo-backend-production.up.railway.app/api/addmember'
-                    : 'https://librioo-backend-production.up.railway.app/api/addguest';
+                    ? `${API_BASE_URL}/api/addmember`
+                    : `${API_BASE_URL}/api/addguest`;
 
             const payload =
                 userRole === 'MEMBER'
@@ -126,7 +128,7 @@ const ManageUsers = () => {
 
         // Try Member first
         try {
-            const memberRes = await axios.get('https://librioo-backend-production.up.railway.app/api/getallmembers', {
+            const memberRes = await axios.get(`${API_BASE_URL}/api/getallmembers`, {
                 params: { memberid: parsedId }
             });
 
@@ -149,7 +151,7 @@ const ManageUsers = () => {
 
         // Try Guest
         try {
-            const guestRes = await axios.get('https://librioo-backend-production.up.railway.app/api/getallguests', {
+            const guestRes = await axios.get(`${API_BASE_URL}/api/getallguests`, {
                 params: { guestid: parsedId }
             });
 
@@ -184,8 +186,8 @@ const ManageUsers = () => {
         try {
             const endpoint =
                 updateForm.role === 'Member'
-                    ? 'https://librioo-backend-production.up.railway.app/api/updatemember'
-                    : 'https://librioo-backend-production.up.railway.app/api/updateguest';
+                    ? `${API_BASE_URL}/api/updatemember`
+                    : `${API_BASE_URL}/api/updateguest`;
 
             const payload =
                 updateForm.role === 'Member'
@@ -228,7 +230,7 @@ const ManageUsers = () => {
 
         // Try Member first
         try {
-            const memberRes = await axios.get('https://librioo-backend-production.up.railway.app/api/getallmembers', {
+            const memberRes = await axios.get(`${API_BASE_URL}/api/getallmembers`, {
                 params: { memberid: parsedId }
             });
 
@@ -246,7 +248,7 @@ const ManageUsers = () => {
 
         // Try Guest
         try {
-            const guestRes = await axios.get('https://librioo-backend-production.up.railway.app/api/getallguests', {
+            const guestRes = await axios.get(`${API_BASE_URL}/api/getallguests`, {
                 params: { guestid: parsedId }
             });
 
@@ -282,8 +284,8 @@ const ManageUsers = () => {
             const isGuest = deleteUser.role === 'Guest';
 
             const endpoint = isGuest
-                ? 'https://librioo-backend-production.up.railway.app/api/deleteguest'
-                : 'https://librioo-backend-production.up.railway.app/api/deletemember';
+                ? `${API_BASE_URL}/api/deleteguest`
+                : `${API_BASE_URL}/api/deletemember`;
 
             const params = isGuest
                 ? { guestid: deleteUser.id }

@@ -1,6 +1,8 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const Notifications = () => {
     const [dailyOverdues, setDailyOverdues] = useState(true);
@@ -17,7 +19,7 @@ const Notifications = () => {
     const fetchNotifications = async () => {
         try {
             setLoading(true);
-            const res = await axios.get('https://librioo-backend-production.up.railway.app/api/notifications');
+            const res = await axios.get(`${API_BASE_URL}/api/notifications`);
             // Sort by ID descending so newest are on top
             const sorted = (res.data || []).sort((a,b) => b.id - a.id);
             setNotifications(sorted);
@@ -30,7 +32,7 @@ const Notifications = () => {
 
     const markAllAsRead = async () => {
         try {
-            await axios.put('https://librioo-backend-production.up.railway.app/api/notifications/read-all');
+            await axios.put(`${API_BASE_URL}/api/notifications/read-all`);
             setNotifications(notifications.map(n => ({...n, read: true})));
         } catch (error) {
             console.error('Failed to mark all as read', error);
@@ -39,7 +41,7 @@ const Notifications = () => {
 
     const sendTestAlert = async () => {
         try {
-            await axios.post('https://librioo-backend-production.up.railway.app/api/notifications/test');
+            await axios.post(`${API_BASE_URL}/api/notifications/test`);
             fetchNotifications();
         } catch (error) {
             console.error('Failed to send test alert', error);

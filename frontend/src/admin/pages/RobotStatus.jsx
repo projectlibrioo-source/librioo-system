@@ -1,7 +1,9 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search } from 'lucide-react';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const RobotStatus = () => {
     const [robots, setRobots] = useState([]);
@@ -16,7 +18,7 @@ const RobotStatus = () => {
     const fetchRobots = async () => {
         try {
             setLoading(true);
-            const res = await axios.get('https://librioo-backend-production.up.railway.app/api/robots/all');
+            const res = await axios.get(`${API_BASE_URL}/api/robots/all`);
             
             // Map the database robot entity to the UI expectation
             // Since physical telemetry (battery, shelf) doesn't exist in MySQL, 

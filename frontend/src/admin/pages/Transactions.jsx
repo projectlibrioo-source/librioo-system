@@ -1,8 +1,10 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -13,7 +15,7 @@ const Transactions = () => {
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const response = await axios.get('https://librioo-backend-production.up.railway.app/api/transactions');
+                const response = await axios.get(`${API_BASE_URL}/api/transactions`);
                 const data = response.data;
                 const formatted = data.map(tx => ({
                     id: tx.transactionId || tx.id || 'N/A',
@@ -152,3 +154,4 @@ const Transactions = () => {
 };
 
 export default Transactions;
+

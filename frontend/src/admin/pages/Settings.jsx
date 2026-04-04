@@ -1,6 +1,8 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const Settings = () => {
     const [enableFines, setEnableFines] = useState(false);
@@ -26,7 +28,7 @@ const Settings = () => {
 
     const fetchFines = async () => {
         try {
-            const res = await axios.get('https://librioo-backend-production.up.railway.app/api/settings/fines');
+            const res = await axios.get(`${API_BASE_URL}/api/settings/fines`);
             setFinesList(res.data);
             if (res.data.length > 0) {
                 setEnableFines(true);
@@ -45,7 +47,7 @@ const Settings = () => {
         };
 
         try {
-            await axios.post('https://librioo-backend-production.up.railway.app/api/settings/fines', payload);
+            await axios.post(`${API_BASE_URL}/api/settings/fines`, payload);
             alert(`${categoryName} category rules updated successfully!`);
             fetchFines(); // Refresh table
         } catch (err) {
@@ -69,7 +71,7 @@ const Settings = () => {
         };
 
         try {
-            await axios.post('https://librioo-backend-production.up.railway.app/api/settings/admins', payload);
+            await axios.post(`${API_BASE_URL}/api/settings/admins`, payload);
             alert(`Admin ${adminEmail} created successfully as ${adminRole}!`);
             setAdminName('');
             setAdminEmail('');
@@ -235,3 +237,4 @@ const Settings = () => {
 };
 
 export default Settings;
+

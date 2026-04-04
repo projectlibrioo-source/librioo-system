@@ -1,7 +1,9 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search } from 'lucide-react';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -11,7 +13,7 @@ const Users = () => {
         const fetchUsers = async () => {
             try {
                 // Fetch from a general users endpoint
-                const response = await axios.get('https://librioo-backend-production.up.railway.app/api/users');
+                const response = await axios.get(`${API_BASE_URL}/api/users`);
                 
                 const formattedUsers = response.data.map(user => ({
                     id: user.libraryID || user.guestID || user.id || 'N/A',
@@ -118,3 +120,4 @@ const Users = () => {
 };
 
 export default Users;
+

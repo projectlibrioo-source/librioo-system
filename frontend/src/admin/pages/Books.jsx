@@ -1,7 +1,9 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search } from 'lucide-react';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const Books = () => {
     const [books, setBooks] = useState([]);
@@ -11,7 +13,7 @@ const Books = () => {
         const fetchBooks = async () => {
             try {
                 // Default endpoint for books over REST
-                const response = await axios.get('https://librioo-backend-production.up.railway.app/api/books');
+                const response = await axios.get(`${API_BASE_URL}/api/books`);
                 
                 const formattedBooks = response.data.map(book => ({
                     id: book.bookId,
@@ -119,3 +121,4 @@ const Books = () => {
 };
 
 export default Books;
+

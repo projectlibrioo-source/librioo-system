@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -7,7 +8,8 @@ import RobotCard from '../components/RobotCard';
 import AdminLayout from '../layouts/AdminLayout';
 
 // Firebase
-import { ref, onValue } from "firebase/database";
+import { ref, onValue } from "firebase/database";import { API_BASE_URL } from '../../config.js';
+
 import { db } from "../firebase"; // your firebase config
 
 const AdminDashboard = () => {
@@ -21,7 +23,7 @@ const AdminDashboard = () => {
   // ---------------- LOAD DASHBOARD STATS ----------------
   useEffect(() => {
 
-    axios.get("https://librioo-backend-production.up.railway.app/api/dashboard")
+    axios.get(`${API_BASE_URL}/api/dashboard`)
       .then(res => {
 
         const data = res.data;
@@ -43,7 +45,7 @@ const AdminDashboard = () => {
   // ---------------- LOAD ROBOTS (SPRING BOOT API) ----------------
   useEffect(() => {
 
-    axios.get("https://librioo-backend-production.up.railway.app/api/overview")
+    axios.get(`${API_BASE_URL}/api/overview`)
       .then(res => {
 
         // Map backend data → UI format

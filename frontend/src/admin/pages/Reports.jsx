@@ -1,6 +1,8 @@
+import { API_BASE_URL } from '../../config.js';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import AdminLayout from '../layouts/AdminLayout';
+import AdminLayout from '../layouts/AdminLayout';import { API_BASE_URL } from '../../config.js';
+
 
 const Reports = () => {
     const [reportType, setReportType] = useState('Library Managing Reports');
@@ -23,7 +25,7 @@ const Reports = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        axios.get('https://librioo-backend-production.up.railway.app/api/admin/reports/dashboard')
+        axios.get(`${API_BASE_URL}/api/admin/reports/dashboard`)
             .then((res) => {
                 const data = res.data;
 
@@ -59,7 +61,7 @@ const Reports = () => {
             };
 
             const res = await axios.post(
-                'https://librioo-backend-production.up.railway.app/api/admin/reports/generate',
+                `${API_BASE_URL}/api/admin/reports/generate`,
                 payload
             );
 

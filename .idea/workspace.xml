@@ -4,7 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3775273-853e-423c-9374-d4f1d09cfaff" name="Changes" comment="added test classes#2" />
+    <list default="true" id="a3775273-853e-423c-9374-d4f1d09cfaff" name="Changes" comment="added test classes#2">
+      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/BackendFunctions.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/BackendFunctions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/components/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/AdminDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/AdminDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/AdminLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/AdminLogin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Books.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Books.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Contacts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Contacts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/ManageBooks.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/ManageBooks.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/ManageRobot.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/ManageRobot.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/ManageTransactions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/ManageTransactions.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/ManageUsers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/ManageUsers.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Notifications.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Notifications.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Reports.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Reports.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/RobotStatus.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/RobotStatus.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Settings.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Settings.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Transactions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Transactions.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/admin/pages/Users.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/admin/pages/Users.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/common/routes/AppRoutes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/common/routes/AppRoutes.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/layouts/RobotLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/layouts/RobotLayout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/BorrowPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/EndingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/EndingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/FolloPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/GuestLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/GuestLogin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/MemberLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/MemberLogin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/SearchBook.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/SearchBook.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/SearchCategory.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/SearchCategory.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/SearchPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/SearchPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/SelectionPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/SelectionPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/robot/pages/UserDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/robot/pages/UserDetails.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tailwind.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tailwind.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +58,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "DinukaD-24"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/projectlibrioo-source/librioo-system.git",
+    "accountId": "5a98ab20-8124-412c-8705-0a8b84f8e3a0"
+  }
+}]]></component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -41,40 +85,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.AdminControllerTest.addBook_shouldReturnOk_whenBookSaved.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdminControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdminControllerTest.getTransactionsByDate.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdminServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.DashboardServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.DashboardServiceTest.testGetDashboardData_ZeroState.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ProjectLibriooApplicationTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ReportsServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.RobotControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.RobotServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TransactionServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;backend-Tharana&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/nimuthusipsara/Desktop/Librioo/Librioo-System/librioo-system&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.AdminControllerTest.addBook_shouldReturnOk_whenBookSaved.executor": "Run",
+    "JUnit.AdminControllerTest.executor": "Run",
+    "JUnit.AdminControllerTest.getTransactionsByDate.executor": "Run",
+    "JUnit.AdminServiceTest.executor": "Run",
+    "JUnit.DashboardServiceTest.executor": "Run",
+    "JUnit.DashboardServiceTest.testGetDashboardData_ZeroState.executor": "Run",
+    "JUnit.ProjectLibriooApplicationTests.executor": "Run",
+    "JUnit.ReportsServiceTest.executor": "Run",
+    "JUnit.RobotControllerTest.executor": "Run",
+    "JUnit.RobotServiceTest.executor": "Run",
+    "JUnit.TransactionServiceTest.executor": "Run",
+    "JUnit.UserServiceTest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.ProjectLibriooApplication.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/IIT module resources/Sem 3/SDGP/Librioo system/librioo-system",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example.projectlibrioo.Controller.Admin" />
@@ -193,11 +238,12 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
-        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="a3775273-853e-423c-9374-d4f1d09cfaff" name="Changes" comment="" />
@@ -223,6 +269,7 @@
       <workItem from="1774230510615" duration="4467000" />
       <workItem from="1774666784471" duration="460000" />
       <workItem from="1775026663647" duration="583000" />
+      <workItem from="1775293893930" duration="779000" />
     </task>
     <task id="LOCAL-00001" summary="added test classes">
       <option name="closed" value="true" />
