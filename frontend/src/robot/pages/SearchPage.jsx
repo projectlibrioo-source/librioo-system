@@ -130,7 +130,7 @@ const SearchPage = () => {
           <img
             src={robotImage}
             alt="Smart Library Assistant Robot"
-            className="relative z-10 scale-110 lg:scale-[1.15] max-h-[70vh] lg:max-h-[80vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
+            className="relative z-10 scale-110 lg:scale-[1.15] max-h-[60vh] lg:max-h-[60vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
           />
         </div>
 

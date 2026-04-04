@@ -84,10 +84,10 @@ const UserDetails = () => {
             <h1 className="
               [font-family:'ADLaM_Display-Regular',Helvetica] 
               text-[#caf9ff] 
-              text-[clamp(32px,5vw,55px)] 
+              text-[clamp(28px,5vw,45px)] 
               leading-tight 
               drop-shadow-lg 
-              mb-6 md:mb-10 
+              mb-4 md:mb-6 
               text-center md:text-left
             ">
               User Details
@@ -99,14 +99,14 @@ const UserDetails = () => {
             >
               
               {/* GLASSMORPHIC FORM CARD */}
-              <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-6 sm:p-8 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 sm:gap-6">
+              <div className="bg-black/30 backdrop-blur-xl border border-white/10 p-5 sm:p-6 rounded-[30px] shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-3 sm:gap-4">
                 {formFields.map((field) => (
                   <div 
                     key={field.id}
                     className="
                       w-full flex flex-col sm:flex-row items-start sm:items-center 
-                      gap-2 sm:gap-6 bg-white/5 border border-white/10 rounded-[20px] 
-                      p-3 sm:p-4 transition-all hover:bg-white/10 hover:border-cyan-400/30
+                      gap-2 sm:gap-4 bg-white/5 border border-white/10 rounded-[20px] 
+                      p-2 sm:p-3 transition-all hover:bg-white/10 hover:border-cyan-400/30
                     "
                   >
                     {/* Label */}
@@ -132,11 +132,11 @@ const UserDetails = () => {
                         value={field.value}
                         readOnly
                         className="
-                          w-full h-[45px] sm:h-[50px]
+                          w-full h-[40px] sm:h-[45px]
                           bg-transparent px-4
                           text-white
                           [font-family:'Aldrich',sans-serif] 
-                          text-[16px] sm:text-[20px]
+                          text-[16px] sm:text-[18px]
                           focus:outline-none cursor-default
                         "
                       />
@@ -190,7 +190,7 @@ const UserDetails = () => {
           {/* RIGHT SIDE: Floating Robot Image (Desktop Only) */}
           <div className="hidden md:flex flex-1 items-center justify-center w-full max-w-[350px] lg:max-w-[450px] shrink-0 animate-safe-float">
             <img
-              className="w-full h-auto max-h-[70vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              className="w-full h-auto max-h-[50vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
               alt="Smart Library Assistant Robot"
               src={robotImage}
             />
