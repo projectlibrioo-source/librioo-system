@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout';
-import { API_BASE_URL } from '../../config.js';
 
 const Contact = () => {
     const [searchFilter, setSearchFilter] = useState('All');
@@ -17,7 +16,7 @@ const Contact = () => {
     const fetchAdmins = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${API_BASE_URL}/api/settings/admins`);
+            const res = await axios.get('https://librioo-backend-production.up.railway.app/api/settings/admins');
             
             // Map DB entity (Admin.java: adminId, adminUsername, adminRole) to UI structure
             const mappedAdmins = (res.data || []).map(admin => {
@@ -200,4 +199,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
