@@ -74,7 +74,7 @@ const EndingPage = () => {
                 leading-normal
                 opacity-95
               ">
-                Thank you for using our Library Assistance.
+                Thank you for using our Library Assistant.
               </p>
 
               <p className="

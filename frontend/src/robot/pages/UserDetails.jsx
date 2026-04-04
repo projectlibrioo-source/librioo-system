@@ -146,8 +146,7 @@ const UserDetails = () => {
               </div>
 
               {/* ACTION BUTTONS */}
-              <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full">
-                
+              <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-4">
                 {/* Back Button */}
                 <button
                   type="button"

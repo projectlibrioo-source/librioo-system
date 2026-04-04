@@ -41,14 +41,14 @@ const SearchPage = () => {
         <div className="z-10 flex flex-col w-full max-w-2xl lg:w-1/2">
           
           {/* Title Section */}
-          <div className="mb-10">
+          <div className="mb-6 lg:mb-8">
             <h1 
-              className="mb-4 text-5xl font-bold text-white lg:text-7xl drop-shadow-lg"
+              className="mb-2 text-5xl font-bold text-white lg:text-6xl drop-shadow-lg"
               style={{ fontFamily: "'ADLaM_Display-Regular', Helvetica" }}
             >
               Search <span className="text-[#e0f7fa]">Books</span>
             </h1>
-            <p className="text-xl font-light text-white/90 drop-shadow-sm">
+            <p className="text-lg lg:text-xl font-light text-white/90 drop-shadow-sm">
               How would you like to find your next read?
             </p>
           </div>
@@ -130,7 +130,7 @@ const SearchPage = () => {
           <img
             src={robotImage}
             alt="Smart Library Assistant Robot"
-            className="relative z-10 scale-125 max-h-[85vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
+            className="relative z-10 scale-110 lg:scale-[1.15] max-h-[70vh] lg:max-h-[80vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
           />
         </div>
 

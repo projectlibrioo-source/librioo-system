@@ -48,20 +48,20 @@ const GuestLogin = () => {
         <div className="z-10 flex flex-col w-full max-w-2xl lg:w-1/2">
           
           {/* Title Section */}
-          <div className="mb-10">
+          <div className="mb-6 lg:mb-8">
             <h1 
-              className="mb-4 text-5xl font-bold text-white lg:text-7xl drop-shadow-lg"
+              className="mb-2 text-5xl font-bold text-white lg:text-6xl drop-shadow-lg"
               style={{ fontFamily: "'ADLaM_Display-Regular', Helvetica" }}
             >
               Guest <span className="text-[#e0f7fa]">Login</span>
             </h1>
-            <p className="text-xl font-light text-white/90 drop-shadow-sm">
+            <p className="text-lg lg:text-xl font-light text-white/90 drop-shadow-sm">
               Please enter your Guest ID to access library services.
             </p>
           </div>
 
           {/* Form Area */}
-          <form onSubmit={handleLogin} className="flex flex-col w-full gap-8 lg:max-w-md">
+          <form onSubmit={handleLogin} className="flex flex-col w-full gap-6 lg:gap-8 lg:max-w-md">
             
             {/* Modern Glass Input Field */}
             <div className="flex flex-col gap-3">
@@ -129,7 +129,7 @@ const GuestLogin = () => {
           <img
             src={robotImage}
             alt="Smart Library Assistant Robot"
-            className="relative z-10 scale-125 max-h-[85vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
+            className="relative z-10 scale-110 lg:scale-[1.15] max-h-[70vh] lg:max-h-[80vh] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] animate-fade-in hover:scale-105 transition-transform duration-700 ease-out"
           />
         </div>
 
