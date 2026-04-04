@@ -25,6 +25,7 @@ const UserDetails = () => {
         : (passedUser.libraryID || passedUser.ID || ""), 
     email: passedUser.email || "", 
     contactNo: passedUser.phoneNumber || passedUser.contactNo || passedUser.mobile || "",   
+    category: passedUser.category || passedUser.occupation || "Member" // Fallback map
   };
 
   // 4. Handle Back Button Logic

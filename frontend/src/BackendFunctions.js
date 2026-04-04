@@ -131,3 +131,25 @@ export async function navigateByCategory(category) {
         alert(e);
     }
 }
+
+//Borrow a book with robot
+export async function borrowBookWithRobot(borrowRequest) {
+    try {
+        const response = await fetch(`https://librioo-backend-production.up.railway.app/api/borrowrobot`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(borrowRequest)
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            return null; // Handle unauthorized/forbidden
+        }
+    } catch (e) {
+        console.error("Borrow API error:", e);
+        return null;
+    }
+}

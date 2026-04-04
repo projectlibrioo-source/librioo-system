@@ -10,6 +10,7 @@ const ConfirmSelectionPage = () => {
 
   // The intent is passed as route state from SelectionPage: { intent: "read" | "borrow" }
   const intent = location.state?.intent || "read";
+  const userData = location.state?.user || {};
 
   const [secondsLeft, setSecondsLeft] = useState(TIMEOUT_SECONDS);
 
@@ -26,9 +27,9 @@ const ConfirmSelectionPage = () => {
   // --- YES: User wants to change selection → go to the appropriate search page ---
   const handleYes = () => {
     if (intent === "read") {
-      navigate("/robot/read-search");
+      navigate("/robot/read-search", { state: { user: userData } });
     } else {
-      navigate("/robot/borrow-search");
+      navigate("/robot/borrow-search", { state: { user: userData } });
     }
   };
 

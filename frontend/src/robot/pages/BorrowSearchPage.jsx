@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout";
 import SearchBar from "../components/SearchBar";
 import BookCard from "../components/BookCard";
-import { searchBooksByName } from "../../BackendFunctions";
+import { searchBooksByName, borrowBookWithRobot } from "../../BackendFunctions";
 
 const TIMEOUT_SECONDS = 60;
 
@@ -15,6 +15,8 @@ const BorrowSearchPage = () => {
   const [timeoutId, setTimeoutId] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const userData = location.state?.user || {};
 
   // --- Session timeout: reset on any user interaction ---
   const resetTimeout = useCallback(() => {
@@ -64,13 +66,41 @@ const BorrowSearchPage = () => {
   };
 
   // --- BORROW: book is already selected from search, go straight to EndingPage ---
-  const handleBorrow = () => {
+  const handleBorrow = async () => {
     if (!selectedBook) {
       alert("Please select a book first!");
       return;
     }
-    // TODO: call borrow API here with selectedBook.id / selectedBook.title + user session data
-    navigate("/robot/ending");
+
+    if (!userData || !userData.id) {
+       console.warn("User data is missing. Simulating anonymous library ID 1 for testing purposes.");
+    }
+
+    setIsLoading(true);
+    
+    // Construct the Transaction shape matching the backend object logic
+    const borrowData = {
+        libraryId: userData?.id || 1, // default 1 if missing for testing
+        bookId: selectedBook.id,
+        borrowDate: new Date().toISOString().split('T')[0],
+        category: userData?.category || "Member",
+        returnDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 14 days
+        status: "Borrowed"
+    };
+
+    try {
+        const result = await borrowBookWithRobot(borrowData);
+        if (result) {
+            navigate("/robot/ending");
+        } else {
+            alert("Error: Could not process borrow request. Borrow limit exceeded or account blocked.");
+        }
+    } catch (e) {
+        console.error("Borrowing flow exception:", e);
+        alert("System error processing the transaction.");
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   // --- Cancel: end session ---
