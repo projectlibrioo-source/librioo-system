@@ -41,40 +41,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.AdminControllerTest.addBook_shouldReturnOk_whenBookSaved.executor": "Run",
-    "JUnit.AdminControllerTest.executor": "Run",
-    "JUnit.AdminControllerTest.getTransactionsByDate.executor": "Run",
-    "JUnit.AdminServiceTest.executor": "Run",
-    "JUnit.DashboardServiceTest.executor": "Run",
-    "JUnit.DashboardServiceTest.testGetDashboardData_ZeroState.executor": "Run",
-    "JUnit.ProjectLibriooApplicationTests.executor": "Run",
-    "JUnit.ReportsServiceTest.executor": "Run",
-    "JUnit.RobotControllerTest.executor": "Run",
-    "JUnit.RobotServiceTest.executor": "Run",
-    "JUnit.TransactionServiceTest.executor": "Run",
-    "JUnit.UserServiceTest.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "backend-Tharana",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/nimuthusipsara/Desktop/Librioo/Librioo-System/librioo-system",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.AdminControllerTest.addBook_shouldReturnOk_whenBookSaved.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminControllerTest.getTransactionsByDate.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DashboardServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DashboardServiceTest.testGetDashboardData_ZeroState.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProjectLibriooApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ReportsServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RobotControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RobotServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TransactionServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;backend-Tharana&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/nimuthusipsara/Desktop/Librioo/Librioo-System/librioo-system&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example.projectlibrioo.Controller.Admin" />
@@ -89,7 +89,7 @@
       <recent name="org.example.projectlibrioo.Service.Admin" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.DashboardServiceTest">
+  <component name="RunManager" selected="Spring Boot.ProjectLibriooApplication">
     <configuration name="AdminControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ProjectLibrioo" />
       <extension name="coverage">

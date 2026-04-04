@@ -73,7 +73,8 @@ const ManageUsers = () => {
                         phoneNumber: addForm.phoneNumber,
                         age: parseInt(addForm.age, 10),
                         NICNumber: addForm.nicNumber,
-                        status: addForm.userType
+                        status: 'Active',
+                        category: addForm.userType
                     }
                     : {
                         guestID: parseInt(addForm.id, 10),
@@ -443,37 +444,28 @@ const ManageUsers = () => {
                                 {userRole === 'MEMBER' && (
                                     <div className="grid items-center grid-cols-1 gap-4 sm:grid-cols-3">
                                         <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right">User Type</label>
-                                        <div className="flex space-x-6 sm:col-span-2">
-                                            <label className="flex items-center space-x-2">
-                                                <input
-                                                    type="radio"
-                                                    name="userType"
-                                                    className="text-blue-600 border-gray-300 focus:ring-blue-500"
-                                                    checked={addForm.userType === 'Student'}
-                                                    onChange={() => handleAddChange('userType', 'Student')}
-                                                />
-                                                <span className="text-sm text-gray-700">Student</span>
-                                            </label>
-                                            <label className="flex items-center space-x-2">
-                                                <input
-                                                    type="radio"
-                                                    name="userType"
-                                                    className="text-blue-600 border-gray-300 focus:ring-blue-500"
-                                                    checked={addForm.userType === 'Lecturer'}
-                                                    onChange={() => handleAddChange('userType', 'Lecturer')}
-                                                />
-                                                <span className="text-sm text-gray-700">Lecturer</span>
-                                            </label>
-                                            <label className="flex items-center space-x-2">
-                                                <input
-                                                    type="radio"
-                                                    name="userType"
-                                                    className="text-blue-600 border-gray-300 focus:ring-blue-500"
-                                                    checked={addForm.userType === 'Staff'}
-                                                    onChange={() => handleAddChange('userType', 'Staff')}
-                                                />
-                                                <span className="text-sm text-gray-700">Staff</span>
-                                            </label>
+                                        <div className="flex bg-gray-200 rounded-md p-1 w-fit sm:col-span-2 space-x-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAddChange('userType', 'Student')}
+                                                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${addForm.userType === 'Student' ? 'bg-white shadow text-blue-600 ring-1 ring-black/5' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-300/50'}`}
+                                            >
+                                                Student
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAddChange('userType', 'Lecturer')}
+                                                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${addForm.userType === 'Lecturer' ? 'bg-white shadow text-blue-600 ring-1 ring-black/5' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-300/50'}`}
+                                            >
+                                                Lecturer
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAddChange('userType', 'Staff')}
+                                                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${addForm.userType === 'Staff' ? 'bg-white shadow text-blue-600 ring-1 ring-black/5' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-300/50'}`}
+                                            >
+                                                Staff
+                                            </button>
                                         </div>
                                     </div>
                                 )}
