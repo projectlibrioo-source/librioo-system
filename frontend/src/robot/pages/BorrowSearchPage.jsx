@@ -63,18 +63,14 @@ const BorrowSearchPage = () => {
     resetTimeout();
   };
 
-  // --- BORROW: carry the selected book into the BorrowPage via route state ---
+  // --- BORROW: book is already selected from search, go straight to EndingPage ---
   const handleBorrow = () => {
     if (!selectedBook) {
       alert("Please select a book first!");
       return;
     }
-    navigate("/robot/borrow", {
-      state: {
-        bookName: selectedBook.title || selectedBook.bookName || "",
-        bookId: selectedBook.id || "",
-      },
-    });
+    // TODO: call borrow API here with selectedBook.id / selectedBook.title + user session data
+    navigate("/robot/ending");
   };
 
   // --- Cancel: end session ---

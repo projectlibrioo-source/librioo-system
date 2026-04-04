@@ -32,13 +32,10 @@ const ConfirmSelectionPage = () => {
     }
   };
 
-  // --- NO: User is happy with their selection → proceed normally ---
+  // --- NO: User is happy with their selection → proceed directly to EndingPage ---
+  // The robot already guided them to the right shelf — no form re-entry needed.
   const handleNo = () => {
-    if (intent === "read") {
-      navigate("/robot/ending");
-    } else {
-      navigate("/robot/borrow");
-    }
+    navigate("/robot/ending");
   };
 
   // SVG ring progress (counts down from full circle to 0)
