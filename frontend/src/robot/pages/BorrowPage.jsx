@@ -1,24 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import RobotLayout from "../layouts/RobotLayout";
 import robotImage from "../../assets/pixverse-image-effect-prompt-give-me-three-pic-removebg-preview-1-2.png";
 
 export default function BorrowPage() {
 
-  const [bookId, setBookId] = useState("");
-  const [bookName, setBookName] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Pre-fill from BorrowSearchPage route state (if available)
+  const [bookId, setBookId] = useState(location.state?.bookId ?? "");
+  const [bookName, setBookName] = useState(location.state?.bookName ?? "");
 
   const handleBorrow = (e) => {
     e.preventDefault();
     console.log("Borrowing:", { bookId, bookName });
-    // Add your backend logic here
+    // TODO: Add backend borrow API call here
+    navigate("/robot/ending");
   };
 
   const handleCancel = () => {
-    setBookId("");
-    setBookName("");
-    // Optional: navigate back if needed, e.g., navigate("/robot/search");
+    // End session
+    navigate("/robot/login");
   };
 
   return (

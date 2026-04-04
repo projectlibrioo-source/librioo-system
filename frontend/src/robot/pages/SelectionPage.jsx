@@ -18,12 +18,10 @@ const SelectionPage = () => {
     setSelectedOption("borrow");
   };
 
-  // 3. ADD PROCEED HANDLER
+  // 3. PROCEED → always go to ConfirmSelectionPage first, passing the intent as state
   const handleProceedClick = () => {
-    if (selectedOption === "read") {
-      navigate("/robot/ending");
-    } else if (selectedOption === "borrow") {
-      navigate("/robot/borrow");
+    if (selectedOption) {
+      navigate("/robot/confirm-selection", { state: { intent: selectedOption } });
     }
   };
 

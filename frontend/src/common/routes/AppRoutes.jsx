@@ -13,6 +13,9 @@ import BorrowPage from "../../robot/pages/BorrowPage";
 import EndingPage from "../../robot/pages/EndingPage";
 import GuestLogin from "../../robot/pages/GuestLogin";
 import SearchCategory from "../../robot/pages/SearchCategory";
+import ConfirmSelectionPage from "../../robot/pages/ConfirmSelectionPage";
+import ReadSearchPage from "../../robot/pages/ReadSearchPage";
+import BorrowSearchPage from "../../robot/pages/BorrowSearchPage";
 
 // Admin pages
 import AdminLogin from "../../admin/pages/AdminLogin";
@@ -53,6 +56,9 @@ function AppRoutes() {
           <Route path="/robot/ending"           element={<EndingPage />} />
           <Route path="/robot/guest-login"      element={<GuestLogin />} />
           <Route path="/robot/search-category"  element={<SearchCategory />} />
+          <Route path="/robot/confirm-selection" element={<ConfirmSelectionPage />} />
+          <Route path="/robot/read-search"       element={<ReadSearchPage />} />
+          <Route path="/robot/borrow-search"     element={<BorrowSearchPage />} />
 
           {/* ── Admin Public ────────────────────────────────────── */}
           <Route path="/admin/login" element={<AdminLogin />} />
