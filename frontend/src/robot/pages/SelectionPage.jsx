@@ -34,8 +34,8 @@ const SelectionPage = () => {
       <div className="h-full w-full relative flex flex-col items-center justify-center overflow-hidden px-6 md:px-16">
         
         {/* Holographic glowing background orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[clamp(250px,40vw,500px)] h-[clamp(250px,40vw,500px)] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[clamp(200px,30vw,400px)] h-[clamp(200px,30vw,400px)] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* Main Content Container */}
         <div className="z-10 w-full max-w-7xl flex flex-col md:flex-row items-center justify-between gap-10 lg:gap-20 h-full py-10">

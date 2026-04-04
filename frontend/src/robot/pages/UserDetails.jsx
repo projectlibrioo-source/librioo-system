@@ -72,11 +72,11 @@ const UserDetails = () => {
       <div className="relative flex flex-col items-center justify-center w-full h-full p-4 overflow-x-hidden md:p-8">
         
         {/* --- HOLOGRAPHIC BACKGROUND ORBS --- */}
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[clamp(250px,40vw,500px)] h-[clamp(250px,40vw,500px)] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[clamp(200px,30vw,400px)] h-[clamp(200px,30vw,400px)] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* --- MAIN CONTENT WRAPPER --- */}
-        <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-[100px] h-full">
+        <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-[clamp(2.5rem,5vw,5rem)] h-full">
           
           {/* LEFT SIDE: Text and Form Container */}
           <div className="flex-1 flex flex-col w-full max-w-[650px] justify-center pt-8 md:pt-0">
@@ -152,7 +152,7 @@ const UserDetails = () => {
                   type="button"
                   onClick={handleBack}
                   className="
-                    flex-1 max-w-[200px] h-[60px] 
+                    flex-1 max-w-[clamp(150px,25vw,200px)] h-[clamp(50px,8vh,60px)] 
                     flex items-center justify-center 
                     bg-red-500/10 backdrop-blur-md border border-red-500/30 rounded-[20px] shadow-lg
                     cursor-pointer transition-all duration-300
@@ -160,7 +160,7 @@ const UserDetails = () => {
                     focus:outline-none focus:ring-2 focus:ring-red-500
                   "
                 >
-                  <span className="text-[#fcfbfa] [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[18px] tracking-widest font-bold">
+                  <span className="text-[#fcfbfa] [font-family:'Aldrich',sans-serif] text-[clamp(14px,2vw,18px)] tracking-widest font-bold">
                     BACK
                   </span>
                 </button>
@@ -169,7 +169,7 @@ const UserDetails = () => {
                 <button
                   type="submit"
                   className="
-                    flex-1 max-w-[200px] h-[60px] 
+                    flex-1 max-w-[clamp(150px,25vw,200px)] h-[clamp(50px,8vh,60px)] 
                     flex items-center justify-center 
                     bg-cyan-500/20 backdrop-blur-md border border-cyan-400 rounded-[20px] shadow-lg
                     cursor-pointer transition-all duration-300
@@ -177,7 +177,7 @@ const UserDetails = () => {
                     focus:outline-none focus:ring-2 focus:ring-cyan-400
                   "
                 >
-                  <span className="text-[#caf9ff] [font-family:'Aldrich',sans-serif] text-[16px] sm:text-[18px] tracking-widest font-bold drop-shadow-md">
+                  <span className="text-[#caf9ff] [font-family:'Aldrich',sans-serif] text-[clamp(14px,2vw,18px)] tracking-widest font-bold drop-shadow-md">
                     PROCEED
                   </span>
                 </button>

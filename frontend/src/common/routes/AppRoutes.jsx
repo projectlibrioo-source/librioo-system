@@ -7,7 +7,7 @@ import MemberLogin from "../../robot/pages/MemberLogin";
 import UserDetails from "../../robot/pages/UserDetails";
 import SearchPage from "../../robot/pages/SearchPage";
 import SearchBook from "../../robot/pages/SearchBook";
-import FollowPage from "../../robot/pages/FolloPage";
+import FollowPage from "../../robot/pages/FollowPage";
 import SelectionPage from "../../robot/pages/SelectionPage";
 
 import EndingPage from "../../robot/pages/EndingPage";

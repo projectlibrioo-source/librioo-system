@@ -83,7 +83,7 @@ const SearchBook = () => {
       <div className="h-full flex flex-col px-[20px] md:px-[65px] pb-[clamp(12px,2vh,24px)] overflow-hidden relative">
         
         {/* Holographic glowing background orb */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-400/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[clamp(250px,40vw,500px)] h-[clamp(250px,40vw,500px)] bg-cyan-400/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
 
         <h1 className="z-10 flex-shrink-0 ml-[80px] mb-[clamp(8px,1.5vh,16px)] [font-family:'ADLaM_Display-Regular',Helvetica] font-normal text-[#caf9ff] text-[clamp(20px,3.5vh,40px)] leading-tight drop-shadow-lg">
           Search Book By <span className="text-white">Name</span>

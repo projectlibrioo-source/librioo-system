@@ -57,8 +57,8 @@ const ConfirmSelectionPage = () => {
       <div className="flex-1 min-h-[80vh] w-full relative flex flex-col items-center justify-center p-4 overflow-hidden">
 
         {/* Holographic background orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#ff7421]/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[clamp(250px,40vw,500px)] h-[clamp(250px,40vw,500px)] bg-red-500/10 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[clamp(200px,30vw,400px)] h-[clamp(200px,30vw,400px)] bg-cyan-400/15 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* Glassmorphic card */}
         <div className="z-10 flex flex-col items-center bg-black/30 backdrop-blur-xl border border-white/20 px-10 py-14 md:px-20 md:py-16 rounded-[40px] shadow-[0_0_60px_rgba(0,0,0,0.5)] max-w-[700px] w-full text-center gap-10">
