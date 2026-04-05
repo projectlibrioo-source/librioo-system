@@ -460,7 +460,7 @@ const ManageUsers = () => {
                                     />
                                 </div>
 
-                                {/* ✅ AMENDED: User Type Section */}
+                                {/*  AMENDED: User Type Section */}
                                 {userRole === 'MEMBER' && (
                                     <div className="grid items-start grid-cols-1 gap-4 sm:grid-cols-3">
                                         <label className="pr-4 text-sm font-medium text-gray-900 sm:text-right pt-2">User Type</label>
